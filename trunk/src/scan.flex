@@ -15,46 +15,27 @@ package lexyaccgen;
 // Hier kann beliebiger zu kopierender Code stehen.
 
 
-	public static final int errorsy		= 255;
+	public static final int UNDEFTOK	= 255;
 
-	public static final int whitespace 	= 256;
-	public static final int ident 		= 257;
-	public static final int intconst	= 258;
-	public static final int lpar		= 259;
-	public static final int rpar		= 260;
-	public static final int addop		= 261;
-	public static final int subop		= 262;
-	public static final int multop		= 263;
-	public static final int divop		= 264;
-	public static final int beginsy		= 265;
-	public static final int endsy		= 266;
-	public static final int forsy		= 267;
-	public static final int dosy		= 268;
-	public static final int whilesy		= 269;
-	public static final int ifsy		= 270;
-	public static final int elsesy		= 271;
-	public static final int intsy		= 272;
-	public static final int floatsy		= 273;
-	public static final int charsy		= 274;
-	public static final int cstringsy	= 275;
-	public static final int sinfu		= 276;
-	public static final int cosfu		= 277;
-	public static final int tanfu		= 278;
-	public static final int divfu	    = 279;
-	public static final int modfu		= 280;
-	public static final int sqrtfu		= 281;
-	public static final int cinfu		= 282;
-	public static final int coutfu		= 283;
-	public static final int beginblock	= 284;
-	public static final int endblock	= 285;
-	public static final int assignop 	= 286;
-    public static final int coutsy		= 287;
-    public static final int cinsy		= 288;
-    public static final int comma		= 289;
-    public static final int endop		= 290;
+	public static final int WHITESPACE 	= 256;
+
+	public static final int LPAR		= 259;
+	public static final int RPAR		= 260;
 	
-    public static final int  UNDEFTOK	= 300;
-	public static final int  IDENTIER	= 301;
+	public static final int COUTSY		= 261;
+	public static final int CINSY		= 262;
+
+	public static final int BEGINSY		= 265;
+	public static final int ENDSY		= 266;
+
+	public static final int BEGINBLOCK	= 284;
+	public static final int ENDBLOCK	= 285;
+	public static final int ASSIGNOP 	= 286;
+
+    public static final int COMMA		= 289;
+    public static final int ENDOP		= 290;
+	
+	public static final int  IDENTIFIER	= 301;
 	public static final int  INTEGER	= 302;
 	public static final int  FLOAT		= 303;
 	public static final int  STRING		= 304;
@@ -65,7 +46,6 @@ package lexyaccgen;
 	public static final int  FUNCTION	= 309;
 	public static final int  DATATYPE	= 310;
     
-    
     		
     static int intval; 
     static String strval;
@@ -73,6 +53,8 @@ package lexyaccgen;
 
 // Makrodefinitionen
 BLANK		=	[ \t\n\r]
+COMMENT		=	(\/\*([^*]|[\r\n]|(\*+([^*\/]|[\r\n])))*\*+\/) | (\/\/.*)
+
 DIGIT		=	[0-9]
 NNDIGIT		=	[1-9] 	//Not Null Digit
 ALPHA		=	[a-zA-Z]
@@ -80,6 +62,8 @@ UINTEGER	= 	{DIGIT} | ( {NNDIGIT} {DIGIT}* )
 INTEGER		=	[-]?{UINTEGER}
 FLOAT       =	{INTEGER}[.]{UINTEGER}
 BOOL		=	"true"|"false"
+STRING		=	\"[^\"\n\r]*\"
+
 
 MATHOP		=	"+"|"-"|"*"|"/"
 COMPARE		=	"=="|"!="|"<"|">"|"<="|">="
@@ -89,9 +73,11 @@ DATATYPE	=	"int"|"float"|"char"|"cstring"|"bool"
 
 %%
 
-{BLANK}*	{return whitespace;}
+{BLANK}*	{return WHITESPACE;}
+{STRING}	{return STRING;}  //strings eat up comments
+{COMMENT}	{return WHITESPACE;}
 {INTEGER} 	{intval = Integer.parseInt(yytext());
-             return intconst;}
+             return INTEGER;}
 {FLOAT}     {return FLOAT;}      
 {BOOL}		{return BOOL;}
 {MATHOP}	{return MATHOP;}
@@ -100,25 +86,22 @@ DATATYPE	=	"int"|"float"|"char"|"cstring"|"bool"
 {FUNCTION}	{return FUNCTION;}
 {DATATYPE}	{return DATATYPE;}
 
-[Bb][Ee][Gg][Ii][Nn]	{return beginsy;}
-[Ee][Nn][Dd]			{return endsy;}
+[Bb][Ee][Gg][Ii][Nn]	{return BEGINSY;}
+[Ee][Nn][Dd]			{return ENDSY;}
 
 
-{ALPHA}({ALPHA}|{DIGIT})*	{strval = new String(yytext()); return ident;}
+{ALPHA}({ALPHA}|{DIGIT})*	{strval = new String(yytext()); return IDENTIFIER;}
 	
-"<<"			{return coutsy;}
-">>"			{return cinsy;}
-\{				{return beginblock;}
-\}		 		{return endblock;}
-\(				{return lpar;}
-\)				{return rpar;}
-\,				{return comma;}
-\;				{return endop;}
-\=				{return assignop;}
-
-
-
-.				{return errorsy;}
+"<<"			{return COUTSY;}
+">>"			{return CINSY;}
+\{				{return BEGINBLOCK;}
+\}		 		{return ENDBLOCK;}
+\(				{return LPAR;}
+\)				{return RPAR;}
+\,				{return COMMA;}
+\;				{return ENDOP;}
+\=				{return ASSIGNOP;}
+.				{return UNDEFTOK;}
 
 
 
