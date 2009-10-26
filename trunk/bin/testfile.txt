@@ -1,0 +1,12 @@
+Begin
+int a/*, b = 123*/;
+float p;// = 3.14;
+cstring str = "hello/*q*/ world";
+
+/*if(b == p) {
+	a = b*p;
+	cin >> str;
+	cout << str;
+}
+p = cos(p);*/
+end
