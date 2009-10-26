@@ -3,7 +3,8 @@ import lexyaccgen.*;
 
 public class MyMiniParserMain {
 
-	static int nextsymbol = 0;
+	//static int nextsymbol = 0;
+	static Yytoken nextToken;
 	static int labcnt = 0;
 	static String infile;
 	static MyScanner1 scanner = null;
@@ -34,8 +35,7 @@ public class MyMiniParserMain {
 
 	public static void Insymbol() {
 		try {
-			while ((nextsymbol = scanner.yylex()) == MyScanner1.WHITESPACE)
-				;
+			while ( ((nextToken = scanner.yylex()) != null) && (nextToken.getTokenType() == MyScanner1.WHITESPACE) );
 			// System.out.println("Insymbol: " + nextsymbol);
 		} catch (java.io.FileNotFoundException e) {
 			System.out.println("File not found : \"" + infile + "\"");
@@ -65,8 +65,8 @@ public class MyMiniParserMain {
 					infile = argv[i];
 					scanner = new MyScanner1(new java.io.FileReader(infile));
 					Insymbol();
-					while (nextsymbol > 0) {
-						System.out.println(nextsymbol);
+					while (nextToken != null) {
+						System.out.println(nextToken.toString());
 						Insymbol();
 					}
 					//	          
