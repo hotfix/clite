@@ -1,6 +1,5 @@
 package lexyaccgen;
 %%
-
 // Setzen, wenn Scanner-Klasse public sein soll
 %public
 // Setzen, wenn Scanner-Klasse nicht Standardnamen haben soll
@@ -9,6 +8,8 @@ package lexyaccgen;
 //%byaccj
 // Setzen, wenn eine main Methode generiert werden soll!
 //%standalone
+%line
+%column
 
 
 %{
@@ -16,6 +17,7 @@ package lexyaccgen;
 
 	public static final int UNDEFTOK	= 255;
 	public static final int WHITESPACE 	= 256;
+	public static final int EOL		 	= 257;
 	public static final int LPAR		= 259;
 	public static final int RPAR		= 260;	
 	public static final int COUTSY		= 261;
@@ -32,20 +34,29 @@ package lexyaccgen;
 	public static final int IDENTIFIER	= 301;
 	public static final int INTEGER		= 302;
 	public static final int FLOAT		= 303;
-	public static final int STRING		= 304;
-	public static final int BOOL		= 305;
-	public static final int COMPARE		= 306;
-	public static final int MATHOP		= 307;
-	public static final int KEYWORD		= 308;
-	public static final int FUNCTION	= 309;
-	public static final int DATATYPE	= 310;
+	public static final int CHAR		= 304;
+	public static final int STRING		= 305;
+	public static final int BOOL		= 306;
+	public static final int COMPARE		= 307;
+	public static final int MATHOP		= 308;
+	public static final int KEYWORD		= 309;
+	public static final int FUNCTION	= 310;
+	public static final int DATATYPE	= 311;
+	
+	public static final int VAR			= 1000;
+	public static final int CONST		= 1001;
        		
     static int intval; 
     static String strval;
+    
+    static int lastDataType = 0;
+    
+    public static SymTable symtable = new SymTable(); 
 %}
 
 // Makrodefinitionen
-BLANK		=	[ \t\n\r]
+BLANK		=	[ \t\n\r\f]
+//EOL			=	[\r][\n]
 COMMENT		=	(\/\*([^*]|[\r\n]|(\*+([^*\/]|[\r\n])))*\*+\/) | (\/\/.*)
 
 DIGIT		=	[0-9]
@@ -67,17 +78,38 @@ DATATYPE	=	"int"|"float"|"char"|"cstring"|"bool"
 %%///////////////////////////////////////////////////////////////////////////
 
 {BLANK}*	{return new Yytoken(WHITESPACE, yytext());}
-{STRING}	{return new Yytoken(STRING, yytext());}  //strings eat up comments
+//{EOL}		{return new Yytoken(EOL, yytext());}
+{STRING}	{
+				symtable.addSymbol(yytext(), CONST, STRING, "");
+				return new Yytoken(STRING, yytext());}  //strings eat up comments
 {COMMENT}	{return new Yytoken(WHITESPACE, yytext());}
-{INTEGER} 	{intval = Integer.parseInt(yytext());
-             return new Yytoken(INTEGER, yytext());}
-{FLOAT}     {return new Yytoken(FLOAT, yytext());}      
-{BOOL}		{return new Yytoken(BOOL, yytext());}
+{INTEGER} 	{
+				//intval = Integer.parseInt(yytext());
+				symtable.addSymbol(yytext(), CONST, INTEGER, "");
+				return new Yytoken(INTEGER, yytext());
+			}
+{FLOAT}     {
+				symtable.addSymbol(yytext(), CONST, FLOAT, "");
+				return new Yytoken(FLOAT, yytext());
+			}      
+{BOOL}		{
+				symtable.addSymbol(yytext(), CONST, BOOL, "");
+				return new Yytoken(BOOL, yytext());
+			}
 {MATHOP}	{return new Yytoken(MATHOP, yytext());}
 {COMPARE}	{return new Yytoken(COMPARE, yytext());}
 {KEYWORD}	{return new Yytoken(KEYWORD, yytext());}
 {FUNCTION}	{return new Yytoken(FUNCTION, yytext());}
-{DATATYPE}	{return new Yytoken(DATATYPE, yytext());}
+{DATATYPE}	{
+				String s = new String(yytext());
+				if(s.equals("int")) 	lastDataType = INTEGER;
+				if(s.equals("float")) 	lastDataType = FLOAT;
+				if(s.equals("char")) 	lastDataType = CHAR;
+				if(s.equals("bool")) 	lastDataType = BOOL;
+				if(s.equals("cstring")) lastDataType = STRING;			
+				
+				return new Yytoken(DATATYPE, s);
+			}
 
 [Bb][Ee][Gg][Ii][Nn]	
             {return new Yytoken(BEGINSY, yytext());}
@@ -86,9 +118,11 @@ DATATYPE	=	"int"|"float"|"char"|"cstring"|"bool"
 
 
 {ALPHA}({ALPHA}|{DIGIT}|"_")*	
-			{strval = new String(yytext()); 
-			return new Yytoken(IDENTIFIER, yytext());}
-	
+			{
+				strval = new String(yytext()); 
+				symtable.addSymbol(strval, VAR, lastDataType, "");
+				return new Yytoken(IDENTIFIER, yytext());
+			}	
 "<<"		{return new Yytoken(COUTSY, yytext());}
 ">>"		{return new Yytoken(CINSY, yytext());}
 \{			{return new Yytoken(BEGINBLOCK, yytext());}
@@ -100,4 +134,8 @@ DATATYPE	=	"int"|"float"|"char"|"cstring"|"bool"
 \,			{return new Yytoken(COMMA, yytext());}
 \;			{return new Yytoken(ENDOP, yytext());}
 \=			{return new Yytoken(ASSIGNOP, yytext());}
-.			{return new Yytoken(UNDEFTOK, yytext());}
+.			{
+				System.err.println("Undefined token \"" + yytext() + "\" on line: " + (yyline+1) + ", column: " + (yycolumn+1));
+				return new Yytoken(UNDEFTOK, yytext());
+				
+			}
