@@ -10,6 +10,9 @@ package lexyaccgen;
 //%standalone
 %line
 %column
+%eofval{
+	return new Yytoken(EOF, new String());
+%eofval}
 
 
 %{
@@ -18,14 +21,14 @@ package lexyaccgen;
 	public static final int UNDEFTOK	= 255;
 	public static final int WHITESPACE 	= 256;
 	public static final int EOL		 	= 257;
+	public static final int EOF		 	= 258;
 	public static final int LPAR		= 259;
 	public static final int RPAR		= 260;	
-	public static final int COUTSY		= 261;
-	public static final int CINSY		= 262;
 	public static final int LSBRACE		= 263;
 	public static final int RSBRACE		= 264;
 	public static final int BEGINSY		= 265;
 	public static final int ENDSY		= 266;
+	public static final int PROGRAMSY	= 283;//new
 	public static final int BEGINBLOCK	= 284;
 	public static final int ENDBLOCK	= 285;	
 	public static final int ASSIGNOP 	= 286;
@@ -51,12 +54,19 @@ package lexyaccgen;
     
     static int lastDataType = 0;
     
-    public static SymTable symtable = new SymTable(); 
+    public static SymTable symtable = new SymTable();
+    
+    public int getLine() {
+    	return(yyline+1);
+    }
+    
+    public int getColumn() {
+    	return(yycolumn+1);
+    }
 %}
 
 // Makrodefinitionen
-BLANK		=	[ \t\n\r\f]
-//EOL			=	[\r][\n]
+BLANK		=	[ \t\n\r\f] 
 COMMENT		=	(\/\*([^*]|[\r\n]|(\*+([^*\/]|[\r\n])))*\*+\/) | (\/\/.*)
 
 DIGIT		=	[0-9]
@@ -65,13 +75,11 @@ ALPHA		=	[a-zA-Z]
 UINTEGER	= 	{DIGIT} | ( {NNDIGIT} {DIGIT}* )
 INTEGER		=	[-]?{UINTEGER}
 FLOAT       =	{INTEGER}[.]{UINTEGER}
-BOOL		=	"true"|"false"
+BOOL		=	"true" | "false"
 STRING		=	\"[^\"\n\r]*\"
-
-
 MATHOP		=	"+"|"-"|"*"|"/"
 COMPARE		=	"=="|"!="|"<"|">"|"<="|">="
-KEYWORD		=	"if"|"else"|"for"|"do"|"while"|"cin"|"cout"|"goto"
+KEYWORD		=	"if"|"else"|"for"|"do"|"while"|"scan"|"print"|"struct"|"return"
 FUNCTION	=	"sin"|"cos"|"tan"|"div"|"mod"|"sqrt"
 DATATYPE	=	"int"|"float"|"char"|"cstring"|"bool"
 
@@ -111,6 +119,9 @@ DATATYPE	=	"int"|"float"|"char"|"cstring"|"bool"
 				return new Yytoken(DATATYPE, s);
 			}
 
+[Pp][Rr][Oo][Gg][Rr][Aa][Mm]	
+                 {return new Yytoken(PROGRAMSY, yytext());}
+
 [Bb][Ee][Gg][Ii][Nn]	
             {return new Yytoken(BEGINSY, yytext());}
 [Ee][Nn][Dd]			
@@ -123,8 +134,8 @@ DATATYPE	=	"int"|"float"|"char"|"cstring"|"bool"
 				symtable.addSymbol(strval, VAR, lastDataType, "");
 				return new Yytoken(IDENTIFIER, yytext());
 			}	
-"<<"		{return new Yytoken(COUTSY, yytext());}
-">>"		{return new Yytoken(CINSY, yytext());}
+//"<<"		{return new Yytoken(COUTSY, yytext());}
+//">>"		{return new Yytoken(CINSY, yytext());}
 \{			{return new Yytoken(BEGINBLOCK, yytext());}
 \}		 	{return new Yytoken(ENDBLOCK, yytext());}
 \(			{return new Yytoken(LPAR, yytext());}
@@ -135,7 +146,7 @@ DATATYPE	=	"int"|"float"|"char"|"cstring"|"bool"
 \;			{return new Yytoken(ENDOP, yytext());}
 \=			{return new Yytoken(ASSIGNOP, yytext());}
 .			{
-				System.err.println("Undefined token \"" + yytext() + "\" on line: " + (yyline+1) + ", column: " + (yycolumn+1));
+				System.err.println("Undefined token \"" + yytext() + "\" on line: " + (yyline+1) + ", column: " + (yycolumn+1) + "\n");
 				return new Yytoken(UNDEFTOK, yytext());
 				
 			}

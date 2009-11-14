@@ -3,12 +3,12 @@ import lexyaccgen.*;
 
 public class MyMiniParserMain {
 
-	//static int nextsymbol = 0;
-	static Yytoken nextToken;
-	static int labcnt = 0;
-	static int linecnt = 0;
 	static String infile;
-	static MyScanner1 scanner = null;
+	static int labcnt = 0;	
+	static Yytoken nextToken;
+	static boolean begin_found	= false;
+	static boolean end_found	= false;
+	static MyScanner1 scanner	= null;
 
 	/*
 	 * Hilfsroutinen
@@ -30,14 +30,96 @@ public class MyMiniParserMain {
 		System.out.print(op);
 	}
 
-	public static void Error(String str) {
-		System.out.println("Error: " + str);
+	private static void Error(String str) {
+		System.out.println("Error at line "+ new Integer(scanner.getLine()).toString() + ": " + str);
+	}
+	
+	private static void eval_Declaration() throws Exception {
+		Insymbol();	
+	}
+	
+	private static void eval_Statement() throws Exception {	
+		
+		switch(nextToken.getTokenType()){
+			case MyScanner1.DATATYPE: eval_Declaration(); break;
+			case MyScanner1.KEYWORD: 
+				if(nextToken.getLexem().equals("struct")){ eval_Declaration(); break; }
+				if(nextToken.getLexem().equals("if")){ eval_IF_Statement(); break; }
+				if(nextToken.getLexem().equals("else")){ eval_ELSE_Statement(); break; }
+				if(nextToken.getLexem().equals("for")){ eval_FOR_Statement(); break; }
+				if(nextToken.getLexem().equals("do")){ eval_DO_Statement(); break; }
+				if(nextToken.getLexem().equals("while")){ eval_WHILE_Statement(); break; }
+				//if(nextToken.getLexem().equals("scan")){ eval_SCAN_Statement(); break; }
+				//if(nextToken.getLexem().equals("print")){ eval_PRINT_Statement(); break; }
+				
+		}
+		Insymbol();		
+	}
+
+	private static void eval_WHILE_Statement() {
+		// TODO Auto-generated method stub
 		
 	}
 
-	public static void Insymbol() {
+	private static void eval_DO_Statement() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void eval_FOR_Statement() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void eval_ELSE_Statement() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void eval_IF_Statement() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void eval_StatementSequence() {
+		
+		
+	}
+
+	private static void eval_Function_Dec() throws Exception {
+
+		Insymbol();
+	}
+	
+	private static void eval_Program() throws Exception {
+		
+		Insymbol();
+		if (nextToken.getTokenType() != MyScanner1.PROGRAMSY) Error("'Program' declaration expected\n");
+		else Insymbol();
+		if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("Program name not correct\n");
+		else Insymbol();
+		if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("Semicolon expected\n");
+		else Insymbol();
+		
+		while (nextToken.getTokenType() != MyScanner1.BEGINSY) {
+			begin_found = true;
+			eval_Function_Dec();
+		}
+		Insymbol();
+		
+		while (nextToken.getTokenType() != MyScanner1.ENDSY) {
+			end_found = true;
+			eval_Statement();
+		}
+				
+		//if (nextToken.getTokenType() != scanner.ENDSY) Error("'END' declaration expected\n");
+		Insymbol();
+	}
+	
+
+	private static void Insymbol() throws Exception {
 		try {				
-				while ( ((nextToken = scanner.yylex()) != null) && (nextToken.getTokenType() == MyScanner1.WHITESPACE));
+			while ( (nextToken = scanner.yylex()).getTokenType() == MyScanner1.WHITESPACE );			
 				
 		} catch (java.io.FileNotFoundException e) {
 			System.out.println("File not found : \"" + infile + "\"");
@@ -48,6 +130,7 @@ public class MyMiniParserMain {
 			System.out.println("Unexpected exception:");
 			e.printStackTrace();
 		}
+		if (nextToken.getTokenType() == MyScanner1.EOF) throw new Exception("Unexpected EOF");
 	}
 
 	/*
@@ -66,12 +149,19 @@ public class MyMiniParserMain {
 					//	        	
 					infile = argv[i];
 					scanner = new MyScanner1(new java.io.FileReader(infile));
+					
+					
+					eval_Program();
+					
+					if (nextToken.getTokenType() != MyScanner1.EOF) Error("End Of File expected\n");
+					else System.out.println("OK!\n");
+					/*
 					Insymbol();
 					while (nextToken != null) {
 						if (nextToken.getTokenType() == MyScanner1.UNDEFTOK) break;
 						System.out.println(nextToken.toString());
 						Insymbol();
-					}
+					}*/
 					
 					System.out.println(MyScanner1.symtable.getTableAsString());
 					//	          
@@ -79,8 +169,7 @@ public class MyMiniParserMain {
 				} catch (java.io.FileNotFoundException e) {
 					System.out.println("File not found : \"" + argv[i] + "\"");
 				} catch (Exception e) {
-					System.out.println("Unexpected exception:");
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 			}
 		}
