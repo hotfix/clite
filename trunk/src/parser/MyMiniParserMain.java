@@ -1,4 +1,6 @@
 package parser;
+import java.util.ArrayList;
+
 import lexyaccgen.*;
 
 public class MyMiniParserMain {
@@ -36,6 +38,16 @@ public class MyMiniParserMain {
 		throw new Exception("Error at line "+ new Integer(scanner.getLine()).toString() + ": " + str);
 	}
 	
+	/*tests if sy in s1, gives errormessage if no
+	and skips until sy in s1+s2 */
+	void test(ArrayList<Integer> s1, ArrayList<Integer> s2, String err) throws Exception {
+		if (s1.contains(nextToken.getTokenType()) == false) {
+			Error(err);
+			s1.addAll(s2);
+			while(s1.contains(nextToken.getTokenType()) == false) Insymbol();
+		}
+	}
+	
 	private static void eval_Declaration() throws Exception {
 		
 		//add type to symtableentry
@@ -43,7 +55,7 @@ public class MyMiniParserMain {
 		if (nextToken.getTokenType() == MyScanner1.IDENTIFIER) {
 			//add varname to symtableentry
 			Insymbol();
-			//while()
+			while(nextToken.getTokenType() != MyScanner1.COMMA);
 		}
 		else Error("'Identifier' expected\n");
 		
@@ -76,24 +88,138 @@ public class MyMiniParserMain {
 		return false;
 	}
 
-	private static void eval_WHILE_Statement() {
+	private static void eval_WHILE_Statement() throws Exception {
+		Insymbol();
+		if (nextToken.getTokenType() != MyScanner1.LPAR) Error("'Lpar' expected\n");
+		else Insymbol();
+		
+		eval_Expression();
+		
+		if (nextToken.getTokenType() != MyScanner1.RPAR) Error("'Rpar' expected\n");
+		else Insymbol();
+		if (nextToken.getTokenType() != MyScanner1.BEGINBLOCK) Error("'Beginblock' in while statement expected\n");
+		else Insymbol();
+		
+		while(nextToken.getTokenType() != MyScanner1.ENDBLOCK){
+			eval_Statement();
+		}
+		
+	}
+
+	private static void eval_DO_Statement() throws Exception {
+		Insymbol();
+		if (nextToken.getTokenType() != MyScanner1.BEGINBLOCK) Error("'Beginblock' in do while statement expected\n");
+		else Insymbol();
+		
+		while(nextToken.getTokenType() != MyScanner1.ENDBLOCK){
+			eval_Statement();
+		}
+		if (!nextToken.getLexem().equals("while")) Error("Keyword while in (do while) statement expected\n");
+		else Insymbol();
+		
+		if (nextToken.getTokenType() != MyScanner1.LPAR) Error("'Lpar' expected\n");
+		else Insymbol();
+		
+		eval_Expression();
+		
+		if (nextToken.getTokenType() != MyScanner1.RPAR) Error("'Rpar' expected\n");
+		else Insymbol();
+		
+	}
+
+	private static void eval_Expression() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	private static void eval_DO_Statement() {
-		// TODO Auto-generated method stub
+	private static void eval_FOR_Statement() throws Exception {
+		
+		
+		/*
+		insymbol;
+		IF sy = ident
+		THEN insymbol
+		ELSE
+		test([],fsys + [becomes,tosy,downtosy,dosy],5);
+		IF sy = becomes
+		THEN
+		BEGIN
+		insymbol;
+		expression(fsys + [tosy,downtosy,dosy])
+		END
+		ELSE test([],fsys + [tosy,downtosy,dosy],58);
+		IF (sy = tosy) OR (sy = downtosy)
+		THEN
+		BEGIN
+		insymbol;
+		expression(fsys + [dosy])
+		END
+		ELSE test([],fsys + [dosy],59);
+		testsy(dosy,54);
+		statement(fsys,statendsys)
+		*/
+		
+		
+		
+		Insymbol();
+		if (nextToken.getTokenType() != MyScanner1.LPAR) Error("'Lpar' expected\n");
+		else Insymbol();
+		
+		eval_Expression();
+		
+		if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("'ENDOPSY' in for Expression expected\n");
+		else Insymbol();
+		
+		eval_Expression();
+				
+		if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("'ENDOPSY' in for Expression expected\n");
+		else Insymbol();
+		
+		eval_Expression();
+		
+		if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("'ENDOPSY' in for Expression expected\n");
+		else Insymbol();
+		if (nextToken.getTokenType() != MyScanner1.RPAR) Error("'Rpar' expected\n");
+		else Insymbol();
+		
+		if (nextToken.getTokenType() != MyScanner1.BEGINBLOCK) Error("'Beginblock' in for statement expected\n");
+		else Insymbol();
+		
+		while(nextToken.getTokenType() != MyScanner1.ENDBLOCK){
+			eval_Statement();
+		}
 		
 	}
 
-	private static void eval_FOR_Statement() {
-		// TODO Auto-generated method stub
-		
-	}
 
-	private static void eval_IF_Statement() {
-		// TODO Auto-generated method stub
+	private static void eval_IF_Statement() throws Exception {
+		Insymbol();
+		if (nextToken.getTokenType() != MyScanner1.LPAR) Error("'Lpar' expected\n");
+		else Insymbol();
 		
+		eval_Expression();
+		
+		if (nextToken.getTokenType() != MyScanner1.RPAR) Error("'Rpar' expected\n");
+		else Insymbol();
+		if (nextToken.getTokenType() != MyScanner1.BEGINBLOCK) Error("'Beginblock' in IF statement expected\n");
+		else Insymbol();
+		
+		while(nextToken.getTokenType() != MyScanner1.ENDBLOCK){
+			eval_Statement();
+		}
+		
+		Insymbol();
+		
+		// else part alternative
+		if(nextToken.getLexem().equals("else")){
+			Insymbol();
+			if (nextToken.getTokenType() != MyScanner1.BEGINBLOCK) Error("'Beginblock' in IF statement expected\n");
+			else Insymbol();
+			
+			while(nextToken.getTokenType() != MyScanner1.ENDBLOCK){
+				eval_Statement();
+			}
+		}
 	}
 
 	private static void eval_StatementSequence() {
