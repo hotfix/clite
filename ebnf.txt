@@ -15,7 +15,7 @@ Struct_Dec         = 'struct' Identifier FieldlList [ IdentList ] ';'.
 FieldlList         = '{' Var_Dec { ';' Var_Dec } '}'.
 IdentList          = Identifier { ',' Identifier }.
 
-Expression         = (Variable '=' Right_Side) | (Right_Side).
+Expression         = [Variable '='] Right_Side
 
 IF_Statement       = 'if' '(' Expression ')' '{' StatementSequence '}' [ 'else' '{' StatementSequence '}' ] .
 FOR_Statement      = 'for' '(' For_Expression ')' '{' StatementSequence '}'.
