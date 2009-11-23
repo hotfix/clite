@@ -3,15 +3,12 @@ package lexyaccgen;
 public class Yytoken {
 
 	private int		m_token;
-	private String	m_lexem;
-	private int		m_length;
-	
+	private String	m_lexem;	
 	
 	public Yytoken(int token, String lexem) {
 			
 		m_token = token;
 		m_lexem = new String(lexem);
-		m_length = lexem.length();
 	}
 	
 	public int getTokenType() {		
@@ -20,10 +17,6 @@ public class Yytoken {
 	
 	public String getLexem() {		
 		return m_lexem;
-	}
-	
-	public int length() {
-		return m_length;
 	}
 	
 	@Override
