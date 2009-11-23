@@ -33,9 +33,11 @@ package lexyaccgen;
 	public static final int ENDBLOCK	= 285;	
 	public static final int ASSIGNOP 	= 286;
     public static final int COMMA		= 289;
-    public static final int ENDOP		= 290;	
+    public static final int ENDOP		= 290;
+    public static final int DOT			= 291;
 	public static final int IDENTIFIER	= 301;
 	public static final int INTEGER		= 302;
+	public static final int UINTEGER	= 303;
 	//public static final int FLOAT		= 303;
 	//public static final int CHAR		= 304;
 	public static final int STRING		= 305;
@@ -43,7 +45,7 @@ package lexyaccgen;
 	public static final int COMPARE		= 307;
 	public static final int MATHOP		= 308;
 	public static final int KEYWORD		= 309;
-	public static final int FUNCTION	= 310;
+	//public static final int FUNCTION	= 310;
 	public static final int DATATYPE	= 311;
 	
 	public static final int VAR			= 1000;
@@ -80,8 +82,8 @@ STRING		=	\"[^\"\n\r]*\"
 MATHOP		=	"+"|"-"|"*"|"/"
 COMPARE		=	"=="|"!="|"<"|">"|"<="|">="
 KEYWORD		=	"if"|"else"|"for"|"do"|"while"|"scan"|"print"|"struct"|"return"
-FUNCTION	=	"sin"|"cos"|"tan"|"div"|"mod"|"sqrt"
-DATATYPE	=	"int"|"float"|"char"|"cstring"|"bool"
+//FUNCTION	=	"sin"|"cos"|"tan"|"div"|"mod"|"sqrt"
+DATATYPE	=	"int"|"cstring" //|"float"|"char"|"bool"
 
 %%///////////////////////////////////////////////////////////////////////////
 
@@ -96,6 +98,7 @@ DATATYPE	=	"int"|"float"|"char"|"cstring"|"bool"
 				//symtable.addSymbol(yytext(), CONST, INTEGER, "");
 				return new Yytoken(INTEGER, yytext());
 			}
+{UINTEGER} 	{return new Yytoken(UINTEGER, yytext());}
 /*
 {FLOAT}     {
 				symtable.addSymbol(yytext(), CONST, FLOAT, "");
@@ -109,7 +112,7 @@ DATATYPE	=	"int"|"float"|"char"|"cstring"|"bool"
 {MATHOP}	{return new Yytoken(MATHOP, yytext());}
 {COMPARE}	{return new Yytoken(COMPARE, yytext());}
 {KEYWORD}	{return new Yytoken(KEYWORD, yytext());}
-{FUNCTION}	{return new Yytoken(FUNCTION, yytext());}
+//{FUNCTION}	{return new Yytoken(FUNCTION, yytext());}
 {DATATYPE}	{
 				String s = new String(yytext());
 				//if(s.equals("int")) 	lastDataType = INTEGER;
@@ -145,6 +148,7 @@ DATATYPE	=	"int"|"float"|"char"|"cstring"|"bool"
 \)			{return new Yytoken(RPAR, yytext());}
 \[			{return new Yytoken(LSBRACE, yytext());}
 \]			{return new Yytoken(RSBRACE, yytext());}
+\.			{return new Yytoken(DOT, yytext());}
 \,			{return new Yytoken(COMMA, yytext());}
 \;			{return new Yytoken(ENDOP, yytext());}
 \=			{return new Yytoken(ASSIGNOP, yytext());}

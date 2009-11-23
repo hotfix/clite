@@ -121,12 +121,10 @@ public class MyMiniParserMain {
 			Insymbol();
 			eval_part3();
 		}
-		Insymbol();	 
+		//Insymbol();	 
 	}
 
 	private static void eval_part3() throws Exception {
-
-		Insymbol();		
 		
 		if ( (nextToken.getTokenType() == MyScanner1.MATHOP) &&
 				( nextToken.getLexem().equals("+") || 
@@ -139,10 +137,41 @@ public class MyMiniParserMain {
 		else {
 			eval_part4();
 		}
+		//Insymbol();		
+	}
+
+	private static void eval_part4() throws Exception {
+
+		if ( (nextToken.getTokenType() == MyScanner1.IDENTIFIER) ) {
+			Insymbol();
+			eval_ActualParameters();
+		}
+		else {
+			eval_part5();
+		}
 		Insymbol();		
 	}
 
-	private static void eval_part4() {
+	private static void eval_part5() {
+		if ( (nextToken.getTokenType() == MyScanner1.IDENTIFIER) ) {
+			Insymbol();
+			if ( (nextToken.getTokenType() == MyScanner1.LSBRACE) || (nextToken.getTokenType() == MyScanner1.DOT) ) {
+				eval_Selector();
+			}
+		}
+		else {
+			eval_part5();
+		}
+		Insymbol();	
+		
+	}
+
+	private static void eval_Selector() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void eval_ActualParameters() {
 		// TODO Auto-generated method stub
 		
 	}
