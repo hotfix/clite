@@ -36,10 +36,10 @@ package lexyaccgen;
     public static final int ENDOP		= 290;	
 	public static final int IDENTIFIER	= 301;
 	public static final int INTEGER		= 302;
-	public static final int FLOAT		= 303;
-	public static final int CHAR		= 304;
+	//public static final int FLOAT		= 303;
+	//public static final int CHAR		= 304;
 	public static final int STRING		= 305;
-	public static final int BOOL		= 306;
+	//public static final int BOOL		= 306;
 	public static final int COMPARE		= 307;
 	public static final int MATHOP		= 308;
 	public static final int KEYWORD		= 309;
@@ -52,9 +52,9 @@ package lexyaccgen;
     static int intval; 
     static String strval;
     
-    static int lastDataType = 0;
+    //static int lastDataType = 0;
     
-    public static SymTable symtable = new SymTable();
+    //public static SymTable symtable = new SymTable();
     
     public int getLine() {
     	return(yyline+1);
@@ -74,8 +74,8 @@ NNDIGIT		=	[1-9] 	//Not Null Digit
 ALPHA		=	[a-zA-Z]
 UINTEGER	= 	{DIGIT} | ( {NNDIGIT} {DIGIT}* )
 INTEGER		=	[-]?{UINTEGER}
-FLOAT       =	{INTEGER}[.]{UINTEGER}
-BOOL		=	"true" | "false"
+//FLOAT       =	{INTEGER}[.]{UINTEGER}
+//BOOL		=	"true" | "false"
 STRING		=	\"[^\"\n\r]*\"
 MATHOP		=	"+"|"-"|"*"|"/"
 COMPARE		=	"=="|"!="|"<"|">"|"<="|">="
@@ -88,14 +88,15 @@ DATATYPE	=	"int"|"float"|"char"|"cstring"|"bool"
 {BLANK}*	{return new Yytoken(WHITESPACE, yytext());}
 //{EOL}		{return new Yytoken(EOL, yytext());}
 {STRING}	{
-				symtable.addSymbol(yytext(), CONST, STRING, "");
+				//symtable.addSymbol(yytext(), CONST, STRING, "");
 				return new Yytoken(STRING, yytext());}  //strings eat up comments
 {COMMENT}	{return new Yytoken(WHITESPACE, yytext());}
 {INTEGER} 	{
 				//intval = Integer.parseInt(yytext());
-				symtable.addSymbol(yytext(), CONST, INTEGER, "");
+				//symtable.addSymbol(yytext(), CONST, INTEGER, "");
 				return new Yytoken(INTEGER, yytext());
 			}
+/*
 {FLOAT}     {
 				symtable.addSymbol(yytext(), CONST, FLOAT, "");
 				return new Yytoken(FLOAT, yytext());
@@ -104,19 +105,21 @@ DATATYPE	=	"int"|"float"|"char"|"cstring"|"bool"
 				symtable.addSymbol(yytext(), CONST, BOOL, "");
 				return new Yytoken(BOOL, yytext());
 			}
+*/
 {MATHOP}	{return new Yytoken(MATHOP, yytext());}
 {COMPARE}	{return new Yytoken(COMPARE, yytext());}
 {KEYWORD}	{return new Yytoken(KEYWORD, yytext());}
 {FUNCTION}	{return new Yytoken(FUNCTION, yytext());}
 {DATATYPE}	{
 				String s = new String(yytext());
-				if(s.equals("int")) 	lastDataType = INTEGER;
-				if(s.equals("float")) 	lastDataType = FLOAT;
-				if(s.equals("char")) 	lastDataType = CHAR;
-				if(s.equals("bool")) 	lastDataType = BOOL;
-				if(s.equals("cstring")) lastDataType = STRING;			
+				//if(s.equals("int")) 	lastDataType = INTEGER;
+				//if(s.equals("float")) 	lastDataType = FLOAT;
+				//if(s.equals("char")) 	lastDataType = CHAR;
+				//if(s.equals("bool")) 	lastDataType = BOOL;
+				//if(s.equals("cstring")) lastDataType = STRING;			
 				
-				return new Yytoken(DATATYPE, s);
+				if(s.equals("int")) 	return new Yytoken(INTEGER, s);
+				if(s.equals("cstring")) return new Yytoken(STRING, s);
 			}
 
 [Pp][Rr][Oo][Gg][Rr][Aa][Mm]	
@@ -130,8 +133,8 @@ DATATYPE	=	"int"|"float"|"char"|"cstring"|"bool"
 
 {ALPHA}({ALPHA}|{DIGIT}|"_")*	
 			{
-				strval = new String(yytext()); 
-				symtable.addSymbol(strval, VAR, lastDataType, "");
+				//strval = new String(yytext()); 
+				//symtable.addSymbol(strval, VAR, lastDataType, "");
 				return new Yytoken(IDENTIFIER, yytext());
 			}	
 //"<<"		{return new Yytoken(COUTSY, yytext());}

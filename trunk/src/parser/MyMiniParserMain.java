@@ -49,25 +49,110 @@ public class MyMiniParserMain {
 	}
 	
 	private static void eval_Declaration() throws Exception {
-		
 		//add type to symtableentry
 		Insymbol();
 		if (nextToken.getTokenType() == MyScanner1.IDENTIFIER) {
 			//add varname to symtableentry
 			Insymbol();
-			while(nextToken.getTokenType() != MyScanner1.COMMA);
+			if (nextToken.getTokenType() == MyScanner1.ASSIGNOP) {
+				Insymbol();
+				eval_right_side();
+			}
+			//Insymbol();
+			while(nextToken.getTokenType() == MyScanner1.COMMA) {
+				Insymbol();
+				if (nextToken.getTokenType() == MyScanner1.IDENTIFIER) {
+					//add varname to symtableentry
+					Insymbol();
+					if (nextToken.getTokenType() == MyScanner1.ASSIGNOP) {
+						Insymbol();
+						eval_right_side();
+					}
+				}
+				else Error("'Identifier' expected\n");
+			}
+			if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("Semicolon expected\n");			
 		}
-		else Error("'Identifier' expected\n");
-		
+		else Error("'Identifier' expected\n");		
 		Insymbol();	
 	}
-	
+
+	private static void eval_right_side() throws Exception {
+		
+		eval_part1();
+		Insymbol();
+		while ( (nextToken.getTokenType() == MyScanner1.MATHOP) &&
+				( nextToken.getLexem().equals("+") || 
+				  nextToken.getLexem().equals("-") 
+				)
+			  ) {
+			Insymbol();
+			eval_part1();
+		}
+		Insymbol();
+	}
+
+	private static void eval_part1() throws Exception {
+		eval_part2();
+		Insymbol();
+		while ( (nextToken.getTokenType() == MyScanner1.MATHOP) &&
+				( nextToken.getLexem().equals("<")	|| 
+				  nextToken.getLexem().equals(">")	||
+				  nextToken.getLexem().equals("==") || 
+				  nextToken.getLexem().equals(">=") ||
+				  nextToken.getLexem().equals("<=") || 
+				  nextToken.getLexem().equals("!=")
+				)
+			  ) {
+			Insymbol();
+			eval_part2();
+		}
+		Insymbol();
+	}
+
+	private static void eval_part2() throws Exception {
+		eval_part3();
+		Insymbol();
+		while ( (nextToken.getTokenType() == MyScanner1.MATHOP) &&
+				( nextToken.getLexem().equals("*") || 
+				  nextToken.getLexem().equals("/") 
+				)
+			  ) {
+			Insymbol();
+			eval_part3();
+		}
+		Insymbol();		
+	}
+
+	private static void eval_part3() throws Exception {
+
+		Insymbol();		
+		
+		if ( (nextToken.getTokenType() == MyScanner1.MATHOP) &&
+				( nextToken.getLexem().equals("+") || 
+				  nextToken.getLexem().equals("-") 
+				)
+			  ) {
+			Insymbol();
+			eval_part4();
+		}
+		else {
+			eval_part4();
+		}
+		Insymbol();		
+	}
+
+	private static void eval_part4() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	private static void eval_Statement() throws Exception {	
 		
 		switch(nextToken.getTokenType()){
-			case MyScanner1.DATATYPE: eval_Declaration(); break;
+			case MyScanner1.DATATYPE: 	eval_Declaration(); break;
 			case MyScanner1.KEYWORD: 
-				if(nextToken.getLexem().equals("struct")){ eval_Declaration(); break; }
+				if(nextToken.getLexem().equals("struct")){ eval_Struct_Declaration(); break; }
 				if(nextToken.getLexem().equals("if")){ eval_IF_Statement(); break; }
 				if(nextToken.getLexem().equals("for")){ eval_FOR_Statement(); break; }
 				if(nextToken.getLexem().equals("do")){ eval_DO_Statement(); break; }
@@ -78,7 +163,12 @@ public class MyMiniParserMain {
 			default: if(isUserDataType() == true) eval_Declaration();
 		}
 
-		Insymbol();		
+		//Insymbol();		
+	}
+
+	private static void eval_Struct_Declaration() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	private static boolean isUserDataType() {
@@ -132,34 +222,7 @@ public class MyMiniParserMain {
 		
 	}
 
-	private static void eval_FOR_Statement() throws Exception {
-		
-		
-		/*
-		insymbol;
-		IF sy = ident
-		THEN insymbol
-		ELSE
-		test([],fsys + [becomes,tosy,downtosy,dosy],5);
-		IF sy = becomes
-		THEN
-		BEGIN
-		insymbol;
-		expression(fsys + [tosy,downtosy,dosy])
-		END
-		ELSE test([],fsys + [tosy,downtosy,dosy],58);
-		IF (sy = tosy) OR (sy = downtosy)
-		THEN
-		BEGIN
-		insymbol;
-		expression(fsys + [dosy])
-		END
-		ELSE test([],fsys + [dosy],59);
-		testsy(dosy,54);
-		statement(fsys,statendsys)
-		*/
-		
-		
+	private static void eval_FOR_Statement() throws Exception {		
 		
 		Insymbol();
 		if (nextToken.getTokenType() != MyScanner1.LPAR) Error("'Lpar' expected\n");
@@ -294,7 +357,7 @@ public class MyMiniParserMain {
 					else 
 					if (error_code == 0)System.out.println("OK!\n");
 					
-					System.out.println(MyScanner1.symtable.getTableAsString());
+					//System.out.println(MyScanner1.symtable.getTableAsString());
 					//	          
 					// Und hier ist Schluss
 				} catch (java.io.FileNotFoundException e) {
