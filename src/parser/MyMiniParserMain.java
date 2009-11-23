@@ -121,7 +121,7 @@ public class MyMiniParserMain {
 			Insymbol();
 			eval_part3();
 		}
-		Insymbol();		
+		Insymbol();	 
 	}
 
 	private static void eval_part3() throws Exception {
