@@ -160,9 +160,16 @@ public class MyMiniParserMain {
 			}
 		}
 		else {
-			eval_part5();
+			if ( (nextToken.getTokenType() == MyScanner1.UINTEGER) ) {
+				
+			}
+			else Error("Identifier or UInteger expected\n");
 		}
 		Insymbol();	
+		if ( (nextToken.getTokenType() == MyScanner1.LPAR) ) Error("LPAR expected\n");
+		Insymbol();	
+		eval_Expression();
+		if ( (nextToken.getTokenType() == MyScanner1.RPAR) ) Error("RPAR expected\n");
 		
 	}
 
@@ -221,8 +228,7 @@ public class MyMiniParserMain {
 		
 		while(nextToken.getTokenType() != MyScanner1.ENDBLOCK){
 			eval_Statement();
-		}
-		
+		}		
 	}
 
 	private static void eval_DO_Statement() throws Exception {
@@ -242,8 +248,7 @@ public class MyMiniParserMain {
 		eval_Expression();
 		
 		if (nextToken.getTokenType() != MyScanner1.RPAR) Error("'Rpar' expected\n");
-		else Insymbol();
-		
+		else Insymbol();		
 	}
 
 	private static void eval_Expression() throws Exception {
@@ -254,7 +259,7 @@ public class MyMiniParserMain {
 			if (nextToken.getTokenType() != MyScanner1.ASSIGNOP) Error("'ASSIGNOP' expected\n");
 			else Insymbol();
 		}
-		eval_right_side();
+		eval_Expression();
 		
 	}
 
@@ -267,10 +272,8 @@ public class MyMiniParserMain {
 			else Insymbol();
 			
 			if (nextToken.getTokenType() != MyScanner1.RSBRACE)Error("'RSBRACE' expected\n");
-			else Insymbol();
-			
-		}
-		
+			else Insymbol();			
+		}		
 	}
 
 	private static void eval_FOR_Statement() throws Exception {		
@@ -279,7 +282,7 @@ public class MyMiniParserMain {
 		if (nextToken.getTokenType() != MyScanner1.LPAR) Error("'Lpar' expected\n");
 		else Insymbol();
 		
-		eval_Expression();
+		eval_Assignment();
 		
 		if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("'ENDOPSY' in for Expression expected\n");
 		else Insymbol();
@@ -289,7 +292,7 @@ public class MyMiniParserMain {
 		if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("'ENDOPSY' in for Expression expected\n");
 		else Insymbol();
 		
-		eval_Expression();
+		eval_Assignment();
 		
 		if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("'ENDOPSY' in for Expression expected\n");
 		else Insymbol();
@@ -305,6 +308,11 @@ public class MyMiniParserMain {
 		
 	}
 
+
+	private static void eval_Assignment() {
+		// TODO Auto-generated method stub
+		
+	}
 
 	private static void eval_IF_Statement() throws Exception {
 		Insymbol();
@@ -336,9 +344,7 @@ public class MyMiniParserMain {
 		}
 	}
 
-	private static void eval_StatementSequence() {
-		
-		
+	private static void eval_StatementSequence() {		
 	}
 
 	private static void eval_Function_Dec() throws Exception {
@@ -362,7 +368,7 @@ public class MyMiniParserMain {
 		begin_found = true;
 		Insymbol();		
 		while (nextToken.getTokenType() != MyScanner1.ENDSY) {			
-			eval_Statement();
+			eval_StatementSequence();
 		}
 		end_found = true;
 	}
