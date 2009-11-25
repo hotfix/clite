@@ -93,12 +93,14 @@ DATATYPE	=	"int"|"cstring" //|"float"|"char"|"bool"
 				//symtable.addSymbol(yytext(), CONST, STRING, "");
 				return new Yytoken(STRING, yytext());}  //strings eat up comments
 {COMMENT}	{return new Yytoken(WHITESPACE, yytext());}
+
+{UINTEGER} 	{return new Yytoken(UINTEGER, yytext());}
 {INTEGER} 	{
 				//intval = Integer.parseInt(yytext());
 				//symtable.addSymbol(yytext(), CONST, INTEGER, "");
 				return new Yytoken(INTEGER, yytext());
 			}
-{UINTEGER} 	{return new Yytoken(UINTEGER, yytext());}
+
 /*
 {FLOAT}     {
 				symtable.addSymbol(yytext(), CONST, FLOAT, "");
