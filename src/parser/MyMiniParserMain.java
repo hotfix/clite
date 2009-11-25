@@ -152,7 +152,7 @@ public class MyMiniParserMain {
 		Insymbol();		
 	}
 
-	private static void eval_part5() {
+	private static void eval_part5() throws Exception {
 		if ( (nextToken.getTokenType() == MyScanner1.IDENTIFIER) ) {
 			Insymbol();
 			if ( (nextToken.getTokenType() == MyScanner1.LSBRACE) || (nextToken.getTokenType() == MyScanner1.DOT) ) {
