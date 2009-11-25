@@ -56,7 +56,7 @@ public class MyMiniParserMain {
 			Insymbol();
 			if (nextToken.getTokenType() == MyScanner1.ASSIGNOP) {
 				Insymbol();
-				eval_right_side();
+				eval_Expression();
 			}
 			//Insymbol();
 			while(nextToken.getTokenType() == MyScanner1.COMMA) {
@@ -66,7 +66,7 @@ public class MyMiniParserMain {
 					Insymbol();
 					if (nextToken.getTokenType() == MyScanner1.ASSIGNOP) {
 						Insymbol();
-						eval_right_side();
+						eval_Expression();
 					}
 				}
 				else Error("'Identifier' expected\n");
@@ -77,7 +77,7 @@ public class MyMiniParserMain {
 		Insymbol();	
 	}
 
-	private static void eval_right_side() throws Exception {
+	private static void eval_Expression() throws Exception {
 		
 		eval_part1();
 		Insymbol();
@@ -184,7 +184,7 @@ public class MyMiniParserMain {
 	}
 
 	private static void eval_Statement() throws Exception {	
-		
+		//TODO Statement fehlt
 		switch(nextToken.getTokenType()){
 			case MyScanner1.DATATYPE: 	eval_Declaration(); break;
 			case MyScanner1.KEYWORD: 
@@ -251,20 +251,21 @@ public class MyMiniParserMain {
 		else Insymbol();		
 	}
 
-	private static void eval_Expression() throws Exception {
+	private static void eval_Assignment() throws Exception {
 		
-		if (nextToken.getTokenType() == MyScanner1.IDENTIFIER){
-			eval_Variable();
+		eval_Variable();
 		
-			if (nextToken.getTokenType() != MyScanner1.ASSIGNOP) Error("'ASSIGNOP' expected\n");
-			else Insymbol();
-		}
+		if (nextToken.getTokenType() != MyScanner1.ASSIGNOP) Error("'ASSIGNOP' expected\n");
+		else Insymbol();
+		
 		eval_Expression();
 		
 	}
 
 	private static void eval_Variable() throws Exception {
-		Insymbol();
+		if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("'IDENTIFIER' expected\n");
+		else Insymbol();
+		
 		if (nextToken.getTokenType() == MyScanner1.LSBRACE) {
 			Insymbol();
 			
@@ -308,11 +309,6 @@ public class MyMiniParserMain {
 		
 	}
 
-
-	private static void eval_Assignment() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	private static void eval_IF_Statement() throws Exception {
 		Insymbol();
