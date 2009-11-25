@@ -4,38 +4,38 @@ FormalParameters   = ’(’ [ Type Variable ] { ',' Type Variable } ’)’.
 ActualParameters   = ’(’ [ Right_Side { ’,’ Right_Side } ] ’)’.
 
 StatementSequence  = { Statement }
-Statement          = (Declaration ';') | (Expression ';') | IF_Statement | FOR_Statement | WHILE_Statement | DO_WHILE_Statement
+Statement          = (Declaration ';') | (Assignment ';') | IF_Statement | FOR_Statement | WHILE_Statement | DO_WHILE_Statement
                      ( 'scan' '(' Variable ')' ';' ) | ( 'print' '(' Variable | String ')' ';' ).
 Declaration        = { ( Var_Dec ) | Struct_Dec }
 
-Var_Dec            = Type Variable ['=' Right_Side]  { ',' Variable ['=' Right_Side] } .
+Var_Dec            = Type Variable ['=' Expression]  { ',' Variable ['=' Expression] } .
 
 // eine Struktur(Record) wird beim parsen zu Type Liste mit Identifier als Name hinzugefugt. Mit der IdentList kann sie gleich instanziiert werden.
 Struct_Dec         = 'struct' Identifier FieldlList [ IdentList ] ';'.
 FieldlList         = '{' Var_Dec { ';' Var_Dec } '}'.
 IdentList          = Identifier { ',' Identifier }.
 
-Expression         = [Variable '='] Right_Side
+Assignment         = Variable '=' Expression
 
 IF_Statement       = 'if' '(' Expression ')' '{' StatementSequence '}' [ 'else' '{' StatementSequence '}' ] .
 FOR_Statement      = 'for' '(' For_Expression ')' '{' StatementSequence '}'.
 WHILE_Statement    = 'while' '(' Expression ')' '{' StatementSequence '}'.
 DO_WHILE_Statement = 'do' '{' StatementSequence '}' 'while' '(' Expression ')' ';'.
 
-For_Expression     = Expression ';' Expression ';' Expression.
+For_Expression     = Assignment ';' Expression ';' Assignment.
 
 Type               = ('int' | 'float' | 'char' | 'bool' | 'cstring' | Identifier) [ '[' ']' ].
 Variable           = Identifier {'[' UnsignedInteger ']'}.
 Identifier         = Letter { (Letter | Digit | '_') }.
 
-Right_Side         = Part1 { ('+' | '-') Part1 }.
+Expression         = Part1 { ('+' | '-') Part1 }.
 Part1              = Part2 { ('>' | '<' | '==' | '>=' | '<=' | '!=') Part2 }.
 Part2              = Part3 { ('*' | '/') Part3 }.
 Part3              = [('+' | '-')] Part4.
 Part4              = ( Part5 | ( Identifier ActualParameters ).
-Part5              = ( UnsignedInteger | Identifier [Selector] ) '(' Right_Side')'.
+Part5              = ( UnsignedInteger | Identifier [Selector] ) '(' Expression')'.
 
-Selector           = {’.’ ident | ’[’ Right_Side ’]’}.
+Selector           = {’.’ ident | ’[’ Expression ’]’}.
 
 UnsignedInteger    = Digit | ( NotNullDigit { Digit } ).
 SignedInteger      = ['-'] UnsignedInteger.
