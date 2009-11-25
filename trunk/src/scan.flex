@@ -37,7 +37,7 @@ package lexyaccgen;
     public static final int DOT			= 291;
 	public static final int IDENTIFIER	= 301;
 	public static final int INTEGER		= 302;
-	public static final int UINTEGER	= 303;
+	//public static final int UINTEGER	= 303;
 	//public static final int FLOAT		= 303;
 	//public static final int CHAR		= 304;
 	public static final int STRING		= 305;
@@ -74,8 +74,10 @@ COMMENT		=	(\/\*([^*]|[\r\n]|(\*+([^*\/]|[\r\n])))*\*+\/) | (\/\/.*)
 DIGIT		=	[0-9]
 NNDIGIT		=	[1-9] 	//Not Null Digit
 ALPHA		=	[a-zA-Z]
-UINTEGER	= 	{DIGIT} | ( {NNDIGIT} {DIGIT}* )
-INTEGER		=	[-]?{UINTEGER}
+
+INTEGER	= 	{DIGIT} | ( {NNDIGIT} {DIGIT}* )
+//UINTEGER	= 	{DIGIT} | ( {NNDIGIT} {DIGIT}* )
+//INTEGER		=	[-]?{UINTEGER}
 //FLOAT       =	{INTEGER}[.]{UINTEGER}
 //BOOL		=	"true" | "false"
 STRING		=	\"[^\"\n\r]*\"
@@ -93,14 +95,12 @@ DATATYPE	=	"int"|"cstring" //|"float"|"char"|"bool"
 				//symtable.addSymbol(yytext(), CONST, STRING, "");
 				return new Yytoken(STRING, yytext());}  //strings eat up comments
 {COMMENT}	{return new Yytoken(WHITESPACE, yytext());}
-
-{UINTEGER} 	{return new Yytoken(UINTEGER, yytext());}
 {INTEGER} 	{
 				//intval = Integer.parseInt(yytext());
 				//symtable.addSymbol(yytext(), CONST, INTEGER, "");
 				return new Yytoken(INTEGER, yytext());
 			}
-
+//{UINTEGER} 	{return new Yytoken(UINTEGER, yytext());}
 /*
 {FLOAT}     {
 				symtable.addSymbol(yytext(), CONST, FLOAT, "");
@@ -123,8 +123,9 @@ DATATYPE	=	"int"|"cstring" //|"float"|"char"|"bool"
 				//if(s.equals("bool")) 	lastDataType = BOOL;
 				//if(s.equals("cstring")) lastDataType = STRING;			
 				
-				if(s.equals("int")) 	return new Yytoken(INTEGER, s);
-				if(s.equals("cstring")) return new Yytoken(STRING, s);
+				//if(s.equals("int")) 	return new Yytoken(INTEGER, s);
+				//if(s.equals("cstring")) return new Yytoken(STRING, s);
+				return new Yytoken(DATATYPE, s);
 			}
 
 [Pp][Rr][Oo][Gg][Rr][Aa][Mm]	
