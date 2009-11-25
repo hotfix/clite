@@ -71,16 +71,16 @@ public class MyMiniParserMain {
 				}
 				else Error("'Identifier' expected\n");
 			}
-			if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("Semicolon expected\n");			
+			if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("Semicolon expected\n");
+			else Insymbol();
 		}
 		else Error("'Identifier' expected\n");		
-		Insymbol();	
+		//Insymbol();	
 	}
 
 	private static void eval_Expression() throws Exception {
 		
 		eval_part1();
-		Insymbol();
 		while ( (nextToken.getTokenType() == MyScanner1.MATHOP) &&
 				( nextToken.getLexem().equals("+") || 
 				  nextToken.getLexem().equals("-") 
@@ -89,12 +89,10 @@ public class MyMiniParserMain {
 			Insymbol();
 			eval_part1();
 		}
-		Insymbol();
 	}
 
 	private static void eval_part1() throws Exception {
 		eval_part2();
-		Insymbol();
 		while ( (nextToken.getTokenType() == MyScanner1.MATHOP) &&
 				( nextToken.getLexem().equals("<")	|| 
 				  nextToken.getLexem().equals(">")	||
@@ -107,12 +105,11 @@ public class MyMiniParserMain {
 			Insymbol();
 			eval_part2();
 		}
-		Insymbol();
 	}
 
 	private static void eval_part2() throws Exception {
 		eval_part3();
-		Insymbol();
+		//Insymbol();
 		while ( (nextToken.getTokenType() == MyScanner1.MATHOP) &&
 				( nextToken.getLexem().equals("*") || 
 				  nextToken.getLexem().equals("/") 
@@ -149,10 +146,17 @@ public class MyMiniParserMain {
 		else {
 			eval_part5();
 		}
-		Insymbol();		
+		//Insymbol();		
 	}
 
 	private static void eval_part5() throws Exception {
+		
+		if ( (nextToken.getTokenType() == MyScanner1.LPAR) ) {
+			Insymbol();	
+			eval_Expression();
+			if ( (nextToken.getTokenType() != MyScanner1.RPAR) ) Error("RPAR expected\n");
+		}
+		else
 		if ( (nextToken.getTokenType() == MyScanner1.IDENTIFIER) ) {
 			Insymbol();
 			if ( (nextToken.getTokenType() == MyScanner1.LSBRACE) || (nextToken.getTokenType() == MyScanner1.DOT) ) {
@@ -160,17 +164,13 @@ public class MyMiniParserMain {
 			}
 		}
 		else {
-			if ( (nextToken.getTokenType() == MyScanner1.UINTEGER) ) {
+			if ( (nextToken.getTokenType() == MyScanner1.INTEGER) ) {
 				
+				Insymbol();
 			}
 			else Error("Identifier or UInteger expected\n");
 		}
-		Insymbol();	
-		if ( (nextToken.getTokenType() == MyScanner1.LPAR) ) Error("LPAR expected\n");
-		Insymbol();	
-		eval_Expression();
-		if ( (nextToken.getTokenType() == MyScanner1.RPAR) ) Error("RPAR expected\n");
-		
+		//Insymbol();		
 	}
 
 	private static void eval_Selector() {
@@ -258,8 +258,7 @@ public class MyMiniParserMain {
 		if (nextToken.getTokenType() != MyScanner1.ASSIGNOP) Error("'ASSIGNOP' expected\n");
 		else Insymbol();
 		
-		eval_Expression();
-		
+		eval_Expression();		
 	}
 
 	private static void eval_Variable() throws Exception {
@@ -269,7 +268,7 @@ public class MyMiniParserMain {
 		if (nextToken.getTokenType() == MyScanner1.LSBRACE) {
 			Insymbol();
 			
-			if (nextToken.getTokenType() != MyScanner1.UINTEGER) Error("'Unsigned Integer' expected\n");
+			if (nextToken.getTokenType() != MyScanner1.INTEGER) Error("'Unsigned Integer' expected\n");
 			else Insymbol();
 			
 			if (nextToken.getTokenType() != MyScanner1.RSBRACE)Error("'RSBRACE' expected\n");
@@ -364,7 +363,7 @@ public class MyMiniParserMain {
 		begin_found = true;
 		Insymbol();		
 		while (nextToken.getTokenType() != MyScanner1.ENDSY) {			
-			eval_StatementSequence();
+			eval_Statement();
 		}
 		end_found = true;
 	}
