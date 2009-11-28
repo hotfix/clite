@@ -8,6 +8,7 @@ public class MyMiniParserMain {
 	static int error_code = 0; 
 	static String infile;
 	static int labcnt = 0;	
+	static boolean skip = false;
 	static Yytoken prevToken = null;
 	static Yytoken nextToken = null;
 	static boolean begin_found	= false;
@@ -146,7 +147,8 @@ public class MyMiniParserMain {
 				eval_ActualParameters();
 			}
 			else {
-				nextToken = prevToken;
+				
+				putback_Token();
 				eval_part5();
 			}
 		}
@@ -155,11 +157,18 @@ public class MyMiniParserMain {
 		}		
 	}
 
+	private static void putback_Token() {
+		
+		nextToken = prevToken;
+		skip = true;
+	}
+
 	private static void eval_part5() throws Exception {
 		
 		if ( (nextToken.getTokenType() == MyScanner1.LPAR) ) {
 			Insymbol();	
 			eval_Expression();
+			//Insymbol();
 			if ( (nextToken.getTokenType() != MyScanner1.RPAR) ) Error("RPAR expected\n");
 			else Insymbol();
 		}
@@ -380,19 +389,22 @@ public class MyMiniParserMain {
 		
 		prevToken = nextToken;
 		
-		try {				
-			while ( (nextToken = scanner.yylex()).getTokenType() == MyScanner1.WHITESPACE );			
+		if(skip == true) skip = false;
+		else {
+			try {			
+				while ( (nextToken = scanner.yylex()).getTokenType() == MyScanner1.WHITESPACE );
 				
-		} catch (java.io.FileNotFoundException e) {
-			System.out.println("File not found : \"" + infile + "\"");
-		} catch (java.io.IOException e) {
-			System.out.println("IO error scanning file \"" + infile + "\"");
-			System.out.println(e);
-		} catch (Exception e) {
-			System.out.println("Unexpected exception:");
-			e.printStackTrace();
+			} catch (java.io.FileNotFoundException e) {
+				System.out.println("File not found : \"" + infile + "\"");
+			} catch (java.io.IOException e) {
+				System.out.println("IO error scanning file \"" + infile + "\"");
+				System.out.println(e);
+			} catch (Exception e) {
+				System.out.println("Unexpected exception:");
+				e.printStackTrace();
+			}
+			if (nextToken.getTokenType() == MyScanner1.EOF) throw new EOFException("Unexpected EOF");
 		}
-		if (nextToken.getTokenType() == MyScanner1.EOF) throw new EOFException("Unexpected EOF");
 	}
 
 	/*
