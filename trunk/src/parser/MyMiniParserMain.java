@@ -224,31 +224,32 @@ public class MyMiniParserMain {
 				if (nextToken.getTokenType() == MyScanner1.ASSIGNOP) {
 					putback_Token();
 					eval_Assignment();
-					Insymbol();					
+					//Insymbol();					
 				}
 				else
 				if (nextToken.getTokenType() == MyScanner1.LSBRACE) {
 					putback_Token();
 					eval_FunctionCall();
-					Insymbol();
+					//Insymbol();
 				}
 				else
 				if (nextToken.getTokenType() == MyScanner1.IDENTIFIER) {
 					putback_Token();
 					if(isUserDataType() == true) eval_Declaration();
 					else Error("Unknown datatype '" + nextToken.getLexem() + "'\n");
-					Insymbol();
+					//Insymbol();
 				}	
 				if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("'ENDOP' expected\n");
 				Insymbol();
+				break;
 				
 			default: Error("Strange statement...\n");
 		}	
 	}
 
 	private static void eval_FunctionCall() {
-		// TODO Auto-generated method stub
 		
+				
 	}
 
 	private static void eval_Assignment() throws Exception {
