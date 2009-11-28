@@ -208,20 +208,47 @@ public class MyMiniParserMain {
 	}
 
 	private static void eval_Statement() throws Exception {	
-		switch(nextToken.getTokenType()){
-			case MyScanner1.DATATYPE: 	eval_Declaration(); break;
+		switch(nextToken.getTokenType()) {
+			case MyScanner1.DATATYPE: 						  eval_Declaration();			break;
 			case MyScanner1.KEYWORD: 
-				if(nextToken.getLexem().equals("struct")){ eval_Struct_Declaration(); break; }
-				if(nextToken.getLexem().equals("if")){ eval_IF_Statement(); break; }
-				if(nextToken.getLexem().equals("for")){ eval_FOR_Statement(); break; }
-				if(nextToken.getLexem().equals("do")){ eval_DO_Statement(); break; }
-				if(nextToken.getLexem().equals("while")){ eval_WHILE_Statement(); break; }
-				//if(nextToken.getLexem().equals("scan")){ eval_SCAN_Statement(); break; }
-				//if(nextToken.getLexem().equals("print")){ eval_PRINT_Statement(); break; }
+				if(nextToken.getLexem().equals("struct"))	{ eval_Struct_Declaration();	break; }
+				if(nextToken.getLexem().equals("if"))		{ eval_IF_Statement(); 			break; }
+				if(nextToken.getLexem().equals("for"))		{ eval_FOR_Statement();			break; }
+				if(nextToken.getLexem().equals("do"))		{ eval_DO_Statement();			break; }
+				if(nextToken.getLexem().equals("while"))	{ eval_WHILE_Statement();		break; }
+				//if(nextToken.getLexem().equals("scan"))	{ eval_SCAN_Statement(); break; }
+				//if(nextToken.getLexem().equals("print"))	{ eval_PRINT_Statement(); break; }
 		
 			case MyScanner1.IDENTIFIER:
-			default: if(isUserDataType() == true) eval_Declaration();
+				Insymbol();
+				if (nextToken.getTokenType() == MyScanner1.ASSIGNOP) {
+					putback_Token();
+					eval_Assignment();
+					Insymbol();					
+				}
+				else
+				if (nextToken.getTokenType() == MyScanner1.LSBRACE) {
+					putback_Token();
+					eval_FunctionCall();
+					Insymbol();
+				}
+				else
+				if (nextToken.getTokenType() == MyScanner1.IDENTIFIER) {
+					putback_Token();
+					if(isUserDataType() == true) eval_Declaration();
+					else Error("Unknown datatype '" + nextToken.getLexem() + "'\n");
+					Insymbol();
+				}	
+				if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("'ENDOP' expected\n");
+				Insymbol();
+				
+			default: Error("Strange statement...\n");
 		}	
+	}
+
+	private static void eval_FunctionCall() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	private static void eval_Assignment() throws Exception {
@@ -315,8 +342,6 @@ public class MyMiniParserMain {
 		
 		eval_Assignment();
 		
-		if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("'ENDOPSY' in for Expression expected\n");
-		else Insymbol();
 		if (nextToken.getTokenType() != MyScanner1.RPAR) Error("'Rpar' expected\n");
 		else Insymbol();
 		
@@ -357,6 +382,7 @@ public class MyMiniParserMain {
 			while(nextToken.getTokenType() != MyScanner1.ENDBLOCK){
 				eval_Statement();
 			}
+			Insymbol();
 		}
 	}
 
