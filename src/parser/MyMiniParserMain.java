@@ -184,11 +184,22 @@ public class MyMiniParserMain {
 		}	
 	}
 
-	private static void eval_Selector() {
-		if ( (nextToken.getTokenType() == MyScanner1.IDENTIFIER) ) {
-			
+	private static void eval_Selector() throws Exception {
+		if ( (nextToken.getTokenType() == MyScanner1.LPAR) ) {			
+			Insymbol();
+			eval_Expression();
+			Insymbol();
+			if ( (nextToken.getTokenType() != MyScanner1.RPAR) ) Error("eval_Selector::RPAR expected\n");
+			else Insymbol();
 		}
-		
+		else
+		if ( (nextToken.getTokenType() == MyScanner1.DOT) ) {
+			Insymbol();
+			if ( (nextToken.getTokenType() != MyScanner1.IDENTIFIER) ) Error("eval_Selector::Identifier expected\n");
+			else Insymbol();
+		}
+		else return;
+		eval_Selector();
 	}
 
 	private static void eval_ActualParameters() {
