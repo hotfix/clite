@@ -8,7 +8,8 @@ public class MyMiniParserMain {
 	static int error_code = 0; 
 	static String infile;
 	static int labcnt = 0;	
-	static Yytoken nextToken;
+	static Yytoken prevToken = null;
+	static Yytoken nextToken = null;
 	static boolean begin_found	= false;
 	static boolean end_found	= false;
 	static MyScanner1 scanner	= null;
@@ -139,14 +140,19 @@ public class MyMiniParserMain {
 
 	private static void eval_part4() throws Exception {
 
-		if ( (nextToken.getTokenType() == MyScanner1.IDENTIFIER) ) {
+		if ( (nextToken.getTokenType() == MyScanner1.IDENTIFIER) ) {			
 			Insymbol();
-			eval_ActualParameters();
+			if ( (nextToken.getTokenType() == MyScanner1.LPAR) ) {
+				eval_ActualParameters();
+			}
+			else {
+				nextToken = prevToken;
+				eval_part5();
+			}
 		}
 		else {
 			eval_part5();
-		}
-		//Insymbol();		
+		}		
 	}
 
 	private static void eval_part5() throws Exception {
@@ -155,6 +161,7 @@ public class MyMiniParserMain {
 			Insymbol();	
 			eval_Expression();
 			if ( (nextToken.getTokenType() != MyScanner1.RPAR) ) Error("RPAR expected\n");
+			else Insymbol();
 		}
 		else
 		if ( (nextToken.getTokenType() == MyScanner1.IDENTIFIER) ) {
@@ -370,6 +377,9 @@ public class MyMiniParserMain {
 	
 
 	private static void Insymbol() throws EOFException {
+		
+		prevToken = nextToken;
+		
 		try {				
 			while ( (nextToken = scanner.yylex()).getTokenType() == MyScanner1.WHITESPACE );			
 				
