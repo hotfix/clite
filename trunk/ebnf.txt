@@ -4,8 +4,10 @@ FormalParameters   = '(' [ Type Variable ] { ',' Type Variable } ’)’.
 ActualParameters   = '(' [ Right_Side { ',' Right_Side } ] ')'.
 
 StatementSequence  = { Statement }
-Statement          = (Declaration ';') | (Assignment ';') | IF_Statement | FOR_Statement | WHILE_Statement | DO_WHILE_Statement
-                     ( 'scan' '(' Variable ')' ';' ) | ( 'print' '(' Variable | String ')' ';' ).
+Statement          = (Declaration ';') | (Assignment ';') | FOR_Statement | WHILE_Statement | DO_WHILE_Statement
+					 | IF_Statement | FunctionCall ';'
+                     
+FuctionCall        = (ident ActualParameters) | ( 'scan' '(' Variable ')' ) | ( 'print' '(' Variable | String ')' ).
 Declaration        = { Var_Dec | Struct_Dec }
 
 Var_Dec            = Type Variable [ Dec_opts ]	{ ',' Variable [ Dec_opts ] }.
@@ -34,7 +36,7 @@ Expression         = Part1 { ('+' | '-') Part1 }.
 Part1              = Part2 { ('>' | '<' | '==' | '>=' | '<=' | '!=') Part2 }.
 Part2              = Part3 { ('*' | '/') Part3 }.
 Part3              = [('+' | '-')] Part4.
-Part4              = ( Part5 | ( Identifier ActualParameters ).
+Part4              = ( Part5 | ( FunctionCall ).
 Part5              = ( UnsignedInteger | Identifier [Selector] ) | ( '(' Expression')' ).
 
 Selector           = {'.' ident | '[' Expression ']'}.
