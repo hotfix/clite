@@ -61,7 +61,6 @@ public class MyMiniParserMain {
 				Insymbol();
 				eval_Expression();
 			}
-			//Insymbol();
 			while(nextToken.getTokenType() == MyScanner1.COMMA) {
 				Insymbol();
 				if (nextToken.getTokenType() == MyScanner1.IDENTIFIER) {
@@ -77,8 +76,7 @@ public class MyMiniParserMain {
 			if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("Semicolon expected\n");
 			else Insymbol();
 		}
-		else Error("'Identifier' expected\n");		
-		//Insymbol();	
+		else Error("'Identifier' expected\n");			
 	}
 
 	private static void eval_Expression() throws Exception {
@@ -96,7 +94,7 @@ public class MyMiniParserMain {
 
 	private static void eval_part1() throws Exception {
 		eval_part2();
-		while ( (nextToken.getTokenType() == MyScanner1.MATHOP) &&
+		while ( (nextToken.getTokenType() == MyScanner1.COMPARE) &&
 				( nextToken.getLexem().equals("<")	|| 
 				  nextToken.getLexem().equals(">")	||
 				  nextToken.getLexem().equals("==") || 
@@ -112,7 +110,6 @@ public class MyMiniParserMain {
 
 	private static void eval_part2() throws Exception {
 		eval_part3();
-		//Insymbol();
 		while ( (nextToken.getTokenType() == MyScanner1.MATHOP) &&
 				( nextToken.getLexem().equals("*") || 
 				  nextToken.getLexem().equals("/") 
@@ -121,7 +118,6 @@ public class MyMiniParserMain {
 			Insymbol();
 			eval_part3();
 		}
-		//Insymbol();	 
 	}
 
 	private static void eval_part3() throws Exception {
@@ -136,8 +132,7 @@ public class MyMiniParserMain {
 		}
 		else {
 			eval_part4();
-		}
-		//Insymbol();		
+		}		
 	}
 
 	private static void eval_part4() throws Exception {
@@ -186,12 +181,13 @@ public class MyMiniParserMain {
 				Insymbol();
 			}
 			else Error("Identifier or UInteger expected\n");
-		}
-		//Insymbol();		
+		}	
 	}
 
 	private static void eval_Selector() {
-		// TODO Auto-generated method stub
+		if ( (nextToken.getTokenType() == MyScanner1.IDENTIFIER) ) {
+			
+		}
 		
 	}
 
@@ -201,7 +197,6 @@ public class MyMiniParserMain {
 	}
 
 	private static void eval_Statement() throws Exception {	
-		//TODO Statement fehlt
 		switch(nextToken.getTokenType()){
 			case MyScanner1.DATATYPE: 	eval_Declaration(); break;
 			case MyScanner1.KEYWORD: 
@@ -213,12 +208,33 @@ public class MyMiniParserMain {
 				//if(nextToken.getLexem().equals("scan")){ eval_SCAN_Statement(); break; }
 				//if(nextToken.getLexem().equals("print")){ eval_PRINT_Statement(); break; }
 		
+			case MyScanner1.IDENTIFIER:
 			default: if(isUserDataType() == true) eval_Declaration();
-		}
-
-		//Insymbol();		
+		}	
 	}
 
+	private static void eval_Assignment() throws Exception {
+		
+		eval_Variable();
+		
+		if ( (nextToken.getTokenType() == MyScanner1.LSBRACE) || 
+			 (nextToken.getTokenType() == MyScanner1.DOT) )
+		{ 
+			eval_Selector();
+		}	
+		
+		if (nextToken.getTokenType() != MyScanner1.ASSIGNOP) Error("'ASSIGNOP' expected\n");
+		else Insymbol();
+		
+		eval_Expression();		
+	}
+
+	private static void eval_Variable() throws Exception {
+		
+		if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("'IDENTIFIER' expected\n");
+		else Insymbol();	
+	}
+	
 	private static void eval_Struct_Declaration() {
 		// TODO Auto-generated method stub
 		
@@ -245,7 +261,8 @@ public class MyMiniParserMain {
 		
 		while(nextToken.getTokenType() != MyScanner1.ENDBLOCK){
 			eval_Statement();
-		}		
+		}
+		Insymbol();
 	}
 
 	private static void eval_DO_Statement() throws Exception {
@@ -268,30 +285,6 @@ public class MyMiniParserMain {
 		else Insymbol();		
 	}
 
-	private static void eval_Assignment() throws Exception {
-		
-		eval_Variable();
-		
-		if (nextToken.getTokenType() != MyScanner1.ASSIGNOP) Error("'ASSIGNOP' expected\n");
-		else Insymbol();
-		
-		eval_Expression();		
-	}
-
-	private static void eval_Variable() throws Exception {
-		if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("'IDENTIFIER' expected\n");
-		else Insymbol();
-		
-		if (nextToken.getTokenType() == MyScanner1.LSBRACE) {
-			Insymbol();
-			
-			if (nextToken.getTokenType() != MyScanner1.INTEGER) Error("'Unsigned Integer' expected\n");
-			else Insymbol();
-			
-			if (nextToken.getTokenType() != MyScanner1.RSBRACE)Error("'RSBRACE' expected\n");
-			else Insymbol();			
-		}		
-	}
 
 	private static void eval_FOR_Statement() throws Exception {		
 		
@@ -322,7 +315,7 @@ public class MyMiniParserMain {
 		while(nextToken.getTokenType() != MyScanner1.ENDBLOCK){
 			eval_Statement();
 		}
-		
+		Insymbol();
 	}
 
 
@@ -451,5 +444,4 @@ public class MyMiniParserMain {
 			}
 		}
 	}
-
 }
