@@ -1,7 +1,7 @@
 Programm           = 'Program' Identifier ';' { Function_Dec } 'BEGIN' StatementSequence 'END'.
 Function_Dec       = [Type] Identifier FormalParameters '{' StatementSequence ['return' Expression] '}'.
-FormalParameters   = ’(’ [ Type Variable ] { ',' Type Variable } ’)’.
-ActualParameters   = ’(’ [ Right_Side { ’,’ Right_Side } ] ’)’.
+FormalParameters   = '(' [ Type Variable ] { ',' Type Variable } ’)’.
+ActualParameters   = '(' [ Right_Side { ',' Right_Side } ] ')'.
 
 StatementSequence  = { Statement }
 Statement          = (Declaration ';') | (Assignment ';') | IF_Statement | FOR_Statement | WHILE_Statement | DO_WHILE_Statement
@@ -33,9 +33,9 @@ Part1              = Part2 { ('>' | '<' | '==' | '>=' | '<=' | '!=') Part2 }.
 Part2              = Part3 { ('*' | '/') Part3 }.
 Part3              = [('+' | '-')] Part4.
 Part4              = ( Part5 | ( Identifier ActualParameters ).
-Part5              = ( UnsignedInteger | Identifier [Selector] ) '(' Expression')'.
+Part5              = ( UnsignedInteger | Identifier [Selector] ) | ( '(' Expression')' ).
 
-Selector           = {’.’ ident | ’[’ Expression ’]’}.
+Selector           = {'.' ident | '[' Expression ']'}.
 
 UnsignedInteger    = Digit | ( NotNullDigit { Digit } ).
 SignedInteger      = ['-'] UnsignedInteger.
