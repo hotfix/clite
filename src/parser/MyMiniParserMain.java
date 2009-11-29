@@ -194,9 +194,19 @@ public class MyMiniParserMain {
 		eval_Selector();
 	}
 
-	private static void eval_ActualParameters() {
-		// TODO Auto-generated method stub
+	private static void eval_ActualParameters() throws Exception {
 		
+		if ( (nextToken.getTokenType() != MyScanner1.LPAR) ) Error("LPAR expected\n");
+		Insymbol();
+		if ( (nextToken.getTokenType() != MyScanner1.RPAR) ) {
+			eval_Expression();
+			while( (nextToken.getTokenType() == MyScanner1.COMMA) ) {
+				Insymbol();
+				eval_Expression();
+			}
+			if ( (nextToken.getTokenType() != MyScanner1.RPAR) ) Error("RPAR expected\n");
+		}		
+		Insymbol();		
 	}
 
 	private static void eval_Statement() throws Exception {	
@@ -215,21 +225,18 @@ public class MyMiniParserMain {
 				Insymbol();
 				if (nextToken.getTokenType() == MyScanner1.ASSIGNOP) {
 					putback_Token();
-					eval_Assignment();
-					//Insymbol();					
+					eval_Assignment();				
 				}
 				else
 				if (nextToken.getTokenType() == MyScanner1.LPAR) {
 					putback_Token();
 					eval_FunctionCall();
-					//Insymbol();
 				}
 				else
 				if (nextToken.getTokenType() == MyScanner1.IDENTIFIER) {
 					putback_Token();
 					if(isUserDataType() == true) eval_Declaration();
 					else Error("Unknown datatype '" + nextToken.getLexem() + "'\n");
-					//Insymbol();
 				}	
 				if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("'ENDOP' expected\n");
 				Insymbol();
@@ -243,12 +250,7 @@ public class MyMiniParserMain {
 		
 		if ( (nextToken.getTokenType() != MyScanner1.IDENTIFIER) ) Error("Identifier expected\n");		
 		Insymbol();
-		if ( (nextToken.getTokenType() != MyScanner1.LPAR) ) Error("LPAR expected\n");
-		Insymbol();
-		eval_Expression();
-		//Insymbol();
-		if ( (nextToken.getTokenType() != MyScanner1.RPAR) ) Error("RPAR expected\n");
-		Insymbol();				
+		eval_ActualParameters();		
 	}
 
 	private static void eval_Assignment() throws Exception {
