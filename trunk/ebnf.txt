@@ -35,9 +35,8 @@ Identifier         = Letter { (Letter | Digit | '_') }.
 Expression         = Part1 { ('+' | '-') Part1 }.
 Part1              = Part2 { ('>' | '<' | '==' | '>=' | '<=' | '!=') Part2 }.
 Part2              = Part3 { ('*' | '/') Part3 }.
-Part3              = [('+' | '-')] Part4.
-Part4              = ( Part5 | ( FunctionCall ).
-Part5              = ( UnsignedInteger | Identifier [Selector] ) | ( '(' Expression')' ).
+Part3              = [('+' | '-')] Part4 | FunctionCall.
+Part4              = ( UnsignedInteger | Identifier [Selector] ) | ( '(' Expression')' ).
 
 Selector           = {'.' ident | '[' Expression ']'}.
 
