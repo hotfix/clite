@@ -5,16 +5,17 @@ import lexyaccgen.*;
 
 public class MyMiniParserMain {
 
-	static int error_code = 0; 
-	static String infile;
-	static int labcnt = 0;	
-	static boolean skip = false;
-	static Yytoken tempToken = null;
-	static Yytoken prevToken = null;
-	static Yytoken nextToken = null;
-	static boolean begin_found	= false;
-	static boolean end_found	= false;
-	static MyScanner1 scanner	= null;
+	static String 		infile;
+	static int 			error_code	= 0;	
+	static int 			labcnt		= 0;	
+	static Yytoken 		tempToken	= null;
+	static Yytoken 		prevToken	= null;
+	static Yytoken 		nextToken	= null;
+	static MyScanner1 	scanner		= null;
+	static boolean 		skip		= false;
+	static boolean 		begin_found	= false;
+	static boolean 		end_found	= false;
+	
 
 	/*
 	 * Hilfsroutinen
@@ -422,14 +423,52 @@ public class MyMiniParserMain {
 		}
 	}
 
-	private static void eval_StatementSequence() {		
-	}
+	//private static void eval_StatementSequence() {		
+	//}
 
 	private static void eval_Function_Dec() throws Exception {
 
-		Insymbol();
+		if (nextToken.getTokenType() == MyScanner1.DATATYPE) {
+			Insymbol();
+		}
+		if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("Function name expected\n");
+		else Insymbol();
+		eval_FormalParameters();
+		if (nextToken.getTokenType() != MyScanner1.BEGINBLOCK) Error("'{' expected\n");
+		else Insymbol();
+		while ( (nextToken.getTokenType() != MyScanner1.ENDBLOCK) && (nextToken.getTokenType() != MyScanner1.RETURNSY) ) {			
+			eval_Statement();
+		}
+		if (nextToken.getTokenType() == MyScanner1.RETURNSY) {
+			Insymbol();
+			if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("';' expected\n");
+			else Insymbol();
+			if (nextToken.getTokenType() != MyScanner1.ENDBLOCK) Error("'}' expected\n");
+			else Insymbol();
+		}
 	}
 	
+	private static void eval_FormalParameters() throws Exception {
+		
+		if ( (nextToken.getTokenType() != MyScanner1.LPAR) ) Error("LPAR expected\n");
+		Insymbol();
+		if ( (nextToken.getTokenType() != MyScanner1.RPAR) ) {
+			if (nextToken.getTokenType() != MyScanner1.DATATYPE) Error("DATATYPE expected\n");
+			else Insymbol();
+			if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("IDENTIFIER expected\n");
+			else Insymbol();
+			while( (nextToken.getTokenType() == MyScanner1.COMMA) ) {
+				Insymbol();
+				if (nextToken.getTokenType() != MyScanner1.DATATYPE) Error("DATATYPE expected\n");
+				else Insymbol();
+				if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("IDENTIFIER expected\n");
+				else Insymbol();
+			}
+			if ( (nextToken.getTokenType() != MyScanner1.RPAR) ) Error("RPAR expected\n");
+		}		
+		Insymbol();			
+	}
+
 	private static void eval_Program() throws Exception {
 		
 		Insymbol();
