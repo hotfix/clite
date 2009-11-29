@@ -128,39 +128,24 @@ public class MyMiniParserMain {
 				)
 			  ) {
 			Insymbol();
-			eval_part4();
 		}
-		else {
-			eval_part4();
-		}		
-	}
-
-	private static void eval_part4() throws Exception {
-
 		if ( (nextToken.getTokenType() == MyScanner1.IDENTIFIER) ) {			
 			Insymbol();
 			if ( (nextToken.getTokenType() == MyScanner1.LPAR) ) {
-				eval_ActualParameters();
+				putback_Token();
+				eval_FunctionCall();
 			}
 			else {
-				
 				putback_Token();
-				eval_part5();
+				eval_part4();
 			}
 		}
 		else {
-			eval_part5();
-		}		
+			eval_part4();
+		}
 	}
 
-	private static void putback_Token() {
-		
-		tempToken = nextToken;
-		nextToken = prevToken;
-		skip = true;
-	}
-
-	private static void eval_part5() throws Exception {
+	private static void eval_part4() throws Exception {
 		
 		if ( (nextToken.getTokenType() == MyScanner1.LPAR) ) {
 			Insymbol();	
@@ -184,6 +169,13 @@ public class MyMiniParserMain {
 		}	
 	}
 
+	private static void putback_Token() {
+		
+		tempToken = nextToken;
+		nextToken = prevToken;
+		skip = true;
+	}
+	
 	private static void eval_Selector() throws Exception {
 		if ( (nextToken.getTokenType() == MyScanner1.LPAR) ) {			
 			Insymbol();
@@ -227,7 +219,7 @@ public class MyMiniParserMain {
 					//Insymbol();					
 				}
 				else
-				if (nextToken.getTokenType() == MyScanner1.LSBRACE) {
+				if (nextToken.getTokenType() == MyScanner1.LPAR) {
 					putback_Token();
 					eval_FunctionCall();
 					//Insymbol();
@@ -247,9 +239,16 @@ public class MyMiniParserMain {
 		}	
 	}
 
-	private static void eval_FunctionCall() {
+	private static void eval_FunctionCall() throws Exception {
 		
-				
+		if ( (nextToken.getTokenType() != MyScanner1.IDENTIFIER) ) Error("Identifier expected\n");		
+		Insymbol();
+		if ( (nextToken.getTokenType() != MyScanner1.LPAR) ) Error("LPAR expected\n");
+		Insymbol();
+		eval_Expression();
+		//Insymbol();
+		if ( (nextToken.getTokenType() != MyScanner1.RPAR) ) Error("RPAR expected\n");
+		Insymbol();				
 	}
 
 	private static void eval_Assignment() throws Exception {
