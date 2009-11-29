@@ -47,6 +47,7 @@ package lexyaccgen;
 	public static final int KEYWORD		= 309;
 	//public static final int FUNCTION	= 310;
 	public static final int DATATYPE	= 311;
+	public static final int RETURNSY	= 312;
 	
 	public static final int VAR			= 1000;
 	public static final int CONST		= 1001;
@@ -83,7 +84,7 @@ INTEGER	= 	{DIGIT} | ( {NNDIGIT} {DIGIT}* )
 STRING		=	\"[^\"\n\r]*\"
 MATHOP		=	"+"|"-"|"*"|"/"
 COMPARE		=	"=="|"!="|"<"|">"|"<="|">="
-KEYWORD		=	"if"|"else"|"for"|"do"|"while"|"scan"|"print"|"struct"|"return"
+KEYWORD		=	"if"|"else"|"for"|"do"|"while"|"scan"|"print"|"struct"
 //FUNCTION	=	"sin"|"cos"|"tan"|"div"|"mod"|"sqrt"
 DATATYPE	=	"int"|"cstring" //|"float"|"char"|"bool"
 
@@ -136,6 +137,7 @@ DATATYPE	=	"int"|"cstring" //|"float"|"char"|"bool"
 [Ee][Nn][Dd]			
          	{return new Yytoken(ENDSY, yytext());}
 
+"return"	{return new Yytoken(RETURNSY, yytext());}
 
 {ALPHA}({ALPHA}|{DIGIT}|"_")*	
 			{
@@ -143,6 +145,7 @@ DATATYPE	=	"int"|"cstring" //|"float"|"char"|"bool"
 				//symtable.addSymbol(strval, VAR, lastDataType, "");
 				return new Yytoken(IDENTIFIER, yytext());
 			}	
+
 //"<<"		{return new Yytoken(COUTSY, yytext());}
 //">>"		{return new Yytoken(CINSY, yytext());}
 \{			{return new Yytoken(BEGINBLOCK, yytext());}
