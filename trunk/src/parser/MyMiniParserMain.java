@@ -275,15 +275,64 @@ public class MyMiniParserMain {
 		else Insymbol();	
 	}
 	
-	private static void eval_Struct_Declaration() {
-		// TODO Auto-generated method stub
+	private static void eval_Struct_Declaration() throws Exception {
+		
+		Insymbol();
+		if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("struct 'IDENTIFIER' expected\n");
+		else Insymbol();
+		
+		eval_FieldlList();
+		
+	}
+
+	private static void eval_FieldlList() throws Exception {
+		if (nextToken.getTokenType() != MyScanner1.BEGINBLOCK) Error("'BEGINBLOCK' in struct expected\n");
+		else Insymbol();
+		
+		eval_Var_Dec();
+		
+		while(nextToken.getTokenType() != MyScanner1.ENDBLOCK){
+			eval_Var_Dec();
+			//Insymbol();
+		}
+		
+		if (nextToken.getTokenType() != MyScanner1.ENDBLOCK) Error("'ENDBLOCK' in struct expected\n");
+		else Insymbol();
+		
+	}
+
+	private static void eval_Var_Dec() throws Exception {
+		if(nextToken.getTokenType() != MyScanner1.DATATYPE) Error("'Datatype' in struct declaration expected\n");
+		else Insymbol();
+		
+		if (nextToken.getTokenType() == MyScanner1.IDENTIFIER) {
+			//add varname to symtableentry
+			Insymbol();
+			if (nextToken.getTokenType() == MyScanner1.ASSIGNOP) {
+				Insymbol();
+				eval_Expression();
+			}
+			while(nextToken.getTokenType() == MyScanner1.COMMA) {
+				Insymbol();
+				if (nextToken.getTokenType() == MyScanner1.IDENTIFIER) {
+					//add varname to symtableentry
+					Insymbol();
+					if (nextToken.getTokenType() == MyScanner1.ASSIGNOP) {
+						Insymbol();
+						eval_Expression();
+					}
+				}
+				else Error("'Identifier' expected\n");
+			}
+			if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("Semicolon expected\n");
+			else Insymbol();
+		}
+		else Error("'Identifier' expected\n");		
 		
 	}
 
 	private static boolean isUserDataType() {
-		// TODO Auto-generated method stub
-		
-		//check in the SymTable if nextToken is a user defined data type
+		// TODO check in the SymTable if nextToken is a user defined data type
 		return false;
 	}
 
