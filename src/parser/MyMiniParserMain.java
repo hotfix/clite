@@ -52,31 +52,16 @@ public class MyMiniParserMain {
 	}
 	
 	private static void eval_Declaration() throws Exception {
-		//add type to symtableentry
-		Insymbol();
-		if (nextToken.getTokenType() == MyScanner1.IDENTIFIER) {
-			//add varname to symtableentry
-			Insymbol();
-			if (nextToken.getTokenType() == MyScanner1.ASSIGNOP) {
-				Insymbol();
-				eval_Expression();
-			}
-			while(nextToken.getTokenType() == MyScanner1.COMMA) {
-				Insymbol();
-				if (nextToken.getTokenType() == MyScanner1.IDENTIFIER) {
-					//add varname to symtableentry
-					Insymbol();
-					if (nextToken.getTokenType() == MyScanner1.ASSIGNOP) {
-						Insymbol();
-						eval_Expression();
-					}
-				}
-				else Error("'Identifier' expected\n");
-			}
-			if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("Semicolon expected\n");
-			else Insymbol();
+		while((nextToken.getTokenType() == MyScanner1.ENDOP) 
+				|| (nextToken.getTokenType() == MyScanner1.ENDBLOCK))
+		{
+			
+			if(nextToken.getLexem().equals("struct")){
+				eval_Struct_Declaration();
+			}else if (nextToken.getTokenType() == MyScanner1.DATATYPE){
+				eval_Var_Dec();
+			}else Error("Error in eval_Declaration");
 		}
-		else Error("'Identifier' expected\n");			
 	}
 
 	private static void eval_Expression() throws Exception {
