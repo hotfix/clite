@@ -6,15 +6,7 @@ import java.util.Map;
 
 import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
 
-import abstractTreeNodes.AbstractNode;
-import abstractTreeNodes.BinNode;
-import abstractTreeNodes.FielListNode;
-import abstractTreeNodes.FieldListNode;
-import abstractTreeNodes.FormalParamsNode;
-import abstractTreeNodes.FunctionDecNode;
-import abstractTreeNodes.ProgNode;
-import abstractTreeNodes.StructDecNode;
-import abstractTreeNodes.VarDecNode;
+import abstractTreeNodes.*;
 
 import symTable.AbstractEntry;
 import symTable.SymTable;
@@ -86,22 +78,33 @@ public class Parser {
 	private static AbstractNode eval_Expression() throws Exception {
 		
 		//TODO: nischt fertisch
-		eval_part1();
+		AbstractNode result = eval_part1();
+		BinNode bin_result = null;
+		
 		while ( (nextToken.getTokenType() == MyScanner1.MATHOP) &&
 				( nextToken.getLexem().equals("+") || 
 				  nextToken.getLexem().equals("-") 
 				)
 			  ) 
 		{
+			int op;
+			if (nextToken.getLexem().equals("+") == true) 
+				op = Ops.addop;
+			else 
+				op = Ops.subop;
 			
 			Insymbol();
-			eval_part1();
+			
+			bin_result = new BinNode(op, result, eval_part1());			
 		}
 		
-		return new AbstractNode();
+		if (bin_result == null)	
+			return result;
+		else 
+			return bin_result;
 	}
 
-	private static void eval_part1() throws Exception {
+	private static AbstractNode eval_part1() throws Exception {
 		eval_part2();
 		while ( (nextToken.getTokenType() == MyScanner1.COMPARE) &&
 				( nextToken.getLexem().equals("<")	|| 
@@ -115,6 +118,8 @@ public class Parser {
 			Insymbol();
 			eval_part2();
 		}
+		
+		return new AbstractNode();
 	}
 
 	private static void eval_part2() throws Exception {
@@ -154,28 +159,33 @@ public class Parser {
 		}
 	}
 
-	private static void eval_part4() throws Exception {
+	private static AbstractNode eval_part4() throws Exception {
 		
+		AbstractNode result = null;
+		/*
 		if ( (nextToken.getTokenType() == MyScanner1.LPAR) ) {
 			Insymbol();	
 			eval_Expression();
 			if ( (nextToken.getTokenType() != MyScanner1.RPAR) ) Error("RPAR expected\n");
 			else Insymbol();
 		}
-		else
+		else*/
 		if ( (nextToken.getTokenType() == MyScanner1.IDENTIFIER) ) {
+			String idf = nextToken.getLexem();
 			Insymbol();
 			if ( (nextToken.getTokenType() == MyScanner1.LSBRACE) || (nextToken.getTokenType() == MyScanner1.DOT) ) {
-				eval_Selector();
+				result = eval_Selector(idf);
 			}
+			else result = new IdfNode(idf);
 		}
 		else {
 			if ( (nextToken.getTokenType() == MyScanner1.INTEGER) ) {
-				
-				Insymbol();
+				result = new IntNode(nextToken.getLexem());
+				Insymbol();				
 			}
 			else Error("Identifier or UInteger expected\n");
-		}	
+		}
+		return result;
 	}
 
 	private static void putback_Token() {
@@ -185,10 +195,16 @@ public class Parser {
 		skip = true;
 	}
 	
-	private static void eval_Selector() throws Exception {
+	private static BinNode eval_Selector(String ident) throws Exception {
+		BinNode result = null;
+		BinNode result2 = null;
+		String fieldIdf = "";
+		AbstractNode rightSide = null;
+		
 		if ( (nextToken.getTokenType() == MyScanner1.LPAR) ) {			
 			Insymbol();
-			eval_Expression();
+			result = new ArrayRefNode();
+			rightSide = eval_Expression();
 			Insymbol();
 			if ( (nextToken.getTokenType() != MyScanner1.RPAR) ) Error("eval_Selector::RPAR expected\n");
 			else Insymbol();
@@ -197,10 +213,24 @@ public class Parser {
 		if ( (nextToken.getTokenType() == MyScanner1.DOT) ) {
 			Insymbol();
 			if ( (nextToken.getTokenType() != MyScanner1.IDENTIFIER) ) Error("eval_Selector::Identifier expected\n");
-			else Insymbol();
+			else{
+				rightSide = new IdfNode(nextToken.getLexem());
+				fieldIdf = nextToken.getLexem();
+				result = new StructRefNode();
+				Insymbol();
+			}
 		}
-		else return;
-		eval_Selector();
+		else return result;
+		result2 = eval_Selector(fieldIdf);
+		if(result2 == null){
+			result.SetL(new IdfNode(ident));
+			result.SetR(rightSide);
+			
+		}else{
+			result.SetL(new IdfNode(ident));
+			result.SetR(result2);
+		}
+		return result;
 	}
 
 	private static void eval_ActualParameters() throws Exception {
