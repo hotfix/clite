@@ -79,7 +79,7 @@ public class Parser {
 			node = eval_Struct_Declaration();
 		}else if (nextToken.getTokenType() == MyScanner1.DATATYPE){
 			node = eval_Var_Dec();
-		}else Error("Error in eval_Declaration");
+		}else Error("Error in eval_Declaration");//wtf?
 		return node;
 	}
 
@@ -500,7 +500,9 @@ public class Parser {
 		}
 		if (nextToken.getTokenType() == MyScanner1.RETURNSY) {
 			Insymbol();
-			//TODO: returnvalue
+			if (nextToken.getTokenType() != MyScanner1.ENDOP) {
+				eval_Expression();
+			}
 			if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("';' expected\n");
 			else Insymbol();
 			if (nextToken.getTokenType() != MyScanner1.ENDBLOCK) Error("'}' expected\n");
@@ -574,7 +576,8 @@ public class Parser {
 		begin_found = true;
 		Insymbol();		
 		while (nextToken.getTokenType() != MyScanner1.ENDSY) {			
-			statements.add(eval_Statement());
+			//statements.add(eval_Statement());
+			statements.add(eval_Expression());
 		}
 		end_found = true;
 		
