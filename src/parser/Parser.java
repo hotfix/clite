@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
 import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
 
 import abstractTreeNodes.*;
 
+import sun.security.jca.GetInstance.Instance;
 import symTable.AbstractEntry;
 import symTable.SymTable;
 
@@ -105,7 +107,7 @@ public class Parser {
 	}
 
 	private static AbstractNode eval_part1() throws Exception {
-		eval_part2();
+		AbstractNode result = eval_part2();
 		while ( (nextToken.getTokenType() == MyScanner1.COMPARE) &&
 				( nextToken.getLexem().equals("<")	|| 
 				  nextToken.getLexem().equals(">")	||
@@ -117,13 +119,13 @@ public class Parser {
 			  ) {
 			Insymbol();
 			eval_part2();
-		}
+		}	
 		
-		return new AbstractNode();
+		return result;
 	}
 
-	private static void eval_part2() throws Exception {
-		eval_part3();
+	private static AbstractNode eval_part2() throws Exception {
+		AbstractNode result = eval_part3();
 		while ( (nextToken.getTokenType() == MyScanner1.MATHOP) &&
 				( nextToken.getLexem().equals("*") || 
 				  nextToken.getLexem().equals("/") 
@@ -132,9 +134,13 @@ public class Parser {
 			Insymbol();
 			eval_part3();
 		}
+		
+		return result;
 	}
 
-	private static void eval_part3() throws Exception {
+	private static AbstractNode eval_part3() throws Exception {
+		
+		AbstractNode result = null;;
 		
 		if ( (nextToken.getTokenType() == MyScanner1.MATHOP) &&
 				( nextToken.getLexem().equals("+") || 
@@ -151,12 +157,14 @@ public class Parser {
 			}
 			else {
 				putback_Token();
-				eval_part4();
+				result = eval_part4();
 			}
 		}
 		else {
-			eval_part4();
+			result = eval_part4();
 		}
+		
+		return result;
 	}
 
 	private static AbstractNode eval_part4() throws Exception {
@@ -301,27 +309,30 @@ public class Parser {
 	//TODO:baum
 	private static AbstractNode eval_Assignment() throws Exception {
 		
-		eval_Variable();
+		String var = nextToken.getLexem();
+		AbstractNode left_side = eval_Variable();
 		
 		if ( (nextToken.getTokenType() == MyScanner1.LSBRACE) || 
 			 (nextToken.getTokenType() == MyScanner1.DOT) )
 		{ 
-			eval_Selector();
+			left_side = eval_Selector(var);
 		}	
 		
 		if (nextToken.getTokenType() != MyScanner1.ASSIGNOP) Error("'ASSIGNOP' expected\n");
 		else Insymbol();
 		
-		eval_Expression();	
+		AbstractNode right_side = eval_Expression();	
 		
-		//?
-		return new AbstractNode();
+		return new AssNode(left_side, right_side);
 	}
 
-	private static void eval_Variable() throws Exception {
+	private static IdfNode eval_Variable() throws Exception {
 		
 		if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("'IDENTIFIER' expected\n");
-		else Insymbol();	
+		
+		IdfNode node = new IdfNode(nextToken.getLexem());
+		Insymbol();	
+		return node;
 	}
 	
 	private static StructDecNode eval_Struct_Declaration() throws Exception {
@@ -600,32 +611,33 @@ public class Parser {
 		String programName = "";
 		List<AbstractNode> functions = new ArrayList<AbstractNode>();
 		List<AbstractNode> statements = new ArrayList<AbstractNode>();
-		
-		
-		Insymbol();
+				
+		//Insymbol();
 		if (nextToken.getTokenType() != MyScanner1.PROGRAMSY){
 			Error("'Program' declaration expected\n");
 			//return null;
 		}
-		else{ Insymbol(); }
+		Insymbol();
+		
 		if (nextToken.getTokenType() != MyScanner1.IDENTIFIER){
 			Error("Program name not correct\n");
 		}
-		else{
-			programName = nextToken.getLexem();
-			Insymbol();
-		}
+		
+		programName = nextToken.getLexem();
+		Insymbol();
+		
 		if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("Semicolon expected\n");
-		else Insymbol();
+		Insymbol();
 		
 		while (nextToken.getTokenType() != MyScanner1.BEGINSY) {
 			functions.add(eval_Function_Dec());
 		}
+		
 		begin_found = true;
-		Insymbol();		
+		Insymbol();
+		
 		while (nextToken.getTokenType() != MyScanner1.ENDSY) {			
-			//statements.add(eval_Statement());
-			statements.add(eval_Expression());
+			statements.add(eval_Statement());
 		}
 		end_found = true;
 		
@@ -664,10 +676,10 @@ public class Parser {
 
 	public static void main(String[] argv) {
 		
-		System.out.println("MyMiniParser Version 0.0");
+		System.out.println("Parser Version 0.2");
 		
 		if (argv.length == 0) {
-			System.out.println("Usage : java MyMiniParser <inputfile>");
+			System.out.println("Usage : java Parser <inputfile>");
 		} else {
 			for (int i = 0; i < argv.length; i++) {
 				try {
@@ -676,8 +688,12 @@ public class Parser {
 					infile = argv[i];
 					scanner = new MyScanner1(new java.io.FileReader(infile));
 					
+					Insymbol();
+					root = eval_Expression();//eval_Program();
+					begin_found = true;
+					end_found = true;
 					
-					root = eval_Program();
+					System.out.println(root.toString());
 					
 					if (scanner.yylex().getTokenType() != MyScanner1.EOF) Error("End Of File expected\n");
 					else 
