@@ -1,4 +1,48 @@
+1
+/*
 Program myprog;
 
-Begin §
-en
+int max (int a, int b) {
+
+	int max_num = a;
+	if(b > a) {
+		max_num = b;
+	}
+	return(max_num);
+}
+
+fun(int i) {
+	return 0;
+}
+
+Begin
+
+	struct st {
+		int a;
+		int b;
+	}
+	//st m_st;
+	m_st.a = 2;
+	int a = m_st.a;
+	int b = a[0];
+	
+	
+	int x;
+	int a = (x<3), b, c = 3;
+	
+	if (2 < x/3) {
+		
+		int a = 3;
+		x = 2;
+		max(a, b);
+	}
+	
+	for(i=0; i < 2; i = i+1) {
+	
+		x = 2;
+	}	
+	
+	//int x = max(2,5);
+	//print(x);
+*/
+end
