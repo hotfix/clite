@@ -91,7 +91,9 @@ public class Parser {
 				( nextToken.getLexem().equals("+") || 
 				  nextToken.getLexem().equals("-") 
 				)
-			  ) {
+			  ) 
+		{
+			
 			Insymbol();
 			eval_part1();
 		}
@@ -216,6 +218,7 @@ public class Parser {
 		Insymbol();		
 	}
 
+	//TODO:baum
 	private static AbstractNode eval_Statement() throws Exception {
 		AbstractNode node;
 		
@@ -253,17 +256,20 @@ public class Parser {
 				
 			default: Error("Strange statement...\n");
 		}
-		return node;	
+		return new AbstractNode();	
 	}
 
-	private static void eval_FunctionCall() throws Exception {
+	//TODO:baum
+	private static AbstractNode eval_FunctionCall() throws Exception {
 		
 		if ( (nextToken.getTokenType() != MyScanner1.IDENTIFIER) ) Error("Identifier expected\n");		
 		Insymbol();
-		eval_ActualParameters();		
+		eval_ActualParameters();
+		return new AbstractNode();		
 	}
 
-	private static void eval_Assignment() throws Exception {
+	//TODO:baum
+	private static AbstractNode eval_Assignment() throws Exception {
 		
 		eval_Variable();
 		
@@ -276,7 +282,10 @@ public class Parser {
 		if (nextToken.getTokenType() != MyScanner1.ASSIGNOP) Error("'ASSIGNOP' expected\n");
 		else Insymbol();
 		
-		eval_Expression();		
+		eval_Expression();	
+		
+		//?
+		return new AbstractNode();
 	}
 
 	private static void eval_Variable() throws Exception {
@@ -372,7 +381,8 @@ public class Parser {
 		return false;
 	}
 
-	private static void eval_WHILE_Statement() throws Exception {
+	//TODO:baum
+	private static AbstractNode eval_WHILE_Statement() throws Exception {
 		Insymbol();
 		if (nextToken.getTokenType() != MyScanner1.LPAR) Error("'Lpar' expected\n");
 		else Insymbol();
@@ -388,9 +398,12 @@ public class Parser {
 			eval_Statement();
 		}
 		Insymbol();
+		//?
+		return new AbstractNode();
 	}
 
-	private static void eval_DO_Statement() throws Exception {
+	//TODO:baum
+	private static AbstractNode eval_DO_Statement() throws Exception {
 		Insymbol();
 		if (nextToken.getTokenType() != MyScanner1.BEGINBLOCK) Error("'Beginblock' in do while statement expected\n");
 		else Insymbol();
@@ -407,11 +420,13 @@ public class Parser {
 		eval_Expression();
 		
 		if (nextToken.getTokenType() != MyScanner1.RPAR) Error("'Rpar' expected\n");
-		else Insymbol();		
+		else Insymbol();
+		//?
+		return new AbstractNode();		
 	}
 
-
-	private static void eval_FOR_Statement() throws Exception {		
+	//TODO:baum
+	private static AbstractNode eval_FOR_Statement() throws Exception {		
 		
 		Insymbol();
 		if (nextToken.getTokenType() != MyScanner1.LPAR) Error("'Lpar' expected\n");
@@ -439,10 +454,12 @@ public class Parser {
 			eval_Statement();
 		}
 		Insymbol();
+		return new AbstractNode();
 	}
 
 
-	private static void eval_IF_Statement() throws Exception {
+	//TODO:baum
+	private static AbstractNode eval_IF_Statement() throws Exception {
 		Insymbol();
 		if (nextToken.getTokenType() != MyScanner1.LPAR) Error("'Lpar' expected\n");
 		else Insymbol();
@@ -471,6 +488,7 @@ public class Parser {
 			}
 			Insymbol();
 		}
+		return new AbstractNode();
 	}
 
 	//private static void eval_StatementSequence() {		
