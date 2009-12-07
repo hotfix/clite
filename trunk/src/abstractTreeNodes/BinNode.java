@@ -7,8 +7,8 @@ public class BinNode extends AbstractNode {
 
 	private static final long serialVersionUID = 1L;
 
-	AbstractNode l;
-	AbstractNode r;
+	private AbstractNode l;
+	private AbstractNode r;
 
 	public BinNode() {
 		op = 0;
