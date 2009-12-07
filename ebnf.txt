@@ -8,7 +8,7 @@ Statement          = (Declaration ';') | (Assignment ';') | FOR_Statement | WHIL
 					 | IF_Statement | FunctionCall ';'
                      
 FuctionCall        = (ident ActualParameters) | ( 'scan' '(' Variable ')' ) | ( 'print' '(' Variable | String ')' ).
-Declaration        = { Var_Dec | Struct_Dec }
+Declaration        = Var_Dec | Struct_Dec
 
 Var_Dec            = Type Variable [ Dec_opts ]	{ ',' Variable [ Dec_opts ] }.
 						
@@ -48,3 +48,6 @@ Digit              = '0' | ... | '9'.
 NotNullDigit       = '1' | ... | '9'.
 String             = '"' { Symbol } '"'.
 Symbol             = x	(x  is from ASCI).
+
+
+todo: global variables
