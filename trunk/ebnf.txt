@@ -3,23 +3,25 @@ Function_Dec       = [Type] Identifier FormalParameters '{' StatementSequence ['
 FormalParameters   = '(' [ Type Variable ] { ',' Type Variable } ’)’.
 ActualParameters   = '(' [ Right_Side { ',' Right_Side } ] ')'.
 
-StatementSequence  = { Statement }
+StatementSequence  = { Statement }.
 Statement          = (Declaration ';') | (Assignment ';') | FOR_Statement | WHILE_Statement | DO_WHILE_Statement
-					 | IF_Statement | FunctionCall ';'
+					 | IF_Statement | FunctionCall ';'.
                      
 FuctionCall        = (ident ActualParameters) | ( 'scan' '(' Variable ')' ) | ( 'print' '(' Variable | String ')' ).
-Declaration        = Var_Dec | Struct_Dec
+Declaration        = Var_Dec | Struct_Dec | Const_Dec.
 
 Var_Dec            = Type Variable [ Dec_opts ]	{ ',' Variable [ Dec_opts ] }.
 						
 Dec_opts           = ('=' Expression) | ( [' UnsignedInteger ']' {'[' UnsignedInteger ']'} ).
+
+Const_Dec		   =  'const' Type Variable '=' UnsignedInteger;
 
 // eine Struktur(Record) wird beim parsen zu Type Liste mit Identifier als Name hinzugefugt. Mit der IdentList kann sie gleich instanziiert werden.
 Struct_Dec         = 'struct' Identifier FieldlList [ IdentList ] ';'.
 FieldlList         = '{' Var_Dec { ';' Var_Dec } '}'.
 IdentList          = Identifier { ',' Identifier }.
 
-Assignment         = Variable [Selector] '=' Expression
+Assignment         = Variable [Selector] '=' Expression.
 
 IF_Statement       = 'if' '(' Expression ')' '{' StatementSequence '}' [ 'else' '{' StatementSequence '}' ].
 FOR_Statement      = 'for' '(' For_Expression ')' '{' StatementSequence '}'.
