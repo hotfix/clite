@@ -50,4 +50,10 @@ public class BinNode extends AbstractNode {
 		r.Compile();
 		CodeGen.OutInstr(new BinInstr(op));
 	};
+	
+	public String toString() {
+		return new String("BinNode: " + op + 
+				"\n  " + GetL().toString() +
+				"\n  " + GetR().toString());
+	}
 }
