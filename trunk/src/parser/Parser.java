@@ -108,33 +108,46 @@ public class Parser {
 		AbstractNode result = eval_part2();
 		BinNode bin_result = null;
 		
-		while ( (nextToken.getTokenType() == MyScanner1.COMPARE) //&&
-//				( nextToken.getLexem().equals("<")	|| 
-//				  nextToken.getLexem().equals(">")	||
-//				  nextToken.getLexem().equals("==") || 
-//				  nextToken.getLexem().equals(">=") ||
-//				  nextToken.getLexem().equals("<=") || 
-//				  nextToken.getLexem().equals("!=")
-//				)
-			  ) 
+		while (nextToken.getTokenType() == MyScanner1.COMPARE)			   
 		{
+			int op = 0;
+			if (nextToken.getLexem().equals("<") == true)	op =  Ops.vergleich;
+			if (nextToken.getLexem().equals(">") == true)	op =  Ops.vergleich;
+			if (nextToken.getLexem().equals("<=") == true)	op =  Ops.vergleich;
+			if (nextToken.getLexem().equals(">=") == true)	op =  Ops.vergleich;
+			if (nextToken.getLexem().equals("==") == true)	op =  Ops.vergleich;
+			if (nextToken.getLexem().equals("!=") == true)	op =  Ops.vergleich;
 			
 			Insymbol();
-			eval_part2();
+			
+			bin_result = new BinNode(op, result, eval_part2());
+			result = bin_result;
 		}	
 		
 		return result;
 	}
 
 	private static AbstractNode eval_part2() throws Exception {
+		
 		AbstractNode result = eval_part3();
+		BinNode bin_result = null;
+		
 		while ( (nextToken.getTokenType() == MyScanner1.MATHOP) &&
 				( nextToken.getLexem().equals("*") || 
 				  nextToken.getLexem().equals("/") 
 				)
-			  ) {
+			  ) 
+		{
+			int op;
+			if (nextToken.getLexem().equals("*") == true) 
+				op = Ops.multop;
+			else 
+				op = Ops.divop;
+			
 			Insymbol();
-			eval_part3();
+			
+			bin_result = new BinNode(op, result, eval_part1());
+			result = bin_result;
 		}
 		
 		return result;
@@ -211,12 +224,11 @@ public class Parser {
 		String fieldIdf = "";
 		AbstractNode rightSide = null;
 		
-		if ( (nextToken.getTokenType() == MyScanner1.LPAR) ) {			
+		if ( (nextToken.getTokenType() == MyScanner1.LSBRACE) ) {			
 			Insymbol();
 			result = new ArrayRefNode();
 			rightSide = eval_Expression();
-			Insymbol();
-			if ( (nextToken.getTokenType() != MyScanner1.RPAR) ) Error("eval_Selector::RPAR expected\n");
+			if ( (nextToken.getTokenType() != MyScanner1.RSBRACE) ) Error("eval_Selector::RSBRACE expected\n");
 			else Insymbol();
 		}
 		else
