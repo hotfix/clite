@@ -9,4 +9,8 @@ public class Ops {
 	public static final int intop	= 104;
 	public static final int varop	= 105;
 	public static final int subop	= 106;
+	public static final int vergleich	= 107; //TODO:
+	public static final int multop	= 108;
+	public static final int divop	= 109;
+	
 }
