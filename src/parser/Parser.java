@@ -111,12 +111,12 @@ public class Parser {
 		while (nextToken.getTokenType() == MyScanner1.COMPARE)			   
 		{
 			int op = 0;
-			if (nextToken.getLexem().equals("<") == true)	op =  Ops.vergleich;
-			if (nextToken.getLexem().equals(">") == true)	op =  Ops.vergleich;
-			if (nextToken.getLexem().equals("<=") == true)	op =  Ops.vergleich;
-			if (nextToken.getLexem().equals(">=") == true)	op =  Ops.vergleich;
-			if (nextToken.getLexem().equals("==") == true)	op =  Ops.vergleich;
-			if (nextToken.getLexem().equals("!=") == true)	op =  Ops.vergleich;
+			if (nextToken.getLexem().equals("<") == true)	op =  Ops.ltop;
+			if (nextToken.getLexem().equals(">") == true)	op =  Ops.gtop;
+			if (nextToken.getLexem().equals("<=") == true)	op =  Ops.leop;
+			if (nextToken.getLexem().equals(">=") == true)	op =  Ops.geop;
+			if (nextToken.getLexem().equals("==") == true)	op =  Ops.eqop;
+			if (nextToken.getLexem().equals("!=") == true)	op =  Ops.neqop;
 			
 			Insymbol();
 			
@@ -140,7 +140,7 @@ public class Parser {
 		{
 			int op;
 			if (nextToken.getLexem().equals("*") == true) 
-				op = Ops.multop;
+				op = Ops.mulop;
 			else 
 				op = Ops.divop;
 			
