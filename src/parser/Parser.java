@@ -71,10 +71,29 @@ public class Parser {
 		AbstractNode node = null;
 		if(nextToken.getLexem().equals("struct")){
 			node = eval_Struct_Declaration();
-		}else if (nextToken.getTokenType() == MyScanner1.DATATYPE){
-			node = eval_Var_Dec();
-		}else Error("Error in eval_Declaration");//wtf?
+		}else if (nextToken.getTokenType() == MyScanner1.DATATYPE) {
+			node = eval_Vars_Dec();
+		}else if (nextToken.getTokenType() == MyScanner1.CONSTSY) {
+			node = eval_Const_Dec();
+		}
 		return node;
+	}
+
+	private static AbstractNode eval_Const_Dec() throws Exception {
+		
+		Insymbol();
+		
+		if(nextToken.getTokenType() != MyScanner1.DATATYPE) Error("'Datatype' in const declaration expected\n");
+		if(nextToken.getLexem().equals("int") == false) Error("Only integer constants can be declared\n");
+		
+		Insymbol();
+		IdfNode left_side = eval_Variable(); 
+		if (nextToken.getTokenType() != MyScanner1.ASSIGNOP) Error("'=' expected\n");
+		Insymbol();		
+		if(nextToken.getTokenType() != MyScanner1.INTEGER) Error("Integer value expected\n");
+		IntNode right_side = new IntNode(nextToken.getLexem());	
+		
+		return new ConstDecNode(left_side, right_side);
 	}
 
 	private static AbstractNode eval_Expression() throws Exception {
@@ -194,12 +213,12 @@ public class Parser {
 		}
 		else
 		if ( (nextToken.getTokenType() == MyScanner1.IDENTIFIER) ) {
-			String idf = nextToken.getLexem();
-			Insymbol();
+			IdfNode idf = eval_Variable();
+			//Insymbol();
 			if ( (nextToken.getTokenType() == MyScanner1.LSBRACE) || (nextToken.getTokenType() == MyScanner1.DOT) ) {
 				result = eval_Selector(idf);
 			}
-			else result = new IdfNode(idf);
+			else result = idf;
 		}
 		else {
 			if ( (nextToken.getTokenType() == MyScanner1.INTEGER) ) {
@@ -218,10 +237,9 @@ public class Parser {
 		skip = true;
 	}
 	
-	private static BinNode eval_Selector(String ident) throws Exception {
+	private static BinNode eval_Selector(AbstractNode left_node) throws Exception {
+
 		BinNode result = null;
-		BinNode result2 = null;
-		String fieldIdf = "";
 		AbstractNode rightSide = null;
 		
 		if ( (nextToken.getTokenType() == MyScanner1.LSBRACE) ) {			
@@ -229,29 +247,22 @@ public class Parser {
 			result = new ArrayRefNode();
 			rightSide = eval_Expression();
 			if ( (nextToken.getTokenType() != MyScanner1.RSBRACE) ) Error("eval_Selector::RSBRACE expected\n");
-			else Insymbol();
 		}
 		else
 		if ( (nextToken.getTokenType() == MyScanner1.DOT) ) {
 			Insymbol();
 			if ( (nextToken.getTokenType() != MyScanner1.IDENTIFIER) ) Error("eval_Selector::Identifier expected\n");
-			else{
-				rightSide = new IdfNode(nextToken.getLexem());
-				fieldIdf = nextToken.getLexem();
-				result = new StructRefNode();
-				Insymbol();
-			}
-		}
-		else return result;
-		result2 = eval_Selector(fieldIdf);
-		if(result2 == null){
-			result.SetL(new IdfNode(ident));
-			result.SetR(rightSide);
 			
-		}else{
-			result.SetL(new IdfNode(ident));
-			result.SetR(result2);
+			rightSide = new IdfNode(nextToken.getLexem());
+			result = new StructRefNode();			
 		}
+		else return (BinNode) left_node;
+		
+		Insymbol();
+		result.SetL(left_node);
+		result.SetR(rightSide);
+		
+		result = eval_Selector(result);		
 		return result;
 	}
 
@@ -275,9 +286,10 @@ public class Parser {
 		AbstractNode node;
 		
 		switch(nextToken.getTokenType()) {
-			case MyScanner1.DATATYPE: 						  node = eval_Declaration();			break;
+			case MyScanner1.CONSTSY:						{ node = eval_Declaration();			break; }	
+			case MyScanner1.DATATYPE: 						{ node = eval_Declaration();			break; }
 			case MyScanner1.KEYWORD: 
-				if(nextToken.getLexem().equals("struct"))	{ node = eval_Struct_Declaration();	break; }
+				if(nextToken.getLexem().equals("struct"))	{ node = eval_Struct_Declaration();		break; }
 				if(nextToken.getLexem().equals("if"))		{ node = eval_IF_Statement(); 			break; }
 				if(nextToken.getLexem().equals("for"))		{ node = eval_FOR_Statement();			break; }
 				if(nextToken.getLexem().equals("do"))		{ node = eval_DO_Statement();			break; }
@@ -329,7 +341,7 @@ public class Parser {
 		if ( (nextToken.getTokenType() == MyScanner1.LSBRACE) || 
 			 (nextToken.getTokenType() == MyScanner1.DOT) )
 		{ 
-			left_side = eval_Selector(var);
+			left_side = eval_Selector(new IdfNode(var));
 		}	
 		
 		if (nextToken.getTokenType() != MyScanner1.ASSIGNOP) Error("'ASSIGNOP' expected\n");
@@ -350,7 +362,8 @@ public class Parser {
 	}
 	
 	private static StructDecNode eval_Struct_Declaration() throws Exception {
-		String structName ="";
+		
+		String structName = "";
 		AbstractNode fieldlist;
 		Insymbol();
 		if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("struct 'IDENTIFIER' expected\n");
@@ -366,15 +379,16 @@ public class Parser {
 	}
 
 	private static FieldListNode eval_FieldlList() throws Exception {
+		
 		List<AbstractNode> varDecNode = new ArrayList<AbstractNode>();
 		
 		if (nextToken.getTokenType() != MyScanner1.BEGINBLOCK) Error("'BEGINBLOCK' in struct expected\n");
 		else Insymbol();
 		
-		varDecNode.add(eval_Var_Dec());
+		varDecNode.add(eval_Vars_Dec());
 		
 		while(nextToken.getTokenType() != MyScanner1.ENDBLOCK){
-			varDecNode.add(eval_Var_Dec());
+			varDecNode.add(eval_Vars_Dec());
 			//Insymbol();
 		}
 		
@@ -383,52 +397,82 @@ public class Parser {
 		return new FieldListNode(varDecNode);
 	}
 
-	private static VarDecNode eval_Var_Dec() throws Exception {
+	
+	//TODO: check if this works..
+	private static VarDecNode eval_Vars_Dec() throws Exception {
 		
-		Map<String, ArrayList<Object>> varDec = new HashMap<String, ArrayList<Object>>();
+		ArrayList<AssNode> varDec = new ArrayList<AssNode>();
+		
 		String type = "";
 		String variable = "";
-		AbstractNode expressionNode;
-		ArrayList<Object> valueAndType = new ArrayList<Object>();
-		if(nextToken.getTokenType() != MyScanner1.DATATYPE) Error("'Datatype' in struct declaration expected\n");
-		else{
-			type = nextToken.getLexem();
-			Insymbol();
+		//AbstractNode expressionNode;
+		
+		//standard datatype or a user defined struct name
+		if( (nextToken.getTokenType() != MyScanner1.DATATYPE) && 
+			(nextToken.getTokenType() != MyScanner1.IDENTIFIER) )
+		{
+			Error("'Datatype' expected\n");
 		}
 		
-		if (nextToken.getTokenType() == MyScanner1.IDENTIFIER) {
-			//add varname to symtableentry
-			variable = nextToken.getLexem();
+		//save type
+		type = nextToken.getLexem();
+		Insymbol();				
+		if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("'Identifier' expected\n");
+		//assignment or an array declaration
+		varDec.add(eval_Var_dec(type));
+			
+
+		while(nextToken.getTokenType() == MyScanner1.COMMA) {
 			Insymbol();
-			if (nextToken.getTokenType() == MyScanner1.ASSIGNOP) {
-				Insymbol();
-				expressionNode = eval_Expression();
-				valueAndType.add(expressionNode);
-				valueAndType.add(type);
-				varDec.put(variable,valueAndType);
-			}
-			while(nextToken.getTokenType() == MyScanner1.COMMA) {
-				Insymbol();
-				if (nextToken.getTokenType() == MyScanner1.IDENTIFIER) {
-					//add varname to symtableentry
-					variable = nextToken.getLexem();
-					Insymbol();
-					if (nextToken.getTokenType() == MyScanner1.ASSIGNOP) {
-						Insymbol();
-						expressionNode = eval_Expression();
-						valueAndType.add(expressionNode);
-						valueAndType.add(type);
-						varDec.put(variable,valueAndType);
-					}
-				}
-				else Error("'Identifier' expected\n");
-			}
-			if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("Semicolon expected\n");
-			else Insymbol();
+			if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("'Identifier' expected\n");			
+			varDec.add(eval_Var_dec(type));				
 		}
-		else Error("'Identifier' expected\n");		
 		
+		if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("Semicolon expected\n");
+		Insymbol();
+				
 		return new VarDecNode(varDec);
+	}
+
+	//TODO: check if this works..
+	private static AssNode eval_Var_dec(String type) throws Exception {
+		
+		AssNode assNode = new AssNode();
+		VarNode varNode = new VarNode();
+		
+		assNode.SetL(varNode);
+		assNode.SetR(null); //set only by assignment
+		
+		//set the variable name
+		varNode.SetL(new IdfNode(nextToken.getLexem()));
+		
+		Insymbol();
+		if (nextToken.getTokenType() == MyScanner1.ASSIGNOP) {
+			
+			varNode.SetR(new IdfNode(type));
+			Insymbol();
+			AbstractNode expressionNode = eval_Expression();
+			assNode.SetR(expressionNode);
+		}
+		else if (nextToken.getTokenType() == MyScanner1.LSBRACE) {
+			ArrayNode array = eval_array_type(type);
+			assNode.SetR(array);
+		}
+		
+		return assNode;
+	}
+
+	// Read a sequence like: [1][2][3]
+	// and build a tree like this:
+	//
+	// ArrayNode : 1
+	//    ArrayNode : 2
+	//        ArrayNode : 3
+	//            IdfNode  int
+	// where "int" is the type given over as a String param	
+	private static ArrayNode eval_array_type(String type) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	private static boolean isUserDataType() {
@@ -703,7 +747,7 @@ public class Parser {
 					scanner = new MyScanner1(new java.io.FileReader(infile));
 					
 					Insymbol();
-					root = eval_Expression();//eval_Program();
+					root = eval_Declaration();//eval_Program();
 					begin_found = true;
 					end_found = true;
 					
