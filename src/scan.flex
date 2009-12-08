@@ -48,6 +48,7 @@ package lexyaccgen;
 	//public static final int FUNCTION	= 310;
 	public static final int DATATYPE	= 311;
 	public static final int RETURNSY	= 312;
+	public static final int CONSTSY		= 313;
 	
 	public static final int VAR			= 1000;
 	public static final int CONST		= 1001;
@@ -138,6 +139,7 @@ DATATYPE	=	"int"|"cstring" //|"float"|"char"|"bool"
          	{return new Yytoken(ENDSY, yytext());}
 
 "return"	{return new Yytoken(RETURNSY, yytext());}
+"const"     {return new Yytoken(CONSTSY, yytext());}
 
 {ALPHA}({ALPHA}|{DIGIT}|"_")*	
 			{
