@@ -79,7 +79,6 @@ public class Parser {
 
 	private static AbstractNode eval_Expression() throws Exception {
 		
-		//TODO: nischt fertisch
 		AbstractNode result = eval_part1();
 		BinNode bin_result = null;
 		
@@ -97,26 +96,29 @@ public class Parser {
 			
 			Insymbol();
 			
-			bin_result = new BinNode(op, result, eval_part1());			
-		}
-		
-		if (bin_result == null)	
-			return result;
-		else 
-			return bin_result;
+			bin_result = new BinNode(op, result, eval_part1());
+			result = bin_result;
+		}		
+
+		return result;
 	}
 
 	private static AbstractNode eval_part1() throws Exception {
+		
 		AbstractNode result = eval_part2();
-		while ( (nextToken.getTokenType() == MyScanner1.COMPARE) &&
-				( nextToken.getLexem().equals("<")	|| 
-				  nextToken.getLexem().equals(">")	||
-				  nextToken.getLexem().equals("==") || 
-				  nextToken.getLexem().equals(">=") ||
-				  nextToken.getLexem().equals("<=") || 
-				  nextToken.getLexem().equals("!=")
-				)
-			  ) {
+		BinNode bin_result = null;
+		
+		while ( (nextToken.getTokenType() == MyScanner1.COMPARE) //&&
+//				( nextToken.getLexem().equals("<")	|| 
+//				  nextToken.getLexem().equals(">")	||
+//				  nextToken.getLexem().equals("==") || 
+//				  nextToken.getLexem().equals(">=") ||
+//				  nextToken.getLexem().equals("<=") || 
+//				  nextToken.getLexem().equals("!=")
+//				)
+			  ) 
+		{
+			
 			Insymbol();
 			eval_part2();
 		}	
@@ -170,14 +172,14 @@ public class Parser {
 	private static AbstractNode eval_part4() throws Exception {
 		
 		AbstractNode result = null;
-		/*
+		
 		if ( (nextToken.getTokenType() == MyScanner1.LPAR) ) {
 			Insymbol();	
-			eval_Expression();
+			result = eval_Expression();
 			if ( (nextToken.getTokenType() != MyScanner1.RPAR) ) Error("RPAR expected\n");
 			else Insymbol();
 		}
-		else*/
+		else
 		if ( (nextToken.getTokenType() == MyScanner1.IDENTIFIER) ) {
 			String idf = nextToken.getLexem();
 			Insymbol();
