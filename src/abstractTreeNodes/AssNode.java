@@ -18,6 +18,17 @@ public class AssNode extends BinNode {
 	}
 	
 	@Override
+	public void SetR(AbstractNode fr) {
+		// TODO Auto-generated method stub
+		if (fr != null) {
+			super.SetR(fr);
+		}
+		else {
+			super.SetR(new IntNode("0"));
+		}
+	}
+
+	@Override
 	public void Compile() {
 
 	}
