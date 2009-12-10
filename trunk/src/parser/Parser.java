@@ -174,13 +174,16 @@ public class Parser {
 
 	private static AbstractNode eval_part3() throws Exception {
 		
-		AbstractNode result = null;;
+		AbstractNode result = null;
+		boolean negation_set = false;
 		
 		if ( (nextToken.getTokenType() == MyScanner1.MATHOP) &&
 				( nextToken.getLexem().equals("+") || 
 				  nextToken.getLexem().equals("-") 
 				)
-			  ) {
+			  ) 
+		{
+			negation_set = true;
 			Insymbol();
 		}
 		if ( (nextToken.getTokenType() == MyScanner1.IDENTIFIER) ) {			
@@ -198,6 +201,7 @@ public class Parser {
 			result = eval_part4();
 		}
 		
+		if (negation_set == true) result = new NegationNode(result);
 		return result;
 	}
 
@@ -420,8 +424,7 @@ public class Parser {
 		if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("'Identifier' expected\n");
 		//assignment or an array declaration
 		varDec.add(eval_Var_dec(type));
-			
-
+		
 		while(nextToken.getTokenType() == MyScanner1.COMMA) {
 			Insymbol();
 			if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("'Identifier' expected\n");			
@@ -445,6 +448,7 @@ public class Parser {
 		
 		//set the variable name
 		varNode.SetL(new IdfNode(nextToken.getLexem()));
+		varNode.SetR(new IdfNode(type));
 		
 		Insymbol();
 		if (nextToken.getTokenType() == MyScanner1.ASSIGNOP) {
@@ -456,7 +460,7 @@ public class Parser {
 		}
 		else if (nextToken.getTokenType() == MyScanner1.LSBRACE) {
 			ArrayNode array = eval_array_type(type);
-			assNode.SetR(array);
+			varNode.SetR(array);
 		}
 		
 		return assNode;
@@ -470,9 +474,23 @@ public class Parser {
 	//        ArrayNode : 3
 	//            IdfNode  int
 	// where "int" is the type given over as a String param	
-	private static ArrayNode eval_array_type(String type) {
-		// TODO Auto-generated method stub
-		return null;
+	private static ArrayNode eval_array_type(String type) throws Exception {
+		
+		if (nextToken.getTokenType() != MyScanner1.LSBRACE) Error("'[' expected\n");
+		Insymbol();
+		ArrayNode arrNode = new ArrayNode();
+		if (nextToken.getTokenType() != MyScanner1.INTEGER) Error("Array size expected\n");
+		arrNode.setSize(new Integer(nextToken.getLexem()).intValue());
+		Insymbol();
+		if (nextToken.getTokenType() != MyScanner1.RSBRACE) Error("']' expected\n");
+		Insymbol();
+		if (nextToken.getTokenType() == MyScanner1.LSBRACE) { 
+			arrNode.SetType(eval_array_type(type));
+		}
+		else {
+			arrNode.SetType(new IdfNode(type));
+		}
+		return arrNode;
 	}
 
 	private static boolean isUserDataType() {
@@ -748,6 +766,7 @@ public class Parser {
 					
 					Insymbol();
 					root = eval_Declaration();//eval_Program();
+					
 					begin_found = true;
 					end_found = true;
 					
