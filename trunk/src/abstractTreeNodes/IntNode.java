@@ -2,6 +2,10 @@ package abstractTreeNodes;
 
 public class IntNode extends AbstractNode {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Integer num;
 	
 	public IntNode(String i) {
