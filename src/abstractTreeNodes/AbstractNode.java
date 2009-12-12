@@ -19,4 +19,11 @@ public class AbstractNode implements Serializable {
 	public void Compile() {
 		System.out.println("AbstractCompile");
 	}
+	
+	public void print(int indentation) {
+		
+		for(int i = 0; i < indentation; i++) System.out.print(' ');
+		System.out.println("AbstractNode");
+	}
+	
 }
