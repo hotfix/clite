@@ -14,9 +14,11 @@ public class StructDecNode extends AbstractNode {
 	public StructDecNode(AbstractNode fieldlist) {
 		structNode = fieldlist;
 	}
+	
+	
 
 	public String toString(){		
-		return "StructDec: \n" + structNode.toString();
+		return "StructDecNode: \n" + structNode.toString();
 	}
 
 }
