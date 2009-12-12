@@ -219,9 +219,9 @@ public class Parser {
 			IdfNode idf = eval_Variable();
 			//Insymbol();
 			if ( (nextToken.getTokenType() == MyScanner1.LSBRACE) || (nextToken.getTokenType() == MyScanner1.DOT) ) {
-				result = eval_Selector(idf);
+				result = new ContNode(eval_Selector(idf));
 			}
-			else result = idf;
+			else result = new ContNode(idf);
 		}
 		else {
 			if ( (nextToken.getTokenType() == MyScanner1.INTEGER) ) {
@@ -286,7 +286,8 @@ public class Parser {
 
 	//TODO:baum
 	private static AbstractNode eval_Statement() throws Exception {
-		AbstractNode node;
+		
+		AbstractNode node = null;
 		
 		switch(nextToken.getTokenType()) {
 			case MyScanner1.CONSTSY:						{ node = eval_Declaration();			break; }	
@@ -297,9 +298,15 @@ public class Parser {
 				if(nextToken.getLexem().equals("for"))		{ node = eval_FOR_Statement();			break; }
 				if(nextToken.getLexem().equals("do"))		{ node = eval_DO_Statement();			break; }
 				if(nextToken.getLexem().equals("while"))	{ node = eval_WHILE_Statement();		break; }
-				//if(nextToken.getLexem().equals("scan"))	{ eval_SCAN_Statement(); break; }
-				//if(nextToken.getLexem().equals("print"))	{ eval_PRINT_Statement(); break; }
-		
+				if(nextToken.getLexem().equals("print"))	{ 
+					Insymbol();
+					node = new PrintNode(eval_Expression());
+					if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("'ENDOP' expected\n");
+					Insymbol();
+					break; 
+				}
+				//if(nextToken.getLexem().equals("scan"))	{  }
+				
 			case MyScanner1.IDENTIFIER:
 				Insymbol();
 				if (nextToken.getTokenType() == MyScanner1.ASSIGNOP) {
@@ -316,23 +323,32 @@ public class Parser {
 					putback_Token();
 					if(isUserDataType() == true) node = eval_Declaration();
 					else Error("Unknown datatype '" + nextToken.getLexem() + "'\n");
-				}	
+				}
+				else
+				if ( (nextToken.getTokenType() == MyScanner1.LSBRACE) || 
+					 (nextToken.getTokenType() == MyScanner1.DOT) )
+				{
+					putback_Token();
+					node = eval_Assignment();
+				}
 				if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("'ENDOP' expected\n");
 				Insymbol();
 				break;
 				
 			default: Error("Strange statement...\n");
 		}
-		return new AbstractNode();	
+		return node;	
 	}
 
 	//TODO:baum
 	private static AbstractNode eval_FunctionCall() throws Exception {
 		
-		if ( (nextToken.getTokenType() != MyScanner1.IDENTIFIER) ) Error("Identifier expected\n");		
+		if ( (nextToken.getTokenType() != MyScanner1.IDENTIFIER) ) Error("Function name expected\n");
+		
 		Insymbol();
 		eval_ActualParameters();
-		return new AbstractNode();		
+		return new AbstractNode();
+		
 	}
 
 	//TODO:baum
@@ -762,12 +778,13 @@ public class Parser {
 					scanner = new MyScanner1(new java.io.FileReader(infile));
 					
 					Insymbol();
-					root = eval_Declaration();//eval_Program();
+					root = eval_Statement();//eval_Program();
 					
 					begin_found = true;
 					end_found = true;
 					
-					System.out.println(root.toString());
+					//System.out.println(root.toString(0));
+					root.print(0);
 					
 					if (scanner.yylex().getTokenType() != MyScanner1.EOF) Error("End Of File expected\n");
 					else 
