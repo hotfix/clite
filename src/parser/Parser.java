@@ -4,12 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
-import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
-
 import abstractTreeNodes.*;
 
-import sun.security.jca.GetInstance.Instance;
 import symTable.AbstractEntry;
 import symTable.SymTable;
 
@@ -92,6 +88,9 @@ public class Parser {
 		Insymbol();		
 		if(nextToken.getTokenType() != MyScanner1.INTEGER) Error("Integer value expected\n");
 		IntNode right_side = new IntNode(nextToken.getLexem());	
+		Insymbol();
+		if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("'ENDOP' expected\n");
+		Insymbol();
 		
 		return new ConstDecNode(left_side, right_side);
 	}
@@ -408,8 +407,6 @@ public class Parser {
 		ArrayList<AssNode> varDec = new ArrayList<AssNode>();
 		
 		String type = "";
-		String variable = "";
-		//AbstractNode expressionNode;
 		
 		//standard datatype or a user defined struct name
 		if( (nextToken.getTokenType() != MyScanner1.DATATYPE) && 
