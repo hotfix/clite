@@ -381,9 +381,10 @@ public class Parser {
 	}
 	
 	private static StructDecNode eval_Struct_Declaration() throws Exception {
-		
-		String structName = "";
-		AbstractNode fieldlist;
+		//AbstractNode structNode;
+		String structName = "";// name der Structur
+		AbstractNode fieldlist;// Liste der Felder der Structur
+		AbstractNode identList = null;
 		Insymbol();
 		if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("struct 'IDENTIFIER' expected\n");
 		else{
@@ -393,8 +394,47 @@ public class Parser {
 		
 		fieldlist = eval_FieldlList();
 		
-		return new StructDecNode(structName, fieldlist);
+		//Liste der identifier
+		if (nextToken.getTokenType() == MyScanner1.IDENTIFIER){
+			identList = eval_IdentList();			
+		}
+		if (nextToken.getTokenType() != MyScanner1.ENDOP)Error("ENDOP on the End of StructDeclaration expected!");
+		else Insymbol();
 		
+		//return new StructDecNode(structName, fieldlist);// hier mit uebergade der Strukturnamen
+		return new StructDecNode(new IdfNode(structName), fieldlist, identList);
+		
+	}
+
+
+	/**
+	 * liefert eine Liste der Identifier zurueck
+	 * Bsp: struct xyz{}"identList";
+	 * @return identList
+	 * @throws Exception
+	 */
+	private static ListNode eval_IdentList() throws Exception {
+
+		
+		//liste der Identifier(Variablen)
+		List<AbstractNode> identList = new ArrayList<AbstractNode>();
+		identList.add(new IdfNode(nextToken.getLexem()));
+		Insymbol();
+	//	if(nextToken.getTokenType() == MyScanner1.COMMA){
+			
+		while(nextToken.getTokenType() == MyScanner1.COMMA){
+			Insymbol();
+			if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("Identifier expected!");
+			else{
+				identList.add(new IdfNode(nextToken.getLexem()));
+				Insymbol();
+			}
+			
+		}
+
+		//}
+			//Insymbol();
+		return new ListNode(identList);
 	}
 
 	private static ListNode eval_FieldlList() throws Exception {
@@ -592,11 +632,15 @@ public class Parser {
 
 	//TODO:baum
 	private static AbstractNode eval_IF_Statement() throws Exception {
+		AbstractNode expression = null;
+		AbstractNode 	st1 = null, 
+						st2 = null;
+		
 		Insymbol();
 		if (nextToken.getTokenType() != MyScanner1.LPAR) Error("'Lpar' expected\n");
 		else Insymbol();
 		
-		eval_Expression();
+		expression = eval_Expression();
 		
 		if (nextToken.getTokenType() != MyScanner1.RPAR) Error("'Rpar' expected\n");
 		else Insymbol();
@@ -604,7 +648,7 @@ public class Parser {
 		else Insymbol();
 		
 		while(nextToken.getTokenType() != MyScanner1.ENDBLOCK){
-			eval_Statement();
+			//st1.add(eval_Statement());
 		}
 		
 		Insymbol();
@@ -616,11 +660,11 @@ public class Parser {
 			else Insymbol();
 			
 			while(nextToken.getTokenType() != MyScanner1.ENDBLOCK){
-				eval_Statement();
+			//	st2.add(eval_Statement());
 			}
 			Insymbol();
 		}
-		return new AbstractNode();
+		return new IfNode(expression, st1, st2);
 	}
 
 	//private static void eval_StatementSequence() {		
