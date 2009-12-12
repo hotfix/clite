@@ -1,4 +1,6 @@
 package abstractTreeNodes;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListNode extends AbstractNode {
@@ -7,9 +9,18 @@ public class ListNode extends AbstractNode {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	List <AbstractNode> list;
+	private List <AbstractNode> list = null;
+	
+	public ListNode() {}
+	
 	public ListNode(List<AbstractNode> list) {
 		this.list = list;
+	}
+	
+	public void addNode(AbstractNode node) {
+		
+		if(list == null) list = new ArrayList<AbstractNode>();		
+		list.add(node);
 	}
 	
 	public void print(int indentation) {
