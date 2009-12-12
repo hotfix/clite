@@ -9,6 +9,12 @@ public class IdfNode extends AbstractNode {
 		name = new String(lexem);
 	}
 	
+	public void print(int indentation) {
+		
+		for(int i = 0; i < indentation; i++) System.out.print(' ');
+		System.out.println("IdfNode " + name);
+	}	
+	
 	public String toString() {
 		return new String("IdfNode " + name);
 	}

@@ -1,29 +1,32 @@
 package abstractTreeNodes;
 
-public class IntNode extends AbstractNode {
-	
+public class ContNode extends AbstractNode {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Integer num;
+	private AbstractNode child;
 	
-	public IntNode(String i) {
+	public ContNode(AbstractNode child) {
 		
-		num = new Integer(i);
+		this.child = child;
 	}
 	
 	public void print(int indentation) {
 		
 		for(int i = 0; i < indentation; i++) System.out.print(' ');
-		System.out.println("IntNode " + num.toString());
+		System.out.println("ContNode");
+		child.print(indentation+2);
 	}	
 	
 	public String toString() {
-		return new String("IntNode " + num.toString());
-	} 
+		return new String("ContNode" + 
+				"\n  " + child.toString() );				
+	}
 	
 	@Override
 	public void Compile() {
+
 	}
 }

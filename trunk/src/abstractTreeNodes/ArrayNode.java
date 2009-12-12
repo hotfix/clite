@@ -28,6 +28,13 @@ public class ArrayNode extends AbstractNode {
 	public int getSize() {
 		return size;
 	}
+	
+	public void print(int indentation) {
+		
+		for(int i = 0; i < indentation; i++) System.out.print(' ');
+		System.out.println("ArrayNode " + size);
+		GetType().print(indentation+2);
+	}	
 
 	public String toString() {
 		return new String("ArrayNode : " + size +

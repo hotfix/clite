@@ -11,6 +11,14 @@ public class AssNode extends BinNode {
 		SetR(right_side);
 	}
 
+	public void print(int indentation) {
+		
+		for(int i = 0; i < indentation; i++) System.out.print(' ');
+		System.out.println("AssNode");
+		GetL().print(indentation+2);
+		GetR().print(indentation+2);
+	}	
+	
 	public String toString() {
 		return new String("AssNode" + 
 				"\n  " + GetL().toString() +
@@ -32,4 +40,5 @@ public class AssNode extends BinNode {
 	public void Compile() {
 
 	}
+
 }
