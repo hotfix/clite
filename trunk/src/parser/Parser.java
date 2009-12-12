@@ -397,7 +397,7 @@ public class Parser {
 		
 	}
 
-	private static FieldListNode eval_FieldlList() throws Exception {
+	private static ListNode eval_FieldlList() throws Exception {
 		
 		List<AbstractNode> varDecNode = new ArrayList<AbstractNode>();
 		
@@ -413,14 +413,14 @@ public class Parser {
 		
 		if (nextToken.getTokenType() != MyScanner1.ENDBLOCK) Error("'ENDBLOCK' in struct expected\n");
 		else Insymbol();
-		return new FieldListNode(varDecNode);
+		return new ListNode(varDecNode);
 	}
 
 	
 	//TODO: check if this works..
-	private static VarDecNode eval_Vars_Dec() throws Exception {
+	private static ListNode eval_Vars_Dec() throws Exception {
 		
-		ArrayList<AssNode> varDec = new ArrayList<AssNode>();
+		List<AbstractNode> varDec = new ArrayList<AbstractNode>();
 		
 		String type = "";
 		
@@ -447,10 +447,10 @@ public class Parser {
 		if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("Semicolon expected\n");
 		Insymbol();
 				
-		return new VarDecNode(varDec);
+		return new ListNode(varDec);
 	}
 
-	//TODO: check if this works..
+
 	private static AssNode eval_Var_dec(String type) throws Exception {
 		
 		AssNode assNode = new AssNode();
@@ -515,21 +515,23 @@ public class Parser {
 	private static AbstractNode eval_WHILE_Statement() throws Exception {
 		Insymbol();
 		if (nextToken.getTokenType() != MyScanner1.LPAR) Error("'Lpar' expected\n");
-		else Insymbol();
+		else Insymbol();		
 		
-		eval_Expression();
+		AbstractNode expr = eval_Expression();
 		
 		if (nextToken.getTokenType() != MyScanner1.RPAR) Error("'Rpar' expected\n");
 		else Insymbol();
 		if (nextToken.getTokenType() != MyScanner1.BEGINBLOCK) Error("'Beginblock' in while statement expected\n");
 		else Insymbol();
 		
+		ListNode st = new ListNode();
+		
 		while(nextToken.getTokenType() != MyScanner1.ENDBLOCK){
-			eval_Statement();
+			st.addNode(eval_Statement());
 		}
 		Insymbol();
-		//?
-		return new AbstractNode();
+		
+		return new WhileNode(expr, st);
 	}
 
 	//TODO:baum
