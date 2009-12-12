@@ -14,7 +14,7 @@ Var_Dec            = Type Variable [ Dec_opts ]	{ ',' Variable [ Dec_opts ] }.
 						
 Dec_opts           = ('=' Expression) | ( [' UnsignedInteger ']' {'[' UnsignedInteger ']'} ).
 
-Const_Dec		   =  'const' Type Variable '=' UnsignedInteger;
+Const_Dec		   =  'const' Type Variable '=' UnsignedInteger ';'.
 
 // eine Struktur(Record) wird beim parsen zu Type Liste mit Identifier als Name hinzugefugt. Mit der IdentList kann sie gleich instanziiert werden.
 Struct_Dec         = 'struct' Identifier FieldlList [ IdentList ] ';'.
