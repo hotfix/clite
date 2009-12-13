@@ -633,8 +633,8 @@ public class Parser {
 	//TODO:baum
 	private static AbstractNode eval_IF_Statement() throws Exception {
 		AbstractNode expression = null;
-		AbstractNode 	st1 = null, 
-						st2 = null;
+		ListNode	 	st1 = new ListNode(), 
+						st2 = new ListNode();
 		
 		Insymbol();
 		if (nextToken.getTokenType() != MyScanner1.LPAR) Error("'Lpar' expected\n");
@@ -648,7 +648,7 @@ public class Parser {
 		else Insymbol();
 		
 		while(nextToken.getTokenType() != MyScanner1.ENDBLOCK){
-			//st1.add(eval_Statement());
+			st1.addNode( eval_Statement());
 		}
 		
 		Insymbol();
@@ -660,7 +660,7 @@ public class Parser {
 			else Insymbol();
 			
 			while(nextToken.getTokenType() != MyScanner1.ENDBLOCK){
-			//	st2.add(eval_Statement());
+				st2.addNode(eval_Statement());
 			}
 			Insymbol();
 		}
