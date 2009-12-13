@@ -70,10 +70,9 @@ public class IfNode extends AbstractNode {
 	
 	public String toString(){
 		String s = new String("IfNode: ");
-		s += e.toString();
-	
-		s += "\n" + st2.toString();				
-		s += "\n" + st1.toString();				
+		s += e.toString();			
+		s += "\n" + st1.toString();
+		s += "\n" + st2.toString();	
 		return s;
 	}
 
