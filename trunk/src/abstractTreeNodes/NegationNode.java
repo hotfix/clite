@@ -13,6 +13,13 @@ public class NegationNode extends AbstractNode {
 		// TODO Auto-generated method stub
 		super.Compile();
 	}
+	
+	public void print(int indentation) {
+		
+		for(int i = 0; i < indentation; i++) System.out.print(' ');
+		System.out.println("NegationNode");
+		child.print(indentation+2);
+	}
 
 	public String toString() {
 		return new String("NegationNode " + "\n  " + child.toString());
