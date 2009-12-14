@@ -25,10 +25,12 @@ public class ListNode extends AbstractNode {
 	
 	public void print(int indentation) {
 		
-		for(int i = 0; i < indentation; i++) System.out.print(' ');
-		System.out.println("ListNode");
-		for(int i = 0; i < list.size(); i++) {
-			list.get(i).print(indentation+2);
+		if(list != null) {
+			for(int i = 0; i < indentation; i++) System.out.print(' ');
+			System.out.println("ListNode");
+			for(int i = 0; i < list.size(); i++) {
+				list.get(i).print(indentation+2);
+			}
 		}
 	}
 	
