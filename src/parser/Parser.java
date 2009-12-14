@@ -164,7 +164,7 @@ public class Parser {
 			
 			Insymbol();
 			
-			bin_result = new BinNode(op, result, eval_part1());
+			bin_result = new BinNode(op, result, eval_part3());
 			result = bin_result;
 		}
 		
