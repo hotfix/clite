@@ -33,6 +33,11 @@ public class SymTable {
 		return id;
 	}
 	
+	public SymTableEntry getSymbol(int index) {
+		
+		return (SymTableEntry) symTable.get(index);
+	}
+	
 	public SymTableEntry getSymbol(String lexem) {		
 		return (SymTableEntry) symTable.get(indexof(lexem));
 	}
