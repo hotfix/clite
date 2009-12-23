@@ -2,16 +2,27 @@ package instructions;
 
 import java.io.Serializable;
 
-public class AbstrInstr implements Serializable{
+import interpreter.Interpreter;
 
- private static final long serialVersionUID = 1L;
+public class AbstrInstr implements Serializable {
 
- int op;
+	private static final long serialVersionUID = 1L;
 
- public int GetOp(){return op;};
- 
- public void SetOp(int fop){op = fop;};
- 
- public void Interpret()
- {System.out.println("Interpret AbstInstr");};	
+	int op;
+
+	public int GetOp() {
+		return op;
+	}
+
+	public void SetOp(int fop) {
+		op = fop;
+	}
+
+	public void Interpret() {
+		System.out.println("Interpret AbstInstr");
+	}
+
+	public void Print() {
+		System.out.println(Interpreter.progcnt + " Interpret AbstInstr");
+	}
 }
