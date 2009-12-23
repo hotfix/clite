@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import codeGen.CodeGen;
+
 import abstractTreeNodes.*;
 
 import symTable.AbstractEntry;
@@ -744,8 +746,10 @@ public class Parser {
 
 	private static ProgNode eval_Program() throws Exception {
 		String programName = "";
-		List<AbstractNode> functions = new ArrayList<AbstractNode>();
-		List<AbstractNode> statements = new ArrayList<AbstractNode>();
+		//List<AbstractNode> functions = new ArrayList<AbstractNode>();
+		//List<AbstractNode> statements = new ArrayList<AbstractNode>();
+		ListNode functions	= new ListNode();
+		ListNode statements = new ListNode();
 				
 		//Insymbol();
 		if (nextToken.getTokenType() != MyScanner1.PROGRAMSY){
@@ -765,14 +769,14 @@ public class Parser {
 		Insymbol();
 		
 		while (nextToken.getTokenType() != MyScanner1.BEGINSY) {
-			functions.add(eval_Function_Dec());
+			functions.addNode(eval_Function_Dec());
 		}
 		
 		begin_found = true;
 		Insymbol();
 		
 		while (nextToken.getTokenType() != MyScanner1.ENDSY) {			
-			statements.add(eval_Statement());
+			statements.addNode(eval_Statement());
 		}
 		end_found = true;
 		
@@ -824,17 +828,19 @@ public class Parser {
 					scanner = new MyScanner1(new java.io.FileReader(infile));
 					
 					Insymbol();
-					root = eval_Statement();
-					
-					begin_found = true;
-					end_found = true;
+					root = eval_Program();//eval_Statement();
 					
 					//System.out.println(root.toString(0));
 					root.print(0);
 					
-					if (scanner.yylex().getTokenType() != MyScanner1.EOF) Error("End Of File expected\n");
-					else 
-					if (error_code == 0)System.out.println("OK!\n");
+					if (scanner.yylex().getTokenType() != MyScanner1.EOF) {
+						Error("End Of File expected\n");
+					}
+					else if (error_code == 0)System.out.println("OK!\n");
+					
+					CodeGen codeGenerator = new CodeGen()
+					
+					
 					
 					//System.out.println(MyScanner1.symtable.getTableAsString());
 					//	          
