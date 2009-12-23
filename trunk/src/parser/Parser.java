@@ -811,7 +811,7 @@ public class Parser {
 
 	public static void main(String[] argv) {
 		
-		System.out.println("Parser Version 0.2");
+		System.out.println("Parser Version 0.3\n");
 		
 		if (argv.length == 0) {
 			System.out.println("Usage : java Parser <inputfile>");
@@ -824,7 +824,7 @@ public class Parser {
 					scanner = new MyScanner1(new java.io.FileReader(infile));
 					
 					Insymbol();
-					root = eval_Statement();//eval_Program();
+					root = eval_Statement();
 					
 					begin_found = true;
 					end_found = true;
