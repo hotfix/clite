@@ -1,4 +1,9 @@
 package parser;
+import interpreter.Interpreter;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +33,7 @@ public class Parser {
 	static AbstractNode root;
 	
 	public static  HashMap<String, AbstractEntry> env =
-		new HashMap<String, AbstractEntry>(); 
+		new HashMap<String, AbstractEntry>();
 
 	/*
 	 * Hilfsroutinen
@@ -51,7 +56,6 @@ public class Parser {
 	}
 
 	private static void Error(String str) throws Exception {
-		error_code = 1;
 		throw new Exception("Error at line "+ new Integer(scanner.getLine()).toString() + ": " + str);
 	}
 	
@@ -219,7 +223,7 @@ public class Parser {
 		else
 		if ( (nextToken.getTokenType() == MyScanner1.IDENTIFIER) ) {
 			IdfNode idf = eval_Variable();
-			//Insymbol();
+
 			if ( (nextToken.getTokenType() == MyScanner1.LSBRACE) || (nextToken.getTokenType() == MyScanner1.DOT) ) {
 				result = new ContNode(eval_Selector(idf));
 			}
@@ -271,6 +275,7 @@ public class Parser {
 		return result;
 	}
 
+	//TODO:baum
 	private static void eval_ActualParameters() throws Exception {
 		
 		if ( (nextToken.getTokenType() != MyScanner1.LPAR) ) Error("LPAR expected\n");
@@ -286,7 +291,6 @@ public class Parser {
 		Insymbol();		
 	}
 
-	//TODO:baum
 	private static AbstractNode eval_Statement() throws Exception {
 		
 		AbstractNode node = null;
@@ -353,7 +357,6 @@ public class Parser {
 		
 	}
 
-	//TODO:baum
 	private static AbstractNode eval_Assignment() throws Exception {
 		
 		String var = nextToken.getLexem();
@@ -403,7 +406,6 @@ public class Parser {
 		if (nextToken.getTokenType() != MyScanner1.ENDOP)Error("ENDOP on the End of StructDeclaration expected!");
 		else Insymbol();
 		
-		//return new StructDecNode(structName, fieldlist);// hier mit uebergade der Strukturnamen
 		return new StructDecNode(new IdfNode(structName), fieldlist, identList);
 		
 	}
@@ -422,7 +424,6 @@ public class Parser {
 		List<AbstractNode> identList = new ArrayList<AbstractNode>();
 		identList.add(new IdfNode(nextToken.getLexem()));
 		Insymbol();
-	//	if(nextToken.getTokenType() == MyScanner1.COMMA){
 			
 		while(nextToken.getTokenType() == MyScanner1.COMMA){
 			Insymbol();
@@ -433,9 +434,6 @@ public class Parser {
 			}
 			
 		}
-
-		//}
-			//Insymbol();
 		return new ListNode(identList);
 	}
 
@@ -450,7 +448,6 @@ public class Parser {
 		
 		while(nextToken.getTokenType() != MyScanner1.ENDBLOCK){
 			varDecNode.add(eval_Vars_Dec());
-			//Insymbol();
 		}
 		
 		if (nextToken.getTokenType() != MyScanner1.ENDBLOCK) Error("'ENDBLOCK' in struct expected\n");
@@ -458,8 +455,6 @@ public class Parser {
 		return new ListNode(varDecNode);
 	}
 
-	
-	//TODO: check if this works..
 	private static ListNode eval_Vars_Dec() throws Exception {
 		
 		List<AbstractNode> varDec = new ArrayList<AbstractNode>();
@@ -553,7 +548,6 @@ public class Parser {
 		return false;
 	}
 
-	//TODO:baum
 	private static AbstractNode eval_WHILE_Statement() throws Exception {
 		Insymbol();
 		if (nextToken.getTokenType() != MyScanner1.LPAR) Error("'Lpar' expected\n");
@@ -813,7 +807,7 @@ public class Parser {
 	 * main
 	 */
 
-	public static void main(String[] argv) {
+	public static void main(String[] argv) throws IOException {
 		
 		System.out.println("Parser Version 0.3\n");
 		
@@ -822,29 +816,35 @@ public class Parser {
 		} else {
 			for (int i = 0; i < argv.length; i++) {
 				try {
-					// Hier geht es los:
-					//	        	
+					
 					infile = argv[i];
 					scanner = new MyScanner1(new java.io.FileReader(infile));
 					
 					Insymbol();
 					root = eval_Program();//eval_Statement();
-					
-					//System.out.println(root.toString(0));
 					root.print(0);
 					
 					if (scanner.yylex().getTokenType() != MyScanner1.EOF) {
 						Error("End Of File expected\n");
 					}
-					else if (error_code == 0)System.out.println("OK!\n");
 					
-					CodeGen codeGenerator = new CodeGen()
+					System.out.println("OK!\n");
 					
+					String nodefile = "tmpnodes";
+					String instrfile = "tmpinstr";
+						
+					FileOutputStream f = new FileOutputStream(nodefile);
+					ObjectOutputStream os = new ObjectOutputStream(f);
 					
+					os.writeObject(root);
+					os.flush();					
 					
-					//System.out.println(MyScanner1.symtable.getTableAsString());
-					//	          
-					// Und hier ist Schluss
+					CodeGen codeGenerator = new CodeGen(nodefile);
+					codeGenerator.start(instrfile);
+					
+					Interpreter interpreter = new Interpreter(instrfile);
+					interpreter.start();				
+				
 				} catch (java.io.FileNotFoundException e) {
 					System.out.println("File not found : \"" + argv[i] + "\"");					
 				} catch (EOFException e) {

@@ -55,8 +55,9 @@ public class ProgNode extends AbstractNode {
 
 	@Override
 	public void Compile() {
-		// TODO Auto-generated method stub
-		super.Compile();
+
+		functions.Compile();
+		statements.Compile();
 	}
 
 }
