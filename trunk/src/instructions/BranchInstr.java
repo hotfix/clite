@@ -1,9 +1,54 @@
 package instructions;
 
+import interpreter.Interpreter;
+import abstractTreeNodes.Ops;
+
 public class BranchInstr extends AbstrInstr {
 
-	public BranchInstr(int brfop, int l1) {
-		// TODO Auto-generated constructor stub
+	private static final long serialVersionUID = 1L;
+
+	public BranchInstr(int fop) {
+		// System.out.println(fop);
+		op = fop;
+	};
+
+	public void Interpret() {
+		IntVal op1;
+		int label;
+
+		System.out.print(Interpreter.progcnt + " Interpret BranchInstr ");
+		label = ((IntVal) Interpreter.valuestack.pop()).GetI();
+		switch (op) {
+		case Ops.brtop: {
+			System.out.println("BT " + label);
+			op1 = (IntVal) Interpreter.valuestack.pop();
+			if (op1.GetI() == 0)
+				Interpreter.progcnt = label;
+			else
+				Interpreter.progcnt++;
+			break;
+		}
+		case Ops.brfop: {
+			System.out.println("BF " + label);
+			op1 = (IntVal) Interpreter.valuestack.pop();
+			if (op1.GetI() != 0)
+				Interpreter.progcnt = label;
+			else
+				Interpreter.progcnt++;
+			break;
+		}
+		case Ops.jmpop: {
+			System.out.println("JMP " + label);
+			Interpreter.progcnt = label;
+			break;
+		}
+		}
+		;
 	}
 
+	public void Print() {
+		System.out.print(Interpreter.progcnt + " ");
+		System.out.println("Interpret BranchInstr " + op);
+		Interpreter.progcnt++;
+	};
 }
