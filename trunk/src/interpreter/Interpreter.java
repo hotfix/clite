@@ -87,7 +87,7 @@ public class Interpreter {
 		// Instruktionen ausgeben
 		System.out.println("*** dump instructions begin");
 		i = progstg.size();
-		progcnt = 1;
+		progcnt = 0;
 		while (progcnt < i) {
 			progstg.get(progcnt).Print();
 		}
@@ -106,8 +106,7 @@ public class Interpreter {
 		while (i < maxstorage) {
 			Interpreter.storage.add(new IntVal(0));
 			i++;
-		}
-		;
+		}		
 
 		// Instruktionen interpretieren
 		i = progstg.size();
