@@ -20,7 +20,7 @@ public class CodeGen {
 
 	AbstractNode root;
 	
-	//Program Stack (Prog)
+	//Program Speicher (Prog)
 	public static ArrayList<AbstrInstr> progst = new ArrayList<AbstrInstr>();
 	
 	public static ArrayList<HashMap<String, AbstractEntry>> envs = new ArrayList<HashMap<String, AbstractEntry>>();
@@ -53,10 +53,9 @@ public class CodeGen {
 
 		System.out.println("== CodeGen auf gehts ==");
 
-		((ProgNode) root).Compile();
+		((/*ProgNode*/AbstractNode) root).Compile();
 
-		System.out
-				.println("== CodeGen code für Interpretierer rausschreiben ==");
+		System.out.println("== CodeGen code für Interpretierer rausschreiben ==");
 		os.writeObject(progst);
 		os.flush();
 	}

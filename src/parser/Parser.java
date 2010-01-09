@@ -739,16 +739,13 @@ public class Parser {
 	}
 
 	private static ProgNode eval_Program() throws Exception {
+		
 		String programName = "";
-		//List<AbstractNode> functions = new ArrayList<AbstractNode>();
-		//List<AbstractNode> statements = new ArrayList<AbstractNode>();
 		ListNode functions	= new ListNode();
 		ListNode statements = new ListNode();
 				
-		//Insymbol();
 		if (nextToken.getTokenType() != MyScanner1.PROGRAMSY){
 			Error("'Program' declaration expected\n");
-			//return null;
 		}
 		Insymbol();
 		
@@ -821,11 +818,16 @@ public class Parser {
 					scanner = new MyScanner1(new java.io.FileReader(infile));
 					
 					Insymbol();
-					root = eval_Program();//eval_Statement();
+					
+					begin_found = true;
+					end_found	= true;
+					
+					root = /*eval_Program();*/eval_Assignment();
 					root.print(0);
 					
+					
 					if (scanner.yylex().getTokenType() != MyScanner1.EOF) {
-						Error("End Of File expected\n");
+						//Error("End Of File expected\n");
 					}
 					
 					System.out.println("OK!\n");

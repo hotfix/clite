@@ -1,5 +1,8 @@
 package abstractTreeNodes;
 
+import instructions.IntVal;
+import codeGen.CodeGen;
+
 public class IntNode extends AbstractNode {
 	
 	/**
@@ -25,5 +28,6 @@ public class IntNode extends AbstractNode {
 	
 	@Override
 	public void Compile() {
+		CodeGen.OutInstr(new IntVal(-2));
 	}
 }

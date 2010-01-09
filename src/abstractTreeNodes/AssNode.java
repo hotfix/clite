@@ -4,9 +4,13 @@ public class AssNode extends BinNode {
 
 	private static final long serialVersionUID = 1L;
 
-	public AssNode () {}
+	public AssNode () {
+		op = Ops.assop;
+	}
 	
 	public AssNode(AbstractNode left_side, AbstractNode right_side) {
+		
+		op = Ops.assop;
 		SetL(left_side);
 		SetR(right_side);
 	}
@@ -38,7 +42,7 @@ public class AssNode extends BinNode {
 
 	@Override
 	public void Compile() {
-
+		super.Compile();
 	}
 
 }
