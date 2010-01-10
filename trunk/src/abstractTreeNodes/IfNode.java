@@ -1,9 +1,7 @@
 package abstractTreeNodes;
 
-import java.util.List;
-
-import codeGen.*;
-import instructions.*;
+import instructions.BranchInstr;
+import codeGen.CodeGen;
 
 public class IfNode extends AbstractNode {
 

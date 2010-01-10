@@ -25,5 +25,6 @@ public class IdfNode extends AbstractNode {
 	@Override
 	public void Compile() {
 		CodeGen.OutInstr(new IntVal(-1));
+		CodeGen.OutInstr(new IntVal(-1));
 	} 
 }
