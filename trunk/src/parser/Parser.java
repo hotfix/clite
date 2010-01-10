@@ -626,7 +626,7 @@ public class Parser {
 	}
 
 
-	//TODO:baum
+	//TODO:testen noch mal
 	private static AbstractNode eval_IF_Statement() throws Exception {
 		AbstractNode expression = null;
 		ListNode	 	st1 = new ListNode(), 
@@ -663,18 +663,16 @@ public class Parser {
 		return new IfNode(expression, st1, st2);
 	}
 
-	//private static void eval_StatementSequence() {		
-	//}
 
 	private static FunctionDecNode eval_Function_Dec() throws Exception {
 		String functionName = "";
-		String returnType = "";
+		AbstractNode returnType = null;
 		AbstractNode formalParams = null;
 		AbstractNode returnValue = null;//TODO:
 		List<AbstractNode> statements = new ArrayList<AbstractNode>();
 
 		if (nextToken.getTokenType() == MyScanner1.DATATYPE) {
-			returnType = nextToken.getLexem();
+			returnType = new IdfNode(nextToken.getLexem());
 			Insymbol();
 		}
 		if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("Function name expected\n");
@@ -698,12 +696,12 @@ public class Parser {
 			if (nextToken.getTokenType() != MyScanner1.ENDBLOCK) Error("'}' expected\n");
 			else Insymbol();
 		}
-		return new FunctionDecNode();
+		return new FunctionDecNode(returnType,functionName, formalParams, statements);
 	}
 	
 	private static FormalParamsNode eval_FormalParameters() throws Exception {
 		//List<BinNode> params = new ArrayList<BinNode>();
-		Map<String,String>params = new HashMap<String, String>();
+		Map<AbstractNode,AbstractNode>params = new HashMap<AbstractNode, AbstractNode>();
 		String type = "";
 		if ( (nextToken.getTokenType() != MyScanner1.LPAR) ) Error("LPAR expected\n");
 		Insymbol();
@@ -715,7 +713,7 @@ public class Parser {
 			}
 			if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("IDENTIFIER expected\n");
 			else{
-				params.put(nextToken.getLexem(), type);
+				params.put(new IdfNode(nextToken.getLexem()), new IdfNode(type));
 				Insymbol();
 			}
 			while( (nextToken.getTokenType() == MyScanner1.COMMA) ) {
@@ -728,7 +726,7 @@ public class Parser {
 					
 				if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("IDENTIFIER expected\n");
 				else{
-					params.put(nextToken.getLexem(), type);
+					params.put(new IdfNode(nextToken.getLexem()), new IdfNode(type));
 					Insymbol();
 				}
 			}
@@ -822,7 +820,7 @@ public class Parser {
 					begin_found = true;
 					end_found	= true;
 					
-					root = /*eval_Program();*/eval_Assignment();
+					root = eval_Program();
 					root.print(0);
 					
 					
