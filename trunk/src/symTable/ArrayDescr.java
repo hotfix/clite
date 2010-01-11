@@ -7,7 +7,6 @@ public class ArrayDescr extends AbstractDescr {
 	private static final long serialVersionUID = 1L;
 	
 	private int numberelems;
-	private int size;
 	private AbstractDescr basetype;
 
 	public ArrayDescr() {
@@ -23,4 +22,9 @@ public class ArrayDescr extends AbstractDescr {
 		size = fs;
 		basetype = fb;
 	}
+
+	@Override
+	public String toString() {		
+		return "ArrayDescr [numberelems=" + numberelems + ", size=" + size + ", basetype=" + basetype.toString() + "]";
+	}	
 }

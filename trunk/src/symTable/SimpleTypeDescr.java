@@ -1,8 +1,6 @@
 package symTable;
 
-public class SimpleTypeDescr extends AbstractDescr {
-	
-	
+public class SimpleTypeDescr extends AbstractDescr {	
 
 	private static final long serialVersionUID = 1L;
 	

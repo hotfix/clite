@@ -35,6 +35,6 @@ public class VarEntry extends AbstractEntry{
 	
 	public String toString() {
 		
-		return(new String(" Addr: "+adr+"; Typ: " + typ.toString()));
+		return(new String(" Addr= " + adr + ", Typ= " + typ.toString()));
 	}
 }
