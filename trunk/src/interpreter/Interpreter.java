@@ -11,6 +11,7 @@ import java.util.Stack;
 
 import symTable.AbstractDescr;
 import symTable.ArrayDescr;
+import symTable.SimpleTypeDescr;
 import symTable.VarEntry;
 import abstractTreeNodes.Ops;
 import codeGen.CodeGen;
@@ -94,23 +95,28 @@ public class Interpreter {
 		System.out.println("*** dump instructions end");
 
 		// Speicher initialisieren;
-		maxstorage = ((IntVal) (progstg.get(1))).GetI();
-		SP = maxstorage;
+		
+		
+		//maxstorage = ((IntVal) (progstg.get(1))).GetI();
+		//SP = maxstorage;
+		
+		
 		SL[0] = 0;
 		SL[1] = 0;
 		SL[2] = 0;
 		SL[3] = 0;
 		SL[4] = 0;
 		SL[5] = 0;
-		i = 0;
-		while (i < maxstorage) {
+
+		SP = CodeGen.envs.size();
+		for (i = 0; i < SP; i++) {
 			Interpreter.storage.add(new IntVal(0));
-			i++;
-		}		
+		}
+		
 
 		// Instruktionen interpretieren
 		i = progstg.size();
-		progcnt = ((IntVal) progstg.get(2)).GetI();
+		progcnt = ((IntVal) progstg.get(0)).GetI();
 		while (progcnt < i) {
 			progstg.get(progcnt).Interpret();
 		}
