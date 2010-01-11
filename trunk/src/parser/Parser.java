@@ -386,11 +386,13 @@ public class Parser {
 		return node;
 	}
 	
-	private static StructDecNode eval_Struct_Declaration() throws Exception {
+	private static ListNode eval_Struct_Declaration() throws Exception {
 		//AbstractNode structNode;
 		String structName = "";// name der Structur
 		AbstractNode fieldlist;// Liste der Felder der Structur
-		AbstractNode identList = null;
+		List<AbstractNode> structList = new ArrayList<AbstractNode>();
+		AbstractNode structNode = null;
+		
 		Insymbol();
 		if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("struct 'IDENTIFIER' expected\n");
 		else{
@@ -400,14 +402,27 @@ public class Parser {
 		
 		fieldlist = eval_FieldlList();
 		
-		//Liste der identifier
+		structNode = new StructDecNode(new IdfNode(structName), fieldlist);
+		
 		if (nextToken.getTokenType() == MyScanner1.IDENTIFIER){
-			identList = eval_IdentList();			
-		}
+			//identList = eval_IdentList();			
+			structList.add(new VarNode(new IdfNode(nextToken.getLexem()), structNode));
+			Insymbol();
+			
+			while(nextToken.getTokenType() == MyScanner1.COMMA) {
+				Insymbol();
+				if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("'Identifier' expected\n");			
+				structList.add(new VarNode(new IdfNode(nextToken.getLexem()),structNode));		
+				Insymbol();
+			}
+		}else Error("'Identifier' after StructDeclaration expected\n");
+		
+		
 		if (nextToken.getTokenType() != MyScanner1.ENDOP)Error("ENDOP on the End of StructDeclaration expected!");
 		else Insymbol();
 		
-		return new StructDecNode(new IdfNode(structName), fieldlist, identList);
+		
+		return new ListNode(structList); //new StructDecNode(new IdfNode(structName), fieldlist, identList);
 		
 	}
 
@@ -418,25 +433,25 @@ public class Parser {
 	 * @return identList
 	 * @throws Exception
 	 */
-	private static ListNode eval_IdentList() throws Exception {
-
-		
-		//liste der Identifier(Variablen)
-		List<AbstractNode> identList = new ArrayList<AbstractNode>();
-		identList.add(new IdfNode(nextToken.getLexem()));
-		Insymbol();
-			
-		while(nextToken.getTokenType() == MyScanner1.COMMA){
-			Insymbol();
-			if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("Identifier expected!");
-			else{
-				identList.add(new IdfNode(nextToken.getLexem()));
-				Insymbol();
-			}
-			
-		}
-		return new ListNode(identList);
-	}
+//	private static ListNode eval_IdentList() throws Exception {
+//
+//		
+//		//liste der Identifier(Variablen)
+//		//List<AbstractNode> identList = new ArrayList<AbstractNode>();
+//		//identList.add(new IdfNode(nextToken.getLexem()));
+//		Insymbol();
+//			
+//		while(nextToken.getTokenType() == MyScanner1.COMMA){
+//			Insymbol();
+//			if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("Identifier expected!");
+//			else{
+//				identList.add(new IdfNode(nextToken.getLexem()));
+//				Insymbol();
+//			}
+//			
+//		}
+//		return new ListNode(identList);
+//	}
 
 	private static ListNode eval_FieldlList() throws Exception {
 		
