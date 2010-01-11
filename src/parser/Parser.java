@@ -523,18 +523,18 @@ public class Parser {
 			AbstractNode expressionNode = eval_Expression();
 			assNode.SetR(expressionNode);
 			
-			CodeGen.DefVariable(varname, new SimpleTypeDescr(type, 1));
+			//CodeGen.DefVariable(varname, new SimpleTypeDescr(type, 1));
 		}
 		else if (nextToken.getTokenType() == MyScanner1.LSBRACE) {
 			ArrayNode array = eval_array_type(type);
 			varNode.SetR(array);
 			
-			CodeGen.DefVariable(varname, new ArrayDescr(array.getSize(),
-														array.getStorageSize(),
-														new SimpleTypeDescr(type,1)));
+			//CodeGen.DefVariable(varname, new ArrayDescr(array.getSize(),
+			//											array.getStorageSize(),
+			//											new SimpleTypeDescr(type,1)));
 		}
 		//simple variable without assignment
-		else CodeGen.DefVariable(varname, new SimpleTypeDescr(type, 1));
+		//else CodeGen.DefVariable(varname, new SimpleTypeDescr(type, 1));
 		
 		return assNode;
 	}
@@ -846,8 +846,6 @@ public class Parser {
 					root = eval_Program();
 					root.print(0);
 					
-					CodeGen.printEnvs();
-					
 					if (scanner.yylex().getTokenType() != MyScanner1.EOF) {
 						//Error("End Of File expected\n");
 					}
@@ -866,8 +864,10 @@ public class Parser {
 					CodeGen codeGenerator = new CodeGen(nodefile);
 					codeGenerator.start(instrfile);
 					
-					Interpreter interpreter = new Interpreter(instrfile);
-					interpreter.start();				
+					CodeGen.printEnvs();
+					
+					//Interpreter interpreter = new Interpreter(instrfile);
+					//interpreter.start();				
 				
 				} catch (java.io.FileNotFoundException e) {
 					System.out.println("File not found : \"" + argv[i] + "\"");					
