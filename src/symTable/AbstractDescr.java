@@ -7,7 +7,7 @@ public class AbstractDescr implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	protected int op;
-	private int size;
+	protected int size;
 
 	public AbstractDescr() {
 		op = 0;
