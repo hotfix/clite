@@ -2,14 +2,18 @@ package abstractTreeNodes;
 
 public class ArrayNode extends AbstractNode {
 
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = 1L;	
+	
 	private int size;
 	private AbstractNode type;
 	
-	public ArrayNode () {}
+	public ArrayNode () {
+		nodeName = "ArrayNode";
+	}
 	
 	public ArrayNode(int size) {
+		
+		nodeName = "ArrayNode";
 		this.size = size;
 	}
 	
@@ -27,6 +31,11 @@ public class ArrayNode extends AbstractNode {
 
 	public int getSize() {
 		return size;
+	}
+	
+	public int getStorageSize() {
+		if (type.nodeName.equals("ArrayNode") == true) return(size*((ArrayNode)type).getStorageSize());
+		else return size;
 	}
 	
 	public void print(int indentation) {

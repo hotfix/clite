@@ -1,6 +1,10 @@
 package abstractTreeNodes;
 
+import instructions.IntVal;
+
 import java.util.List;
+
+import codeGen.CodeGen;
 
 public class ProgNode extends AbstractNode {
 
@@ -56,7 +60,8 @@ public class ProgNode extends AbstractNode {
 	@Override
 	public void Compile() {
 
-		functions.Compile();
+		functions.Compile();		
+		CodeGen.OutInstr(new IntVal(CodeGen.progst.size()));		
 		statements.Compile();
 	}
 
