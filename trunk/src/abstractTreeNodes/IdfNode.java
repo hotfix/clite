@@ -1,5 +1,6 @@
 package abstractTreeNodes;
 
+import symTable.VarEntry;
 import instructions.IntVal;
 import codeGen.CodeGen;
 
@@ -24,7 +25,9 @@ public class IdfNode extends AbstractNode {
 
 	@Override
 	public void Compile() {
-		CodeGen.OutInstr(new IntVal(-1));
-		CodeGen.OutInstr(new IntVal(-1));
+		//Address
+		CodeGen.OutInstr(new IntVal( ((VarEntry)CodeGen.Search(name).GetE()).GetAddr() ));
+		//Size
+		CodeGen.OutInstr(new IntVal( ((VarEntry)CodeGen.Search(name).GetE()).GetTyp().GetSize() ));
 	} 
 }
