@@ -42,7 +42,8 @@ public class AssNode extends BinNode {
 
 	@Override
 	public void Compile() {
-		super.Compile();
+		System.out.println("AssNode::Compile");
+		GetL().Compile();
 	}
 
 }

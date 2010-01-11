@@ -1,9 +1,10 @@
 package abstractTreeNodes;
 
+import java.util.HashMap;
 import java.util.List;
 
 import symTable.AbstractDescr;
-import symTable.StructDescr;
+import symTable.AbstractEntry;
 
 public class StructDecNode extends AbstractNode {
 
@@ -11,25 +12,23 @@ public class StructDecNode extends AbstractNode {
 
 	AbstractNode structNode;
 	IdfNode name;
-	//AbstractNode idlist;
-
+	AbstractNode idlist;
 	public StructDecNode(IdfNode structName, AbstractNode fieldlist) {
 		structNode = fieldlist;
 		name = structName;
-		//idlist = null;
+		idlist = null;
 	}
-
+	
 	public StructDecNode(AbstractNode fieldlist) {
 		structNode = fieldlist;
 		name = null;
-		//idlist = null;
 	}
-
 	
 	
 	public IdfNode getName() {
 		return name;
 	}
+
 
 	public void setName(IdfNode name) {
 		this.name = name;
@@ -39,20 +38,21 @@ public class StructDecNode extends AbstractNode {
 		return structNode;
 	}
 
+
 	public void setStructNode(AbstractNode structNode) {
 		this.structNode = structNode;
 	}
 
-	public void print(int indentation) {
 
-		for (int i = 0; i < indentation; i++)
-			System.out.print(' ');
+	public void print(int indentation) {
+		
+		for(int i = 0; i < indentation; i++) System.out.print(' ');
 		System.out.println("StructDecNode");
 		getName().print(indentation + 2);
 		getStructNode().print(indentation + 2);
-		//getIdlist().print(indentation + 2);
 	}
 
+	
 	@Override
 	public void Compile() {
 		name.Compile();
@@ -64,6 +64,12 @@ public class StructDecNode extends AbstractNode {
 
 	public String toString() {
 		return "StructDecNode: \n" + structNode.toString();
+	}
+	
+	//TODO: implement
+	public AbstractDescr Compile(HashMap<String, AbstractEntry> env) {
+		
+		return null;
 	}
 
 }

@@ -49,7 +49,7 @@ public class Ops {
  public final static int constop  = 34;
 
  public final static int arraytyp  = 35;
- public final static int recordtyp  = 36;
+ public final static int structtyp  = 36;
  public final static int printop = 37;
 
  public final static int procdecop = 38;

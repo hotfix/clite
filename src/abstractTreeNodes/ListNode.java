@@ -5,32 +5,27 @@ import java.util.List;
 
 public class ListNode extends AbstractNode {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private List <AbstractNode> list = null;
 	
-	public ListNode() {}
+	public ListNode() {
+		list = new ArrayList<AbstractNode>();	
+	}
 	
 	public ListNode(List<AbstractNode> list) {
 		this.list = list;
 	}
 	
-	public void addNode(AbstractNode node) {
-		
-		if(list == null) list = new ArrayList<AbstractNode>();		
+	public void addNode(AbstractNode node) {		
 		list.add(node);
 	}
 	
 	public void print(int indentation) {
 		
-		if(list != null) {
-			for(int i = 0; i < indentation; i++) System.out.print(' ');
-			System.out.println("ListNode");
-			for(int i = 0; i < list.size(); i++) {
-				list.get(i).print(indentation+2);
-			}
+		for(int i = 0; i < indentation; i++) System.out.print(' ');
+		System.out.println("ListNode");
+		for(int i = 0; i < list.size(); i++) {
+			list.get(i).print(indentation+2);
 		}
 	}
 	
@@ -44,8 +39,11 @@ public class ListNode extends AbstractNode {
 
 	@Override
 	public void Compile() {
-		// TODO Auto-generated method stub
-		super.Compile();
+
+		System.out.println("ListNode::Compile");
+		for(int i = 0; i < list.size(); i++) {
+			list.get(i).Compile();
+		}
 	}
 
 }
