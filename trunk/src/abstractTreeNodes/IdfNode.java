@@ -1,5 +1,10 @@
 package abstractTreeNodes;
 
+import java.util.HashMap;
+
+import symTable.AbstractDescr;
+import symTable.AbstractEntry;
+import symTable.SimpleTypeDescr;
 import symTable.VarEntry;
 import instructions.IntVal;
 import codeGen.CodeGen;
@@ -29,5 +34,15 @@ public class IdfNode extends AbstractNode {
 		CodeGen.OutInstr(new IntVal( ((VarEntry)CodeGen.Search(name).GetE()).GetAddr() ));
 		//Size
 		CodeGen.OutInstr(new IntVal( ((VarEntry)CodeGen.Search(name).GetE()).GetTyp().GetSize() ));
+	}	
+	
+	@Override
+	public AbstractDescr Compile(HashMap<String, AbstractEntry> env) {
+
+		return new SimpleTypeDescr(name, 1);
+	}
+
+	public String GetS() {
+		return name;
 	} 
 }

@@ -1,11 +1,15 @@
 package abstractTreeNodes;
 
 import java.io.*;
+import java.util.HashMap;
+
+import symTable.AbstractDescr;
+import symTable.AbstractEntry;
+import symTable.ArrayDescr;
 
 public class AbstractNode implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	protected String nodeName = "AbstractNode";
 	
 	int op;
 
@@ -21,10 +25,17 @@ public class AbstractNode implements Serializable {
 		System.out.println("AbstractCompile");
 	}
 	
+	public AbstractDescr Compile(HashMap<String, AbstractEntry> env) {
+		System.out.println("AbstractCompile2");
+		return null;
+	}
+	
 	public void print(int indentation) {
 		
 		for(int i = 0; i < indentation; i++) System.out.print(' ');
 		System.out.println("AbstractNode");
 	}
+
+
 	
 }
