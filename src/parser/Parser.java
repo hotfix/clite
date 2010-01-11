@@ -1,4 +1,5 @@
 package parser;
+import instructions.IntVal;
 import interpreter.Interpreter;
 
 import java.io.FileOutputStream;
@@ -14,7 +15,10 @@ import codeGen.CodeGen;
 import abstractTreeNodes.*;
 
 import symTable.AbstractEntry;
+import symTable.ArrayDescr;
+import symTable.SimpleTypeDescr;
 import symTable.SymTable;
+import symTable.VarEntry;
 
 import lexyaccgen.*;
 
@@ -31,9 +35,6 @@ public class Parser {
 	static boolean 		begin_found	= false;
 	static boolean 		end_found	= false;
 	static AbstractNode root;
-	
-	public static  HashMap<String, AbstractEntry> env =
-		new HashMap<String, AbstractEntry>();
 
 	/*
 	 * Hilfsroutinen
@@ -457,21 +458,19 @@ public class Parser {
 
 	private static ListNode eval_Vars_Dec() throws Exception {
 		
-		List<AbstractNode> varDec = new ArrayList<AbstractNode>();
-		
+		List<AbstractNode> varDec = new ArrayList<AbstractNode>();		
 		String type = "";
 		
-		//standard datatype or a user defined struct name
-		if( (nextToken.getTokenType() != MyScanner1.DATATYPE) && 
-			(nextToken.getTokenType() != MyScanner1.IDENTIFIER) )
-		{
+		//standard datatype
+		if(nextToken.getTokenType() != MyScanner1.DATATYPE) {
 			Error("'Datatype' expected\n");
 		}
 		
 		//save type
 		type = nextToken.getLexem();
 		Insymbol();				
-		if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("'Identifier' expected\n");
+		if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("'Identifier' expected\n");		             
+		             
 		//assignment or an array declaration
 		varDec.add(eval_Var_dec(type));
 		
@@ -497,7 +496,8 @@ public class Parser {
 		assNode.SetR(null); //set only by assignment
 		
 		//set the variable name
-		varNode.SetL(new IdfNode(nextToken.getLexem()));
+		String varname = new String(nextToken.getLexem());
+		varNode.SetL(new IdfNode(varname));
 		varNode.SetR(new IdfNode(type));
 		
 		Insymbol();
@@ -507,11 +507,19 @@ public class Parser {
 			Insymbol();
 			AbstractNode expressionNode = eval_Expression();
 			assNode.SetR(expressionNode);
+			
+			CodeGen.DefVariable(varname, new SimpleTypeDescr(type, 1));
 		}
 		else if (nextToken.getTokenType() == MyScanner1.LSBRACE) {
 			ArrayNode array = eval_array_type(type);
 			varNode.SetR(array);
+			
+			CodeGen.DefVariable(varname, new ArrayDescr(array.getSize(),
+														array.getStorageSize(),
+														new SimpleTypeDescr(type,1)));
 		}
+		//simple variable without assignment
+		else CodeGen.DefVariable(varname, new SimpleTypeDescr(type, 1));
 		
 		return assNode;
 	}
@@ -626,7 +634,6 @@ public class Parser {
 	}
 
 
-	//TODO:testen noch mal
 	private static AbstractNode eval_IF_Statement() throws Exception {
 		AbstractNode expression = null;
 		ListNode	 	st1 = new ListNode(), 
@@ -817,12 +824,14 @@ public class Parser {
 					
 					Insymbol();
 					
-					begin_found = true;
-					end_found	= true;
+					//begin_found = true;
+					//end_found	= true;
+					CodeGen.envs.add(new HashMap<String, AbstractEntry>());
 					
 					root = eval_Program();
 					root.print(0);
 					
+					CodeGen.printEnvs();
 					
 					if (scanner.yylex().getTokenType() != MyScanner1.EOF) {
 						//Error("End Of File expected\n");
