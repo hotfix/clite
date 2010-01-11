@@ -20,8 +20,5 @@ public class StructRefNode extends BinNode {
 				"\n  " + GetR().toString());
 	}
 	
-	@Override
-	public void Compile() {
 
-	}
 }
