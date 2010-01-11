@@ -7,16 +7,16 @@ public class VarEntry extends AbstractEntry{
 	private static final long serialVersionUID = 1L;
 
 	int adr;
-	String typ;
+	AbstractDescr typ;
 	
 	public VarEntry()
 	{
 		op = Ops.varop; 
 		adr = 0; 
-		typ = "";
+		//typ = "";
 	}
 	
-	public VarEntry(int fa, String ftyp)
+	public VarEntry(int fa, AbstractDescr ftyp)
 	{
 		op = Ops.varop; 
 		adr = fa; 
@@ -28,8 +28,13 @@ public class VarEntry extends AbstractEntry{
 		return adr;
 	}
 	
-	public String GetTyp()
+	public AbstractDescr GetTyp()
 	{
 		return typ;
+	}
+	
+	public String toString() {
+		
+		return(new String(" Addr: "+adr+"; Typ: " + typ.toString()));
 	}
 }
