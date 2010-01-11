@@ -7,10 +7,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
+import symTable.AbstractDescr;
 import symTable.AbstractEntry;
+import symTable.SimpleTypeDescr;
+import symTable.VarEntry;
 
 import instructions.*;
+import interpreter.Interpreter;
 import abstractTreeNodes.*;
 
 public class CodeGen {
@@ -68,6 +73,11 @@ public class CodeGen {
 		labels[flab] = CodeGen.progcnt;
 	}
 
+	public static void DefVariable(String name, AbstractDescr descr) {
+		
+		CodeGen.envs.get(CodeGen.level).put(name, new VarEntry(CodeGen.envs.get(CodeGen.level).size(), descr));
+	}
+	
 	public static SearchResult Search(String s) {
 		int level;
 		AbstractEntry e = null;
@@ -81,4 +91,17 @@ public class CodeGen {
 		}
 		return new SearchResult(level, e);
 	};
+	
+	public static void printEnvs() {
+		
+		System.out.println("== Symboltabellen rausschreiben ==");
+		for(int i = 0; i < envs.size(); i++) {
+			System.out.println("  Symboltabelle " + i + ":");
+			Iterator<String> it = envs.get(i).keySet().iterator();
+			while(it.hasNext()) {
+				String varname = it.next();
+				System.out.println(varname + " --> " + envs.get(i).get(varname).toString());
+			}
+		}
+	}
 }
