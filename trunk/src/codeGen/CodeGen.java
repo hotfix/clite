@@ -109,17 +109,4 @@ public class CodeGen {
 			}
 		}
 	}
-	
-	public static void printStorage() {
-		
-		System.out.println("== Storage ausgabe ==");
-		for(int i = 0; i < envs.size(); i++) {
-			System.out.println("  Symboltabelle " + i + ":");
-			Iterator<String> it = envs.get(i).keySet().iterator();
-			while(it.hasNext()) {
-				String varname = it.next();
-				System.out.println(varname + " --> " + envs.get(i).get(varname).toString());
-			}
-		}
-	}
 }
