@@ -115,11 +115,11 @@ public class Interpreter {
 		
 
 		// Instruktionen interpretieren
-		i = progstg.size();
-		progcnt = ((IntVal) progstg.get(0)).GetI();
-		while (progcnt < i) {
-			progstg.get(progcnt).Interpret();
-		}
+//		i = progstg.size();
+//		progcnt = ((IntVal) progstg.get(0)).GetI();
+//		while (progcnt < i) {
+//			progstg.get(progcnt).Interpret();
+//		}
 
 		/*
 		 * am Ende Speicherbelegung ausgeben geht bei Prozedurn schief!
