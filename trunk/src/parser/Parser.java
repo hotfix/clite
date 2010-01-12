@@ -823,8 +823,8 @@ public class Parser {
 					
 					CodeGen.printEnvs();
 					
-					//Interpreter interpreter = new Interpreter(instrfile);
-					//interpreter.start();				
+					Interpreter interpreter = new Interpreter(instrfile);
+					interpreter.start();				
 				
 				} catch (java.io.FileNotFoundException e) {
 					System.out.println("File not found : \"" + argv[i] + "\"");					
