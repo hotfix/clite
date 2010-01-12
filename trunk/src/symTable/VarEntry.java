@@ -5,9 +5,9 @@ import abstractTreeNodes.Ops;
 public class VarEntry extends AbstractEntry{
 
 	private static final long serialVersionUID = 1L;
-
-	int adr;
-	AbstractDescr typ;
+	
+	private int adr;
+	private AbstractDescr typ;
 	
 	public VarEntry()
 	{
