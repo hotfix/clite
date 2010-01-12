@@ -5,9 +5,6 @@ import codeGen.CodeGen;
 
 public class IntNode extends AbstractNode {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private Integer num;
 	
@@ -28,6 +25,6 @@ public class IntNode extends AbstractNode {
 	
 	@Override
 	public void Compile() {
-		CodeGen.OutInstr(new IntVal(-2));
+		CodeGen.OutInstr(new IntVal(num));
 	}
 }
