@@ -48,7 +48,7 @@ public class AssNode extends BinNode {
 		System.out.println("AssNode::Compile");
 		GetR().Compile();
 		GetL().Compile();
-		CodeGen.getVariableAddr(((IdfNode)((VarNode)GetL()).GetL()).GetS());
+		//CodeGen.getVariableAddr(((IdfNode)((VarNode)GetL()).GetL()).GetS());
 		CodeGen.OutInstr(new BinInstr(16));
 	}
 
