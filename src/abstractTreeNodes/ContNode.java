@@ -2,9 +2,6 @@ package abstractTreeNodes;
 
 public class ContNode extends AbstractNode {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private AbstractNode child;
 	
