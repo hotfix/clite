@@ -190,7 +190,7 @@ public class Parser {
 			Insymbol();
 			if ( (nextToken.getTokenType() == MyScanner1.LPAR) ) {
 				putback_Token();
-				eval_FunctionCall();
+				result = eval_FunctionCall();
 			}
 			else {
 				putback_Token();
@@ -673,8 +673,9 @@ public class Parser {
 			if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("';' expected\n");
 			else Insymbol();
 			if (nextToken.getTokenType() != MyScanner1.ENDBLOCK) Error("'}' expected\n");
-			else Insymbol();
+			//else Insymbol();
 		}
+		Insymbol();
 		return new FunctionDecNode(returnType,functionName, formalParams, statements);
 	}
 	
@@ -789,8 +790,7 @@ public class Parser {
 			System.out.println("Usage : java Parser <inputfile>");
 		} else {
 			for (int i = 0; i < argv.length; i++) {
-				try {
-					
+				try {					
 					infile = argv[i];
 					scanner = new MyScanner1(new java.io.FileReader(infile));
 					
