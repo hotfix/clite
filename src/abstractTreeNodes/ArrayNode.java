@@ -79,7 +79,6 @@ public class ArrayNode extends AbstractNode {
 		else {
 			basedescr = new SimpleTypeDescr(((IdfNode) type).GetS(), 1);
 		}
-		CodeGen.Unindent();
 		return new ArrayDescr(size, basedescr.GetSize() * size, basedescr);
 	}
 }

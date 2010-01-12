@@ -1,5 +1,8 @@
 package abstractTreeNodes;
 
+import instructions.BinInstr;
+import codeGen.CodeGen;
+
 public class AssNode extends BinNode {
 
 	private static final long serialVersionUID = 1L;
@@ -43,7 +46,10 @@ public class AssNode extends BinNode {
 	@Override
 	public void Compile() {
 		System.out.println("AssNode::Compile");
+		GetR().Compile();
 		GetL().Compile();
+		CodeGen.getVariableAddr(((IdfNode)((VarNode)GetL()).GetL()).GetS());
+		CodeGen.OutInstr(new BinInstr(16));
 	}
 
 }
