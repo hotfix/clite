@@ -36,7 +36,14 @@ begin
 
     if (i < 10){ 
         r.a = 1; a[2] = r.a;
-    }else{ 
+    }else{
+        r.a = i-8;  
         i = i + i*10;
+        a[2] = r.a * i;
     }
+    
+    print i; //110
+    print r.a; // 2
+    
+    print a[2];//220
 end
