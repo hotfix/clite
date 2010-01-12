@@ -1,0 +1,41 @@
+program m;
+
+
+p01(int v){
+    v := c1;
+    p2(v);
+}
+
+p2(int i){
+    if (j == i){
+        print i
+    }
+}
+
+begin
+    const c1 = 10;
+    const c2 = 20;
+    
+    int i, j, k;
+    
+    int a1[10], a2[20];
+    
+    struct myStruct{
+        int [10];
+        int b;    
+    }r;
+    
+    i  = c1;  k = 0;
+ 
+    while (k < 5) {
+        i = i + 1;
+        k = k + 1;
+    }
+ 
+    j = i;
+    
+    a1[j] = c2*100;
+    a2  := a1;
+    r.a := a2;
+    p01(k);
+end
