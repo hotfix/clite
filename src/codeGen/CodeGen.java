@@ -78,6 +78,11 @@ public class CodeGen {
 		CodeGen.envs.get(CodeGen.level).put(name, new VarEntry(CodeGen.envs.get(CodeGen.level).size(), descr));
 	}
 	
+	public static int getVariableAddr(String name) {
+		
+		return ((VarEntry)(CodeGen.envs.get(CodeGen.level).get(name))).GetAddr();
+	}
+	
 	public static SearchResult Search(String s) {
 		int level;
 		AbstractEntry e = null;
@@ -94,7 +99,7 @@ public class CodeGen {
 	
 	public static void printEnvs() {
 		
-		System.out.println("== Symboltabellen rausschreiben ==");
+		System.out.println("== Symboltabellen ausgabe ==");
 		for(int i = 0; i < envs.size(); i++) {
 			System.out.println("  Symboltabelle " + i + ":");
 			Iterator<String> it = envs.get(i).keySet().iterator();
@@ -104,9 +109,17 @@ public class CodeGen {
 			}
 		}
 	}
-
-	public static void Unindent() {
-		// TODO Auto-generated method stub
+	
+	public static void printStorage() {
 		
+		System.out.println("== Storage ausgabe ==");
+		for(int i = 0; i < envs.size(); i++) {
+			System.out.println("  Symboltabelle " + i + ":");
+			Iterator<String> it = envs.get(i).keySet().iterator();
+			while(it.hasNext()) {
+				String varname = it.next();
+				System.out.println(varname + " --> " + envs.get(i).get(varname).toString());
+			}
+		}
 	}
 }
