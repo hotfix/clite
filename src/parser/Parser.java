@@ -270,20 +270,21 @@ public class Parser {
 		return result;
 	}
 
-	//TODO:baum
-	private static void eval_ActualParameters() throws Exception {
+	private static AbstractNode eval_ActualParameters() throws Exception {
 		
+		ListNode params = new ListNode();
 		if ( (nextToken.getTokenType() != MyScanner1.LPAR) ) Error("LPAR expected\n");
 		Insymbol();
 		if ( (nextToken.getTokenType() != MyScanner1.RPAR) ) {
-			eval_Expression();
+			params.addNode(eval_Expression());
 			while( (nextToken.getTokenType() == MyScanner1.COMMA) ) {
 				Insymbol();
-				eval_Expression();
+				params.addNode(eval_Expression());
 			}
 			if ( (nextToken.getTokenType() != MyScanner1.RPAR) ) Error("RPAR expected\n");
 		}		
 		Insymbol();		
+		return params;
 	}
 
 	private static AbstractNode eval_Statement() throws Exception {
@@ -341,15 +342,12 @@ public class Parser {
 		return node;	
 	}
 
-	//TODO:baum
 	private static AbstractNode eval_FunctionCall() throws Exception {
 		
 		if ( (nextToken.getTokenType() != MyScanner1.IDENTIFIER) ) Error("Function name expected\n");
-		
+		String name = nextToken.getLexem();
 		Insymbol();
-		eval_ActualParameters();
-		return new AbstractNode();
-		
+		return new FunctionCallNode(name, (ListNode)eval_ActualParameters());		
 	}
 
 	private static AbstractNode eval_Assignment() throws Exception {
