@@ -11,14 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 import codeGen.CodeGen;
-
 import abstractTreeNodes.*;
-
 import symTable.AbstractEntry;
-import symTable.ArrayDescr;
-import symTable.SimpleTypeDescr;
-import symTable.SymTable;
-import symTable.VarEntry;
 
 import lexyaccgen.*;
 
@@ -328,8 +322,8 @@ public class Parser {
 				else
 				if (nextToken.getTokenType() == MyScanner1.IDENTIFIER) {
 					putback_Token();
-					if(isUserDataType() == true) node = eval_Declaration();
-					else Error("Unknown datatype '" + nextToken.getLexem() + "'\n");
+					//if(isUserDataType() == true) node = eval_Declaration();
+					//else Error("Unknown datatype '" + nextToken.getLexem() + "'\n");
 				}
 				else
 				if ( (nextToken.getTokenType() == MyScanner1.LSBRACE) || 
@@ -404,10 +398,16 @@ public class Parser {
 		
 		structNode = new StructDecNode(new IdfNode(structName), fieldlist);
 		
-		if (nextToken.getTokenType() == MyScanner1.IDENTIFIER){
-			//identList = eval_IdentList();			
-			structList.add(new VarNode(new IdfNode(nextToken.getLexem()), structNode));
+		if (nextToken.getTokenType() == MyScanner1.IDENTIFIER) {
+			
+			String varname = nextToken.getLexem();
+			AbstractNode vartype;
 			Insymbol();
+			if(nextToken.getTokenType() == MyScanner1.LSBRACE) 
+				vartype = eval_array_type(structNode);
+			else vartype = structNode;
+			
+			structList.add(new VarNode(new IdfNode(varname), vartype));
 			
 			while(nextToken.getTokenType() == MyScanner1.COMMA) {
 				Insymbol();
@@ -419,39 +419,11 @@ public class Parser {
 		
 		
 		if (nextToken.getTokenType() != MyScanner1.ENDOP)Error("ENDOP on the End of StructDeclaration expected!");
-		else Insymbol();
+		else Insymbol();		
 		
-		
-		return new ListNode(structList); //new StructDecNode(new IdfNode(structName), fieldlist, identList);
-		
+		return new ListNode(structList);	
 	}
 
-
-	/**
-	 * liefert eine Liste der Identifier zurueck
-	 * Bsp: struct xyz{}"identList";
-	 * @return identList
-	 * @throws Exception
-	 */
-//	private static ListNode eval_IdentList() throws Exception {
-//
-//		
-//		//liste der Identifier(Variablen)
-//		//List<AbstractNode> identList = new ArrayList<AbstractNode>();
-//		//identList.add(new IdfNode(nextToken.getLexem()));
-//		Insymbol();
-//			
-//		while(nextToken.getTokenType() == MyScanner1.COMMA){
-//			Insymbol();
-//			if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("Identifier expected!");
-//			else{
-//				identList.add(new IdfNode(nextToken.getLexem()));
-//				Insymbol();
-//			}
-//			
-//		}
-//		return new ListNode(identList);
-//	}
 
 	private static ListNode eval_FieldlList() throws Exception {
 		
@@ -474,7 +446,6 @@ public class Parser {
 	private static ListNode eval_Vars_Dec() throws Exception {
 		
 		List<AbstractNode> varDec = new ArrayList<AbstractNode>();		
-		String type = "";
 		
 		//standard datatype
 		if(nextToken.getTokenType() != MyScanner1.DATATYPE) {
@@ -482,7 +453,7 @@ public class Parser {
 		}
 		
 		//save type
-		type = nextToken.getLexem();
+		IdfNode type = new IdfNode(nextToken.getLexem());
 		Insymbol();				
 		if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("'Identifier' expected\n");		             
 		             
@@ -502,7 +473,7 @@ public class Parser {
 	}
 
 
-	private static AssNode eval_Var_dec(String type) throws Exception {
+	private static AssNode eval_Var_dec(IdfNode type) throws Exception {
 		
 		AssNode assNode = new AssNode();
 		VarNode varNode = new VarNode();
@@ -511,30 +482,22 @@ public class Parser {
 		assNode.SetR(null); //set only by assignment
 		
 		//set the variable name
-		String varname = new String(nextToken.getLexem());
+		String varname = nextToken.getLexem();
 		varNode.SetL(new IdfNode(varname));
-		varNode.SetR(new IdfNode(type));
+		varNode.SetR(type);
 		
 		Insymbol();
 		if (nextToken.getTokenType() == MyScanner1.ASSIGNOP) {
 			
-			varNode.SetR(new IdfNode(type));
+			varNode.SetR(type);
 			Insymbol();
 			AbstractNode expressionNode = eval_Expression();
 			assNode.SetR(expressionNode);
-			
-			//CodeGen.DefVariable(varname, new SimpleTypeDescr(type, 1));
 		}
 		else if (nextToken.getTokenType() == MyScanner1.LSBRACE) {
 			ArrayNode array = eval_array_type(type);
 			varNode.SetR(array);
-			
-			//CodeGen.DefVariable(varname, new ArrayDescr(array.getSize(),
-			//											array.getStorageSize(),
-			//											new SimpleTypeDescr(type,1)));
 		}
-		//simple variable without assignment
-		//else CodeGen.DefVariable(varname, new SimpleTypeDescr(type, 1));
 		
 		return assNode;
 	}
@@ -547,7 +510,7 @@ public class Parser {
 	//        ArrayNode : 3
 	//            IdfNode  int
 	// where "int" is the type given over as a String param	
-	private static ArrayNode eval_array_type(String type) throws Exception {
+	private static ArrayNode eval_array_type(AbstractNode type) throws Exception {
 		
 		if (nextToken.getTokenType() != MyScanner1.LSBRACE) Error("'[' expected\n");
 		Insymbol();
@@ -561,15 +524,11 @@ public class Parser {
 			arrNode.SetType(eval_array_type(type));
 		}
 		else {
-			arrNode.SetType(new IdfNode(type));
+			arrNode.SetType(type);
 		}
 		return arrNode;
 	}
 
-	private static boolean isUserDataType() {
-		// TODO check in the SymTable if nextToken is a user defined data type
-		return false;
-	}
 
 	private static AbstractNode eval_WHILE_Statement() throws Exception {
 		Insymbol();
