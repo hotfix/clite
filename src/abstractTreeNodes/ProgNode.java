@@ -61,7 +61,7 @@ public class ProgNode extends AbstractNode {
 	public void Compile() {
 
 		functions.Compile();		
-		CodeGen.OutInstr(new IntVal(CodeGen.progst.size()));		
+		//CodeGen.OutInstr(new IntVal(CodeGen.progst.size()));		
 		statements.Compile();
 	}
 

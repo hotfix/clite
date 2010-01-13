@@ -58,7 +58,7 @@ public class Interpreter {
 		i = 0;
 		while (i < l.size()) {
 			name = l.get(i);
-			entry = (VarEntry) ((CodeGen.envs.get(CodeGen.level)).get(name));
+			entry = (VarEntry) ((CodeGen.envs.get(CodeGen.level)).getVariable(name));
 			addr = entry.GetAddr();
 			d = entry.GetTyp();
 			if (d.GetOp() == Ops.strop) {
@@ -108,18 +108,19 @@ public class Interpreter {
 		SL[4] = 0;
 		SL[5] = 0;
 
-		SP = CodeGen.envs.size();
+		SP = CodeGen.envs.get(0).getSize();
 		for (i = 0; i < SP; i++) {
 			Interpreter.storage.add(new IntVal(0));
 		}
 		
 
 		// Instruktionen interpretieren
-//		i = progstg.size();
-//		progcnt = ((IntVal) progstg.get(0)).GetI();
-//		while (progcnt < i) {
-//			progstg.get(progcnt).Interpret();
-//		}
+		i = progstg.size();
+		//progcnt = ((IntVal) progstg.get(0)).GetI();
+		progcnt = 0;
+		while (progcnt < i) {
+			progstg.get(progcnt).Interpret();
+		}
 
 		/*
 		 * am Ende Speicherbelegung ausgeben geht bei Prozedurn schief!

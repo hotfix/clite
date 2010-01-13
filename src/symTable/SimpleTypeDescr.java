@@ -15,8 +15,7 @@ public class SimpleTypeDescr extends AbstractDescr {
 	
 	public SimpleTypeDescr(String name, int size){
 		this.name = name;
-		this.size = size;
-		
+		this.size = size;		
 	}
 	
 	public String GetName() {	

@@ -13,7 +13,6 @@ public class VarEntry extends AbstractEntry{
 	{
 		op = Ops.varop; 
 		adr = 0; 
-		//typ = "";
 	}
 	
 	public VarEntry(int fa, AbstractDescr ftyp)

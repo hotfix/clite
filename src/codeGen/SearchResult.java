@@ -1,12 +1,12 @@
 package codeGen;
 
-import symTable.AbstractEntry;
+import symTable.VarEntry;
 
 public class SearchResult {
 	int level;
-	AbstractEntry e;
+	VarEntry e;
 
-	public SearchResult(int fl, AbstractEntry fe) {
+	public SearchResult(int fl, VarEntry fe) {
 		level = fl;
 		e = fe;
 	}
@@ -15,7 +15,7 @@ public class SearchResult {
 		return level;
 	}
 
-	public AbstractEntry GetE() {
+	public VarEntry GetE() {
 		return e;
 	}
 }

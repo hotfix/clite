@@ -23,6 +23,14 @@ public class ArrayDescr extends AbstractDescr {
 		basetype = fb;
 	}
 
+	public int getNumberOfElements() {
+		return numberelems;
+	}
+	
+	public AbstractDescr getType() {
+		return basetype;
+	}
+	
 	@Override
 	public String toString() {		
 		return "ArrayDescr [numberelems=" + numberelems + ", size=" + size + ", basetype=" + basetype.toString() + "]";
