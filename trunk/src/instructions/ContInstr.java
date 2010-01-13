@@ -9,11 +9,9 @@ public class ContInstr extends AbstrInstr {
 
 	public ContInstr() {
 		op = Ops.contop;
-	};
+	}
 
-	public void Interpret()
-
-	{
+	public void Interpret()	{
 		IntVal i;
 
 		int addr, size, j = 0;
@@ -25,15 +23,15 @@ public class ContInstr extends AbstrInstr {
 			Interpreter.valuestack.push(i);
 			System.out.print(Interpreter.progcnt + " ");
 			System.out.println("Interpret ContInstr Addr = "
-					+ ((IntVal) i).GetI() + " value = " + i.GetI());
+					+ (addr+j) + " value = " + i.GetI());
 			j++;
 		}
 		Interpreter.progcnt++;
-	};
+	}
 
 	public void Print() {
 		System.out.print(Interpreter.progcnt + " ");
 		System.out.println("Interpret ContInstr");
 		Interpreter.progcnt++;
-	};
+	}
 }

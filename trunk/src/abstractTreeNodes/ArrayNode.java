@@ -1,13 +1,13 @@
 package abstractTreeNodes;
 
-import java.util.HashMap;
+import instructions.IntVal;
 
 import codeGen.CodeGen;
 
 import symTable.AbstractDescr;
-import symTable.AbstractEntry;
 import symTable.ArrayDescr;
 import symTable.SimpleTypeDescr;
+import symTable.SymTable;
 
 public class ArrayNode extends AbstractNode {
 
@@ -63,9 +63,8 @@ public class ArrayNode extends AbstractNode {
 	}
 
 
-	//(c)Völler
 	@Override
-	public ArrayDescr Compile(HashMap<String, AbstractEntry> env) {
+	public ArrayDescr Compile(SymTable env) {
 		
 		System.out.println("ArrayNode::Compile");
 		
@@ -79,6 +78,11 @@ public class ArrayNode extends AbstractNode {
 		else {
 			basedescr = new SimpleTypeDescr(((IdfNode) type).GetS(), 1);
 		}
-		return new ArrayDescr(size, basedescr.GetSize() * size, basedescr);
+		int actual_size = basedescr.GetSize() * size;
+		
+		//write default values (0) to init the array by declaration
+		for(int i = 0; i < actual_size; i++) CodeGen.OutInstr(new IntVal(0));
+		
+		return new ArrayDescr(size, actual_size, basedescr);
 	}
 }

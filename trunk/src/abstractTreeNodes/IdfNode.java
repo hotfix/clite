@@ -5,6 +5,7 @@ import java.util.HashMap;
 import symTable.AbstractDescr;
 import symTable.AbstractEntry;
 import symTable.SimpleTypeDescr;
+import symTable.SymTable;
 import symTable.VarEntry;
 import instructions.IntVal;
 import codeGen.CodeGen;
@@ -37,7 +38,7 @@ public class IdfNode extends AbstractNode {
 	}	
 	
 	@Override
-	public AbstractDescr Compile(HashMap<String, AbstractEntry> env) {
+	public AbstractDescr Compile(SymTable env) {
 
 		return new SimpleTypeDescr(name, 1);
 	}

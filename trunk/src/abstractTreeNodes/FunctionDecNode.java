@@ -70,7 +70,7 @@ public class FunctionDecNode extends AbstractNode {
 			statements.get(i).Compile();
 		}
 		
-	};
+	}
 
 }
 																																																																					

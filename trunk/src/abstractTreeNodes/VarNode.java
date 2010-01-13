@@ -32,7 +32,10 @@ public class VarNode extends BinNode {
 	@Override
 	public void Compile() {
 		System.out.println("VarNode::Compile");
-		CodeGen.DefVariable(((IdfNode)GetL()).GetS(), 
-							GetR().Compile(CodeGen.envs.get(CodeGen.level)));
+		CodeGen.envs.get(CodeGen.level).addVariable(
+				((IdfNode)GetL()).GetS(), 
+				GetR().Compile(CodeGen.envs.get(CodeGen.level))
+		);
+		((IdfNode)GetL()).Compile();
 	}
 }

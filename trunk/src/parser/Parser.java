@@ -13,6 +13,7 @@ import java.util.Map;
 import codeGen.CodeGen;
 import abstractTreeNodes.*;
 import symTable.AbstractEntry;
+import symTable.SymTable;
 
 import lexyaccgen.*;
 
@@ -798,7 +799,7 @@ public class Parser {
 					
 					//begin_found = true;
 					//end_found	= true;
-					CodeGen.envs.add(new HashMap<String, AbstractEntry>());
+					CodeGen.envs.add(new SymTable());
 					
 					root = eval_Program();
 					root.print(0);
@@ -834,7 +835,7 @@ public class Parser {
 					else
 					if (end_found == false) System.out.println("'End' not found!\n");
 				} catch (Exception e) {
-					System.out.println(e.getMessage());
+					System.out.println(e.getClass() + " ~~~ " + e.getMessage());
 				}
 			}
 		}

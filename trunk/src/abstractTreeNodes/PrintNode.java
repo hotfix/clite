@@ -1,10 +1,10 @@
 package abstractTreeNodes;
 
+import instructions.PrintInstr;
+import codeGen.CodeGen;
+
 public class PrintNode extends AbstractNode {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private AbstractNode param;
 	
@@ -27,5 +27,7 @@ public class PrintNode extends AbstractNode {
 	
 	@Override
 	public void Compile() {
+		param.Compile();
+		CodeGen.OutInstr(new PrintInstr());
 	}
 }

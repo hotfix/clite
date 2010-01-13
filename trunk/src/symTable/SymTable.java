@@ -1,65 +1,48 @@
 package symTable;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
-
+import codeGen.CodeGen;
 
 
 public class SymTable {
 
-	private HashMap symTable;
+	private HashMap<String, VarEntry> symTable;
 	
 	public SymTable() {
-		this.symTable = new HashMap<Integer, SymTableEntry>();
+		this.symTable = new HashMap<String, VarEntry>();
 	}
 	
-	public String getTableAsString() {
-		//return symTable.values().toString();
-		String values = new String();
-		for(int i = 0; i < symTable.size(); i++) {
-			values+=( (new Integer(i)).toString()+ ": " + symTable.get(i) + "\n" );
+	// returns the actual size of the SymTyble
+	public int getSize() {
+		int size = 0;
+		Iterator<String> it = symTable.keySet().iterator();
+		while(it.hasNext()) {
+			String varname = it.next();
+			size+=symTable.get(varname).GetTyp().GetSize();
 		}
-		return values;
+		return size;	
 	}
 
-	public int addSymbol(String lexem, int token, int typ, String wert) {
+	public void addVariable(String name, AbstractDescr descr) {	
 		
-		int index = indexof(lexem), id = -1;
-		if(index == -1) {
-			SymTableEntry se = new SymTableEntry(lexem, token, typ, wert);		
-			id = symTable.size();
-			symTable.put(id, se);
+		symTable.put(name, new VarEntry(getSize(), descr));
+	}
+	
+	public void Print() {
+		
+		Iterator<String> it = symTable.keySet().iterator();
+		while(it.hasNext()) {
+			String varname = it.next();
+			System.out.println(varname + " --> " + symTable.get(varname).toString());
 		}
-		return id;
-	}
-	
-	public SymTableEntry getSymbol(int index) {
-		
-		return (SymTableEntry) symTable.get(index);
-	}
-	
-	public SymTableEntry getSymbol(String lexem) {		
-		return (SymTableEntry) symTable.get(indexof(lexem));
 	}
 
-	private int indexof(String lexem) {
-		int index;
-		
-		// Expert code:
-		/*
-		for(int i = 0; i < symTable.size(); i++) if (((SymTableEntry)symTable.get(i)).lexem.equals(lexem)) return i;
-		*/
-		
-		// Lamer code:
-		SymTableEntry s;
-		for(int i = 0; i < symTable.size(); i++) {			
-			s = (SymTableEntry) symTable.get(i);
-			if(s.lexem.equals(lexem)){
-				return i;
-			}
-		}		
-		return -1;
+	public VarEntry getVariable(String s) {
+		return symTable.get(s);
 	}
+	
 }
 
 

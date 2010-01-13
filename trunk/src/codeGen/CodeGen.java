@@ -12,6 +12,7 @@ import java.util.Iterator;
 import symTable.AbstractDescr;
 import symTable.AbstractEntry;
 import symTable.SimpleTypeDescr;
+import symTable.SymTable;
 import symTable.VarEntry;
 
 import instructions.*;
@@ -28,7 +29,7 @@ public class CodeGen {
 	//Program Speicher (Prog)
 	public static ArrayList<AbstrInstr> progst = new ArrayList<AbstrInstr>();
 	
-	public static ArrayList<HashMap<String, AbstractEntry>> envs = new ArrayList<HashMap<String, AbstractEntry>>();
+	public static ArrayList<SymTable> envs = new ArrayList<SymTable>();
 
 	public static int[] labels = new int[10000];
 	public static int progcnt = 0;
@@ -71,42 +72,28 @@ public class CodeGen {
 
 	public static void DefLabel(int flab) {
 		labels[flab] = CodeGen.progcnt;
-	}
-
-	public static void DefVariable(String name, AbstractDescr descr) {
-		
-		CodeGen.envs.get(CodeGen.level).put(name, new VarEntry(CodeGen.envs.get(CodeGen.level).size(), descr));
-	}
-	
-	public static int getVariableAddr(String name) {
-		
-		return ((VarEntry)(CodeGen.envs.get(CodeGen.level).get(name))).GetAddr();
-	}
+	}	
 	
 	public static SearchResult Search(String s) {
 		int level;
-		AbstractEntry e = null;
-		HashMap<String, AbstractEntry> lenv;
+		VarEntry e = null;
+		SymTable lenv;
 		level = CodeGen.level;
 		while ((level >= 0) && (e == null)) {
 			lenv = CodeGen.envs.get(level);
-			e = lenv.get(s);
+			e = lenv.getVariable(s);
 			if (e == null)
 				level--;
 		}
 		return new SearchResult(level, e);
-	};
+	}
 	
 	public static void printEnvs() {
 		
 		System.out.println("== Symboltabellen ausgabe ==");
 		for(int i = 0; i < envs.size(); i++) {
 			System.out.println("  Symboltabelle " + i + ":");
-			Iterator<String> it = envs.get(i).keySet().iterator();
-			while(it.hasNext()) {
-				String varname = it.next();
-				System.out.println(varname + " --> " + envs.get(i).get(varname).toString());
-			}
+			envs.get(i).Print();
 		}
 	}
 }

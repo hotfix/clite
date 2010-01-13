@@ -6,6 +6,7 @@ import java.util.HashMap;
 import symTable.AbstractDescr;
 import symTable.AbstractEntry;
 import symTable.ArrayDescr;
+import symTable.SymTable;
 
 public class AbstractNode implements Serializable {
 
@@ -25,7 +26,7 @@ public class AbstractNode implements Serializable {
 		System.out.println("AbstractCompile");
 	}
 	
-	public AbstractDescr Compile(HashMap<String, AbstractEntry> env) {
+	public AbstractDescr Compile(SymTable env) {
 		System.out.println("AbstractCompile2");
 		return null;
 	}
@@ -34,8 +35,5 @@ public class AbstractNode implements Serializable {
 		
 		for(int i = 0; i < indentation; i++) System.out.print(' ');
 		System.out.println("AbstractNode");
-	}
-
-
-	
+	}	
 }

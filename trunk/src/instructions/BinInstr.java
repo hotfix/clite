@@ -9,7 +9,7 @@ public class BinInstr extends AbstrInstr {
 
 	public BinInstr(int fop) {
 		op = fop;
-	};
+	}
 
 	public void Interpret() {
 		AbstrInstr op1, op2;
@@ -58,10 +58,11 @@ public class BinInstr extends AbstrInstr {
 			size = ((IntVal) Interpreter.valuestack.pop()).GetI();
 			op1 = Interpreter.valuestack.pop(); // intinstr
 			i1 = ((IntVal) op1).GetI();
+			System.out.println();
 			while (j < size) {
 				op2 = Interpreter.valuestack.pop(); // intinstr
 				i2 = ((IntVal) op2).GetI();
-				System.out.println("addr(" + i1 + ") := " + i2);
+				System.out.println("             addr(" + (i1+j) + ") := " + i2);
 				Interpreter.storage.set(i1 + size - (j + 1), new IntVal(i2));
 				j++;
 			}
@@ -140,12 +141,11 @@ public class BinInstr extends AbstrInstr {
 			break;
 		}
 		}
-		;
 		Interpreter.progcnt++;
-	};
+	}
 
 	public void Print() {
 		System.out.println(Interpreter.progcnt + " Interpret BinInstr " + op);
 		Interpreter.progcnt++;
-	};
+	}
 }

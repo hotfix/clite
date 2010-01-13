@@ -58,4 +58,6 @@ public class Ops {
  public final static int parop = 41;
  public final static int callop = 42;
  public final static int typedecop = 43;
+ 
+ public final static int arrayref = 44;
 }
