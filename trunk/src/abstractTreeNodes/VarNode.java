@@ -30,6 +30,7 @@ public class VarNode extends BinNode {
 				"\n  " + GetR().toString());
 	}
 	
+	//TODO:ersetzen
 	@Override
 	public void Compile() {
 		System.out.println("VarNode::Compile");
@@ -42,12 +43,13 @@ public class VarNode extends BinNode {
 	
 	@Override
 	public AbstractDescr Compile(SymTable env) {
-		System.out.println("VarNode::Compile");
+		System.out.println("VarNode::Compile2");
 		env.addVariable(
 				((IdfNode)GetL()).GetS(), 
 				GetR().getDescriptor()
 		);
-		((IdfNode)GetL()).Compile();
+		((IdfNode)GetL()).Compile(env);
+		//TODO: null ???
 		return null;
 	}
 }
