@@ -799,7 +799,6 @@ public class Parser {
 					
 					//begin_found = true;
 					//end_found	= true;
-					CodeGen.envs.add(new SymTable());
 					
 					root = eval_Program();
 					root.print(0);
