@@ -30,15 +30,16 @@ public class IdfNode extends AbstractNode {
 	}
 
 	@Override
-	public void Compile() {
+	public AbstractDescr Compile(SymTable env) {
 		//Address
 		CodeGen.OutInstr(new IntVal( ((VarEntry)CodeGen.Search(name).GetE()).GetAddr() ));
 		//Size
 		CodeGen.OutInstr(new IntVal( ((VarEntry)CodeGen.Search(name).GetE()).GetTyp().GetSize() ));
+		
+		return null;
 	}	
 	
-	@Override
-	public AbstractDescr Compile(SymTable env) {
+	public AbstractDescr getDescriptor() {
 
 		return new SimpleTypeDescr(name, 1);
 	}

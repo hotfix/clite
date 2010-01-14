@@ -2,6 +2,7 @@ package abstractTreeNodes;
 
 import symTable.AbstractDescr;
 import symTable.SimpleTypeDescr;
+import symTable.SymTable;
 import codeGen.CodeGen;
 
 public class VarNode extends BinNode {
@@ -37,5 +38,16 @@ public class VarNode extends BinNode {
 				GetR().Compile(CodeGen.envs.get(CodeGen.level))
 		);
 		((IdfNode)GetL()).Compile();
+	}
+	
+	@Override
+	public AbstractDescr Compile(SymTable env) {
+		System.out.println("VarNode::Compile");
+		env.addVariable(
+				((IdfNode)GetL()).GetS(), 
+				GetR().getDescriptor()
+		);
+		((IdfNode)GetL()).Compile();
+		return null;
 	}
 }
