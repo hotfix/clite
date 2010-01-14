@@ -59,6 +59,7 @@ public class CodeGen {
 
 		System.out.println("== CodeGen auf gehts ==");
 
+		CodeGen.envs.add(new SymTable());
 		((/*ProgNode*/AbstractNode) root).Compile();
 
 		System.out.println("== CodeGen code für Interpretierer rausschreiben ==");

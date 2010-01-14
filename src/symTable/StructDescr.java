@@ -6,24 +6,21 @@ public class StructDescr extends AbstractDescr{
 
 	private static final long serialVersionUID = 1L;
 	
+	private int addr; // start address of first field
+	private SymTable recenv;
+	
 	public int getAddr() {
 		return addr;
 	}
-
 	public void setAddr(int addr) {
 		this.addr = addr;
 	}
-
 	public SymTable getRecenv() {
 		return recenv;
 	}
-
 	public void setRecenv(SymTable recenv) {
 		this.recenv = recenv;
 	}
-
-	private int addr; // start address of first field
-	private SymTable recenv;
 
 	public StructDescr() {
 		op = Ops.structtyp;
