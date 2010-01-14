@@ -1,11 +1,5 @@
 package abstractTreeNodes;
 
-import java.util.HashMap;
-import java.util.List;
-
-import symTable.AbstractDescr;
-import symTable.AbstractEntry;
-import symTable.StructDescr;
 import symTable.SymTable;
 
 public class StructDecNode extends AbstractNode {
@@ -39,7 +33,6 @@ public class StructDecNode extends AbstractNode {
 		
 		SymTable env = new SymTable();		
 		fieldlist.Compile(env);
-		// idlist.Compile();
 	}
 
 	public String toString() {

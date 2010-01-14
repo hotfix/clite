@@ -1,5 +1,8 @@
 package abstractTreeNodes;
 
+import symTable.AbstractDescr;
+import symTable.SymTable;
+
 public class AssNode extends BinNode {
 
 	private static final long serialVersionUID = 1L;
@@ -39,9 +42,14 @@ public class AssNode extends BinNode {
 		}
 	}
 
+	//TODO:ersetzen
 	@Override
 	public void Compile() {
 		super.Compile();
 	}
 
+	@Override
+	public AbstractDescr Compile(SymTable env) {
+		return super.Compile(env);
+	}
 }
