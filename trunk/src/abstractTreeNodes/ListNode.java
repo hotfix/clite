@@ -3,6 +3,9 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import symTable.AbstractDescr;
+import symTable.SymTable;
+
 public class ListNode extends AbstractNode {
 
 	private static final long serialVersionUID = 1L;
@@ -45,5 +48,18 @@ public class ListNode extends AbstractNode {
 			list.get(i).Compile();
 		}
 	}
+
+	@Override
+	public AbstractDescr Compile(SymTable env) {
+		
+		System.out.println("ListNode::Compile2");
+		for(int i = 0; i < list.size(); i++) {
+			list.get(i).Compile(env);
+		}
+		
+		return null;
+	}
+	
+	
 
 }
