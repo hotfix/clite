@@ -28,7 +28,7 @@ public class Interpreter {
 	static final int MAXLEVEL = 5;
 	public static int[] SL = new int[MAXLEVEL + 1];
 
-	// für Testausgabe der Variablenbelegung geht bei Prozeduren schief!!
+	// fÃ¼r Testausgabe der Variablenbelegung geht bei Prozeduren schief!!
 	public static ArrayList<String> l = new ArrayList<String>();
 
 	FileInputStream in;
@@ -39,7 +39,7 @@ public class Interpreter {
 		in = new FileInputStream(filename);
 		s = new ObjectInputStream(in);
 
-		System.out.println("== code für Interpretierer wieder einlesen ==");
+		System.out.println("== code fÃ¼r Interpretierer wieder einlesen ==");
 		progstg = (ArrayList<AbstrInstr>) s.readObject();
 		progcnt = 0;
 
