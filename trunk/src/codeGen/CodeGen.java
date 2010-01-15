@@ -1,23 +1,17 @@
 package codeGen;
 
+import instructions.AbstrInstr;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 
-import symTable.AbstractDescr;
-import symTable.AbstractEntry;
-import symTable.SimpleTypeDescr;
 import symTable.SymTable;
 import symTable.VarEntry;
-
-import instructions.*;
-import interpreter.Interpreter;
-import abstractTreeNodes.*;
+import abstractTreeNodes.AbstractNode;
 
 public class CodeGen {
 

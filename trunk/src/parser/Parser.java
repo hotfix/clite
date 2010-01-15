@@ -1,5 +1,4 @@
 package parser;
-import instructions.IntVal;
 import interpreter.Interpreter;
 
 import java.io.FileOutputStream;
@@ -10,12 +9,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lexyaccgen.EOFException;
+import lexyaccgen.MyScanner1;
+import lexyaccgen.Yytoken;
+import abstractTreeNodes.AbstractNode;
+import abstractTreeNodes.ArrayNode;
+import abstractTreeNodes.ArrayRefNode;
+import abstractTreeNodes.AssNode;
+import abstractTreeNodes.BinNode;
+import abstractTreeNodes.ConstDecNode;
+import abstractTreeNodes.ContNode;
+import abstractTreeNodes.FormalParamsNode;
+import abstractTreeNodes.FunctionCallNode;
+import abstractTreeNodes.FunctionDecNode;
+import abstractTreeNodes.IdfNode;
+import abstractTreeNodes.IfNode;
+import abstractTreeNodes.IntNode;
+import abstractTreeNodes.ListNode;
+import abstractTreeNodes.NegationNode;
+import abstractTreeNodes.Ops;
+import abstractTreeNodes.PrintNode;
+import abstractTreeNodes.ProgNode;
+import abstractTreeNodes.StructDecNode;
+import abstractTreeNodes.StructRefNode;
+import abstractTreeNodes.VarNode;
+import abstractTreeNodes.WhileNode;
 import codeGen.CodeGen;
-import abstractTreeNodes.*;
-import symTable.AbstractEntry;
-import symTable.SymTable;
-
-import lexyaccgen.*;
 
 public class Parser {
 
@@ -649,7 +668,7 @@ public class Parser {
 		String functionName = "";
 		AbstractNode returnType = null;
 		AbstractNode formalParams = null;
-		AbstractNode returnValue = null;//TODO:
+		//AbstractNode returnValue = null;//TODO:
 		List<AbstractNode> statements = new ArrayList<AbstractNode>();
 
 		if (nextToken.getTokenType() == MyScanner1.DATATYPE) {

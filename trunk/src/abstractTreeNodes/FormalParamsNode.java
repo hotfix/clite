@@ -1,14 +1,12 @@
 package abstractTreeNodes;
 
-import instructions.IntVal;
-
 import java.util.Iterator;
 import java.util.Map;
 
-import codeGen.CodeGen;
-
 public class FormalParamsNode extends AbstractNode {
 
+	private static final long serialVersionUID = 1L;
+	
 	Map<AbstractNode, AbstractNode> params;
 
 	public FormalParamsNode(Map<AbstractNode, AbstractNode> params2) {

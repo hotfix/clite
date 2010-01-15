@@ -8,6 +8,8 @@ import symTable.VarEntry;
 
 public class ArrayRefNode extends BinNode {
 
+	private static final long serialVersionUID = 1L;
+	
 	private static AbstractDescr descr = null;
 	
 	public ArrayRefNode() {

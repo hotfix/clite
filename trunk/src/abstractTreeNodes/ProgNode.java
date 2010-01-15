@@ -1,16 +1,8 @@
 package abstractTreeNodes;
 
-import instructions.IntVal;
-
-import java.util.List;
-
-import codeGen.CodeGen;
 
 public class ProgNode extends AbstractNode {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	private String		programName;

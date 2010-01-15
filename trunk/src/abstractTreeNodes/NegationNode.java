@@ -2,6 +2,8 @@ package abstractTreeNodes;
 
 public class NegationNode extends AbstractNode {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private AbstractNode child;	
 	
 	public NegationNode(AbstractNode child) {

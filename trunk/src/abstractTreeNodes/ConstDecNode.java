@@ -2,6 +2,8 @@ package abstractTreeNodes;
 
 public class ConstDecNode extends BinNode {
 
+	private static final long serialVersionUID = 1L;
+
 	public ConstDecNode () {}
 	
 	public ConstDecNode(IdfNode left_side, IntNode right_side) {

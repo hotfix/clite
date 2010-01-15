@@ -1,17 +1,16 @@
 package abstractTreeNodes;
 
-import java.util.HashMap;
-
+import instructions.IntVal;
 import symTable.AbstractDescr;
-import symTable.AbstractEntry;
 import symTable.SimpleTypeDescr;
 import symTable.SymTable;
 import symTable.VarEntry;
-import instructions.IntVal;
 import codeGen.CodeGen;
 
 public class IdfNode extends AbstractNode {
 
+	private static final long serialVersionUID = 1L;
+	
 	private String name;
 	
 	public IdfNode(String lexem) {
