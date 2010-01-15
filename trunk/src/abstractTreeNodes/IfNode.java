@@ -1,6 +1,9 @@
 package abstractTreeNodes;
 
+import symTable.AbstractDescr;
+import symTable.SymTable;
 import instructions.BranchInstr;
+import instructions.IntVal;
 import codeGen.CodeGen;
 
 public class IfNode extends AbstractNode {
@@ -83,5 +86,32 @@ public class IfNode extends AbstractNode {
 		CodeGen.DefLabel(l1);
 		st2.Compile();
 		CodeGen.DefLabel(l2);
+	}
+
+	/* (non-Javadoc)
+	 * @see abstractTreeNodes.AbstractNode#Compile(symTable.SymTable)
+	 */
+	@Override
+	public AbstractDescr Compile(SymTable env) {
+		int l1, l2;
+
+		System.out.println("IfNode");
+		l1 = CodeGen.NewLabel();
+		l2 = CodeGen.NewLabel();
+		
+		e.Compile(env);
+		CodeGen.OutInstr(new IntVal(l1));// SprungLable, falls die bedinung falsch ist
+		
+		//CodeGen.OutInstr(new BranchInstr(Ops.brfop, l1));
+		CodeGen.OutInstr(new BranchInstr(Ops.brfop));
+		st1.Compile(env);
+		CodeGen.OutInstr(new IntVal(l2));
+		//CodeGen.OutInstr(new BranchInstr(Ops.jmpop, l2));
+		CodeGen.OutInstr(new BranchInstr(Ops.jmpop));
+		CodeGen.DefLabel(l1);
+		st2.Compile(env);
+		CodeGen.DefLabel(l2);
+		
+		return null;
 	};
 }
