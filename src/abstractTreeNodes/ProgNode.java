@@ -1,8 +1,19 @@
 package abstractTreeNodes;
 
+import instructions.IntVal;
+
+import java.util.List;
+
+import symTable.AbstractDescr;
+import symTable.SymTable;
+
+import codeGen.CodeGen;
 
 public class ProgNode extends AbstractNode {
 
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 	
 	private String		programName;
@@ -56,5 +67,15 @@ public class ProgNode extends AbstractNode {
 		//CodeGen.OutInstr(new IntVal(CodeGen.progst.size()));		
 		statements.Compile();
 	}
+
+	@Override
+	public AbstractDescr Compile(SymTable env) {
+		functions.Compile();		
+		//CodeGen.OutInstr(new IntVal(CodeGen.progst.size()));		
+		statements.Compile(env);
+		
+		return null;
+	}
+
 
 }

@@ -1,5 +1,7 @@
 package abstractTreeNodes;
 
+import symTable.AbstractDescr;
+import symTable.SymTable;
 import instructions.BinInstr;
 import codeGen.CodeGen;
 
@@ -51,6 +53,15 @@ public class BinNode extends AbstractNode {
 		CodeGen.OutInstr(new BinInstr(op));
 	}
 	
+	@Override
+	public AbstractDescr Compile(SymTable env) {
+		System.out.println("BinNode " + op);
+		r.Compile(env);
+		l.Compile(env);		
+		CodeGen.OutInstr(new BinInstr(op));
+		return null;
+	}
+
 	public void print(int indentation) {
 		
 		for(int i = 0; i < indentation; i++) System.out.print(' ');

@@ -1,17 +1,23 @@
 package codeGen;
 
-import instructions.AbstrInstr;
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
+import symTable.AbstractDescr;
+import symTable.AbstractEntry;
+import symTable.SimpleTypeDescr;
 import symTable.SymTable;
 import symTable.VarEntry;
-import abstractTreeNodes.AbstractNode;
+
+import instructions.*;
+import interpreter.Interpreter;
+import abstractTreeNodes.*;
 
 public class CodeGen {
 
@@ -54,9 +60,9 @@ public class CodeGen {
 		System.out.println("== CodeGen auf gehts ==");
 
 		CodeGen.envs.add(new SymTable());
-		((/*ProgNode*/AbstractNode) root).Compile();
+		((/*ProgNode*/AbstractNode) root).Compile(envs.get(0));
 
-		System.out.println("== CodeGen code fÃ¼r Interpretierer rausschreiben ==");
+		System.out.println("== CodeGen code für Interpretierer rausschreiben ==");
 		os.writeObject(progst);
 		os.flush();
 	}

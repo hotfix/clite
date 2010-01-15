@@ -1,16 +1,15 @@
 package abstractTreeNodes;
 
-import instructions.IntVal;
 import symTable.AbstractDescr;
 import symTable.SimpleTypeDescr;
 import symTable.SymTable;
-import symTable.VarEntry;
+import instructions.IntVal;
 import codeGen.CodeGen;
 
 public class IdfNode extends AbstractNode {
-
-	private static final long serialVersionUID = 1L;
 	
+	private static final long serialVersionUID = 1L;
+
 	private String name;
 	
 	public IdfNode(String lexem) {
@@ -31,10 +30,11 @@ public class IdfNode extends AbstractNode {
 	@Override
 	public AbstractDescr Compile(SymTable env) {
 		//Address
-		CodeGen.OutInstr(new IntVal( ((VarEntry)CodeGen.Search(name).GetE()).GetAddr() ));
+		CodeGen.OutInstr(new IntVal( env.getVariable(name).GetAddr() ));
 		//Size
-		CodeGen.OutInstr(new IntVal( ((VarEntry)CodeGen.Search(name).GetE()).GetTyp().GetSize() ));
+		CodeGen.OutInstr(new IntVal( env.getVariable(name).GetTyp().GetSize() ));
 		
+		//???
 		return null;
 	}	
 	
