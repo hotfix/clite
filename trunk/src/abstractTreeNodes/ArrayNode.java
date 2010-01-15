@@ -62,6 +62,8 @@ public class ArrayNode extends AbstractNode {
 		return new String("ArrayNode : " + size + "\n  " + GetType().toString());
 	}
 
+	
+	//TODO: getdescriptor
 
 	@Override
 	public ArrayDescr Compile(SymTable env) {
