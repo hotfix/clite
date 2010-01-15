@@ -18,10 +18,10 @@ public class CodeGen {
 	ObjectInputStream s;
 
 	AbstractNode root;
-	
-	//Program Speicher (Prog)
+
+	// Program Speicher (Prog)
 	public static ArrayList<AbstrInstr> progst = new ArrayList<AbstrInstr>();
-	
+
 	public static ArrayList<SymTable> envs = new ArrayList<SymTable>();
 
 	public static int[] labels = new int[10000];
@@ -53,11 +53,35 @@ public class CodeGen {
 		System.out.println("\n== CodeGen auf gehts ==");
 
 		CodeGen.envs.add(new SymTable());
-		((/*ProgNode*/AbstractNode) root).Compile(envs.get(0));
-
-		System.out.println("\n== CodeGen code für Interpretierer rausschreiben ==");
+		((/* ProgNode */AbstractNode) root).Compile(envs.get(0));
+		FixUp(progst.size());
+		System.out
+				.println("\n== CodeGen code fï¿½r Interpretierer rausschreiben ==");
 		os.writeObject(progst);
 		os.flush();
+	}
+
+	public static void FixUp(int storagelength) {
+		AbstrInstr instr;
+		int i = 0;
+		IntVal label;
+		System.out.println("+++ FixUp program length = " + progst.size()
+				+ " storagelength = " + storagelength);
+//		progst.set(1, new IntVal(storagelength));
+//		progst.set(2, new IntVal(progstart));
+		while (i < progst.size()) {
+			instr = progst.get(i);
+			if (instr != null)
+				if ((instr.GetOp() == Ops.brfop)
+						|| (instr.GetOp() == Ops.brtop)
+						|| (instr.GetOp() == Ops.jmpop)) {
+					label = (IntVal) progst.get(i - 1);
+					label.SetI(CodeGen.labels[label.GetI()]);
+					System.out.println(instr.GetOp() + " " + label.GetI());
+				}
+			i++;
+		}
+		System.out.println("+++ Ende Fixup");
 	}
 
 	public static int NewLabel() {
@@ -66,8 +90,8 @@ public class CodeGen {
 
 	public static void DefLabel(int flab) {
 		labels[flab] = CodeGen.progcnt;
-	}	
-	
+	}
+
 	public static SearchResult Search(String s) {
 		int level;
 		VarEntry e = null;
@@ -81,11 +105,11 @@ public class CodeGen {
 		}
 		return new SearchResult(level, e);
 	}
-	
+
 	public static void printEnvs() {
-		
+
 		System.out.println("\n== Symboltabellen ausgabe ==");
-		for(int i = 0; i < envs.size(); i++) {
+		for (int i = 0; i < envs.size(); i++) {
 			System.out.println("  Symboltabelle " + i + ":");
 			envs.get(i).Print();
 		}
