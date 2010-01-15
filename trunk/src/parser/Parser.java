@@ -393,6 +393,7 @@ public class Parser {
 			Insymbol();
 		}
 		
+		
 		fieldlist = eval_FieldlList();
 		
 		structNode = new StructDecNode(new IdfNode(structName), fieldlist);
