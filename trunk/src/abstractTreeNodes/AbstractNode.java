@@ -23,7 +23,7 @@ public class AbstractNode implements Serializable {
 		System.out.println("AbstractCompile");
 	}
 	
-	public AbstractDescr getDescriptor() {
+	public AbstractDescr getDescriptor(SymTable env) {
 		return null;
 	}
 	public AbstractDescr Compile(SymTable env) {

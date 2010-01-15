@@ -38,7 +38,8 @@ public class IdfNode extends AbstractNode {
 		return null;
 	}	
 	
-	public AbstractDescr getDescriptor() {
+	@Override
+	public AbstractDescr getDescriptor(SymTable env) {
 
 		return new SimpleTypeDescr(name, 1);
 	}

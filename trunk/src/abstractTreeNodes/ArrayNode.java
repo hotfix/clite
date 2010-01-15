@@ -64,9 +64,33 @@ public class ArrayNode extends AbstractNode {
 
 	
 	//TODO: getdescriptor
+	
 
 	@Override
 	public ArrayDescr Compile(SymTable env) {
+		
+		System.out.println("ArrayNode::Compile");
+		
+		AbstractDescr basedescr = null;
+		if (type.GetOp() == Ops.arraytyp) {
+			basedescr = ((ArrayNode) type).Compile(env);
+		} 
+		else if (type.GetOp() == Ops.structtyp) {
+			basedescr = ((StructDecNode) type).Compile(env);
+		} 
+		else {
+			basedescr = new SimpleTypeDescr(((IdfNode) type).GetS(), 1);
+		}
+		int actual_size = basedescr.GetSize() * size;
+		
+		//write default values (0) to init the array by declaration
+		for(int i = 0; i < actual_size; i++) CodeGen.OutInstr(new IntVal(0));
+		
+		return new ArrayDescr(size, actual_size, basedescr);
+	}
+
+	@Override
+	public AbstractDescr getDescriptor(SymTable env) {
 		
 		System.out.println("ArrayNode::Compile");
 		
