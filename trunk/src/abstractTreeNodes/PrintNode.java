@@ -1,5 +1,7 @@
 package abstractTreeNodes;
 
+import symTable.AbstractDescr;
+import symTable.SymTable;
 import instructions.PrintInstr;
 import codeGen.CodeGen;
 
@@ -29,5 +31,13 @@ public class PrintNode extends AbstractNode {
 	public void Compile() {
 		param.Compile();
 		CodeGen.OutInstr(new PrintInstr());
+	}
+
+
+	@Override
+	public AbstractDescr Compile(SymTable env) {
+		param.Compile(env);
+		CodeGen.OutInstr(new PrintInstr());
+		return null;
 	}
 }

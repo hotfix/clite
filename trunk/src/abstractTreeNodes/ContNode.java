@@ -1,5 +1,7 @@
 package abstractTreeNodes;
 
+import symTable.AbstractDescr;
+import symTable.SymTable;
 import instructions.ContInstr;
 import codeGen.CodeGen;
 
@@ -27,10 +29,22 @@ public class ContNode extends AbstractNode {
 	
 	@Override
 	public void Compile() {
-		System.out.println("ContNode::Compile");
+		System.out.println("ContNode::Compile2");
 		
 		child.Compile();
 		CodeGen.OutInstr(new ContInstr());
 
+	}
+
+	/* (non-Javadoc)
+	 * @see abstractTreeNodes.AbstractNode#Compile(symTable.SymTable)
+	 */
+	@Override
+	public AbstractDescr Compile(SymTable env) {
+		System.out.println("ContNode::Compile");
+	
+		child.Compile(env);
+		CodeGen.OutInstr(new ContInstr());
+		return null;
 	}
 }
