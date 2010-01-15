@@ -39,7 +39,7 @@ public class Interpreter {
 		in = new FileInputStream(filename);
 		s = new ObjectInputStream(in);
 
-		System.out.println("== code fÃ¼r Interpretierer wieder einlesen ==");
+		System.out.println("\n== code für Interpretierer wieder einlesen ==");
 		progstg = (ArrayList<AbstrInstr>) s.readObject();
 		progcnt = 0;
 
@@ -86,13 +86,13 @@ public class Interpreter {
 		int i, maxstorage;
 
 		// Instruktionen ausgeben
-		System.out.println("*** dump instructions begin");
+		System.out.println("\n*** dump instructions begin");
 		i = progstg.size();
 		progcnt = 0;
 		while (progcnt < i) {
 			progstg.get(progcnt).Print();
 		}
-		System.out.println("*** dump instructions end");
+		System.out.println("\n*** dump instructions end");
 
 		// Speicher initialisieren;
 		
