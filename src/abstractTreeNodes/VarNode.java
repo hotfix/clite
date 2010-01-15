@@ -45,7 +45,7 @@ public class VarNode extends BinNode {
 		System.out.println("VarNode::Compile2");
 		env.addVariable(
 				((IdfNode)GetL()).GetS(), 
-				GetR().getDescriptor()
+				GetR().getDescriptor(env)
 		);
 		((IdfNode)GetL()).Compile(env);
 		//TODO: null ???
