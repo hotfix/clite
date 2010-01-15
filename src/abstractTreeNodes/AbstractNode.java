@@ -1,11 +1,8 @@
 package abstractTreeNodes;
 
-import java.io.*;
-import java.util.HashMap;
+import java.io.Serializable;
 
 import symTable.AbstractDescr;
-import symTable.AbstractEntry;
-import symTable.ArrayDescr;
 import symTable.SymTable;
 
 public class AbstractNode implements Serializable {

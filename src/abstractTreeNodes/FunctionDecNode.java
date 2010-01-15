@@ -2,8 +2,6 @@ package abstractTreeNodes;
 
 import java.util.List;
 
-import codeGen.CodeGen;
-
 public class FunctionDecNode extends AbstractNode {
 	private static final long serialVersionUID = 1L;
 

@@ -1,7 +1,6 @@
 package instructions;
 
 import interpreter.Interpreter;
-import abstractTreeNodes.Ops;
 
 public class ReturnInstr extends AbstrInstr {
 

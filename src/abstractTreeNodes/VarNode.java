@@ -1,7 +1,6 @@
 package abstractTreeNodes;
 
 import symTable.AbstractDescr;
-import symTable.SimpleTypeDescr;
 import symTable.SymTable;
 import codeGen.CodeGen;
 

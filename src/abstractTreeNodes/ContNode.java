@@ -1,8 +1,6 @@
 package abstractTreeNodes;
 
-import symTable.VarEntry;
 import instructions.ContInstr;
-import instructions.IntVal;
 import codeGen.CodeGen;
 
 public class ContNode extends AbstractNode {

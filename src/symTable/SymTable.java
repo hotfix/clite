@@ -3,8 +3,6 @@ package symTable;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import codeGen.CodeGen;
-
 
 public class SymTable {
 
