@@ -10,7 +10,7 @@ public class BoolVal extends AbstrInstr {
 	boolean b;
 
 	public BoolVal(boolean fb) {
-		op = Ops.boolop;
+		SetOp(Ops.boolop);
 		b = fb;
 	};
 

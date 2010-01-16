@@ -10,7 +10,7 @@ public class StringVal extends AbstrInstr {
 	String s;
 
 	public StringVal(String fs) {
-		op = Ops.strop;
+		SetOp(Ops.strop);
 		s = fs;
 	};
 

@@ -8,7 +8,7 @@ public class ContInstr extends AbstrInstr {
 	private static final long serialVersionUID = 1L;
 
 	public ContInstr() {
-		op = Ops.contop;
+		SetOp(Ops.contop);
 	}
 
 	public void Interpret()	{

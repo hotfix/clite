@@ -10,7 +10,7 @@ public class IntVal extends AbstrInstr {
 	int i;
 
 	public IntVal(int fi) {
-		op = Ops.intop;
+		SetOp(Ops.intop);
 		i = fi;
 	};
 

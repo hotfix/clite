@@ -8,7 +8,7 @@ public class AbstrInstr implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	int op;
+	private int op;
 
 	public int GetOp() {
 		return op;
@@ -21,7 +21,7 @@ public class AbstrInstr implements Serializable {
 	public void Interpret() {
 		System.out.println("Interpret AbstInstr");
 	}
-
+	
 	public void Print() {
 		System.out.println(Interpreter.progcnt + " Interpret AbstInstr");
 	}
