@@ -88,8 +88,10 @@ public class WhileNode extends AbstractNode {
 		System.out.println("WhileNode");
 		l1 = CodeGen.NewLabel();
 		l2 = CodeGen.NewLabel();
+		
 		CodeGen.DefLabel(l2);
 		expr.Compile(env);
+		
 		CodeGen.OutInstr(new IntVal(l1));
 		CodeGen.OutInstr(new BranchInstr(Ops.brfop));
 		
@@ -97,8 +99,8 @@ public class WhileNode extends AbstractNode {
 		CodeGen.OutInstr(new IntVal(l2));
 		CodeGen.OutInstr(new BranchInstr(Ops.jmpop));
 		
+		
 		CodeGen.DefLabel(l1);
-		CodeGen.DefLabel(l2);
 		return null;
 	}
 
