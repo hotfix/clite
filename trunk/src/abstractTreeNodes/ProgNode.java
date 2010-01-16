@@ -64,7 +64,7 @@ public class ProgNode extends AbstractNode {
 
 	@Override
 	public AbstractDescr Compile(SymTable env) {
-		functions.Compile();		
+		functions.Compile(env);		
 		//CodeGen.OutInstr(new IntVal(CodeGen.progst.size()));		
 		statements.Compile(env);
 		
