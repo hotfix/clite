@@ -60,4 +60,5 @@ public class Ops {
  public final static int typedecop = 43;
  
  public final static int arrayref = 44;
+ public final static int structref = 45;
 }

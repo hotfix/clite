@@ -97,23 +97,25 @@ public class Parser {
 	}
 
 	private static AbstractNode eval_Const_Dec() throws Exception {
-		
+				
 		Insymbol();
 		
 		if(nextToken.getTokenType() != MyScanner1.DATATYPE) Error("'Datatype' in const declaration expected\n");
 		if(nextToken.getLexem().equals("int") == false) Error("Only integer constants can be declared\n");
 		
 		Insymbol();
-		IdfNode left_side = eval_Variable(); 
+		
+		VarNode var = new VarNode(eval_Variable(), new IdfNode("int"), true);
+		
 		if (nextToken.getTokenType() != MyScanner1.ASSIGNOP) Error("'=' expected\n");
 		Insymbol();		
 		if(nextToken.getTokenType() != MyScanner1.INTEGER) Error("Integer value expected\n");
-		IntNode right_side = new IntNode(nextToken.getLexem());	
+		String value = nextToken.getLexem();
 		Insymbol();
 		if (nextToken.getTokenType() != MyScanner1.ENDOP) Error("'ENDOP' expected\n");
 		Insymbol();
 		
-		return new ConstDecNode(left_side, right_side);
+		return new AssNode(var, new IntNode(value));
 	}
 
 	private static AbstractNode eval_Expression() throws Exception {
@@ -275,10 +277,9 @@ public class Parser {
 		else
 		if ( (nextToken.getTokenType() == MyScanner1.DOT) ) {
 			Insymbol();
-			if ( (nextToken.getTokenType() != MyScanner1.IDENTIFIER) ) Error("eval_Selector::Identifier expected\n");
-			
+			if ( (nextToken.getTokenType() != MyScanner1.IDENTIFIER) ) Error("eval_Selector::Identifier expected\n");			
 			rightSide = new IdfNode(nextToken.getLexem());
-			result = new StructRefNode();			
+			result = new StructRefNode();	
 		}
 		else return (BinNode) left_node;
 		
@@ -426,12 +427,12 @@ public class Parser {
 				vartype = eval_array_type(structNode);
 			else vartype = structNode;
 			
-			structList.add(new VarNode(new IdfNode(varname), vartype));
+			structList.add(new VarNode(new IdfNode(varname), vartype, false));
 			
 			while(nextToken.getTokenType() == MyScanner1.COMMA) {
 				Insymbol();
 				if (nextToken.getTokenType() != MyScanner1.IDENTIFIER) Error("'Identifier' expected\n");			
-				structList.add(new VarNode(new IdfNode(nextToken.getLexem()),structNode));		
+				structList.add(new VarNode(new IdfNode(nextToken.getLexem()),structNode, false));		
 				Insymbol();
 			}
 		}else Error("'Identifier' after StructDeclaration expected\n");

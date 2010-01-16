@@ -7,24 +7,31 @@ import codeGen.CodeGen;
 public class VarNode extends BinNode {
 
 	private static final long serialVersionUID = 1L;
+	
+	private boolean isconst = false;
 
 	public VarNode () {}
 	
-	public VarNode(IdfNode varName, AbstractNode type) {
+	public VarNode(IdfNode varName, AbstractNode type, boolean isconst) {
+		
+		this.isconst = isconst;
 		SetL(varName);
 		SetR(type);
 	}
 
 	public void print(int indentation) {
-		
+		String cnst = new String("");
+		if(isconst == true) cnst = "const";
 		for(int i = 0; i < indentation; i++) System.out.print(' ');
-		System.out.println("VarNode");
+		System.out.println("VarNode " + cnst);
 		GetL().print(indentation+2);
 		GetR().print(indentation+2);
 	}	
 	
 	public String toString() {
-		return new String("VarNode" + 
+		String cnst = new String("");
+		if(isconst == true) cnst = "const";
+		return new String("VarNode " + cnst + 
 				"\n  " + GetL().toString() +
 				"\n  " + GetR().toString());
 	}
@@ -43,9 +50,13 @@ public class VarNode extends BinNode {
 	@Override
 	public AbstractDescr Compile(SymTable env) {
 		System.out.println("VarNode::Compile2");
+		
+		AbstractDescr descr = GetR().getDescriptor(env);
+		if (isconst == true) descr.setConst(true);
+		
 		env.addVariable(
 				((IdfNode)GetL()).GetS(), 
-				GetR().getDescriptor(env)
+				descr
 		);
 		((IdfNode)GetL()).Compile(env);
 		//TODO: null ???

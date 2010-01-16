@@ -35,4 +35,9 @@ public class StructDescr extends AbstractDescr{
 		recenv = sym;
 		addr = 0;
 	}
+	
+	@Override
+	public String toString() {		
+		return "StructDescr\n[" + recenv.toString() + "\n]";
+	}
 }

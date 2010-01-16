@@ -36,6 +36,17 @@ public class SymTable {
 			System.out.println(varname + " --> " + symTable.get(varname).toString());
 		}
 	}
+	
+	public String toString() {
+		
+		String str = new String();
+		Iterator<String> it = symTable.keySet().iterator();
+		while(it.hasNext()) {
+			String varname = it.next();
+			str += ("\n" + varname + " --> " + symTable.get(varname).toString());
+		}		
+		return str;		
+	}
 
 	public VarEntry getVariable(String s) {
 		return symTable.get(s);
