@@ -2,40 +2,45 @@ program m;
 
 
 p01(int v){
-    v := c1;
+    v = c1;
     p2(v);
 }
 
 p2(int i){
     if (j == i){
-        print i
+        print i;
     }
 }
 
 begin
-    const c1 = 10;
-    const c2 = 20;
+    const int c1 = 10;
+    const int c2 = 20;
     
     int i, j, k;
     
     int a1[10], a2[20];
     
     struct myStruct{
-        int [10];
+        int a[10];
         int b;    
     }r;
     
-    i  = c1;  k = 0;
+    i  = c1;  k = 0;// i = 10
  
     while (k < 5) {
         i = i + 1;
         k = k + 1;
-    }
+    }//k=5, i=15
  
-    j = i;
+    j = i; //j=15
     
     a1[j] = c2*100;
-    a2  := a1;
-    r.a := a2;
+    //a2  = a1;
+    r.b = 3;
     p01(k);
+    
+    print i;// 15
+    print j; // 15
+    print k; // 5
+    print r.b; //3
 end
