@@ -36,9 +36,6 @@ public class ContNode extends AbstractNode {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see abstractTreeNodes.AbstractNode#Compile(symTable.SymTable)
-	 */
 	@Override
 	public AbstractDescr Compile(SymTable env) {
 		System.out.println("ContNode::Compile");

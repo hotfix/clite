@@ -8,11 +8,20 @@ public class AbstractDescr implements Serializable {
 
 	protected int op;
 	protected int size;
+	private boolean isconst = false;
 
 	public AbstractDescr() {
 		op = 0;
 		size = 0;
-	};
+	}
+	
+	public boolean isConst() {
+		return isconst;
+	}
+	
+	public void setConst(boolean c) {
+		isconst = c;
+	}
 
 	public int GetOp() {
 		return op;

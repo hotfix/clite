@@ -10,7 +10,7 @@ public class CharVal extends AbstrInstr {
 	char c;;
 
 	public CharVal(char fc) {
-		op = Ops.charop;
+		SetOp(Ops.charop);
 		c = fc;
 	};
 

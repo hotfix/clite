@@ -8,7 +8,7 @@ public class PrintInstr extends AbstrInstr {
 	private static final long serialVersionUID = 1L;
 
 	public PrintInstr() {
-		op = Ops.printop;
+		SetOp(Ops.printop);
 	}
 
 	public void Interpret()	{

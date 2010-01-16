@@ -10,7 +10,7 @@ public class RealVal extends AbstrInstr {
 	float r;
 
 	public RealVal(float fr) {
-		op = Ops.realop;
+		SetOp(Ops.realop);
 		r = fr;
 	};
 

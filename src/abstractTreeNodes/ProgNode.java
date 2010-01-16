@@ -1,13 +1,7 @@
 package abstractTreeNodes;
 
-import instructions.IntVal;
-
-import java.util.List;
-
 import symTable.AbstractDescr;
 import symTable.SymTable;
-
-import codeGen.CodeGen;
 
 public class ProgNode extends AbstractNode {
 
@@ -76,6 +70,5 @@ public class ProgNode extends AbstractNode {
 		
 		return null;
 	}
-
 
 }

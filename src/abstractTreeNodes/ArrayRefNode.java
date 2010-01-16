@@ -4,6 +4,7 @@ import instructions.IntVal;
 import codeGen.CodeGen;
 import symTable.AbstractDescr;
 import symTable.ArrayDescr;
+import symTable.SymTable;
 import symTable.VarEntry;
 
 public class ArrayRefNode extends BinNode {
@@ -45,6 +46,16 @@ public class ArrayRefNode extends BinNode {
 		return addr + ((IntNode)GetR()).getI()*descr.GetSize();		
 	}	
 	
+	@Override
+	public AbstractDescr Compile(SymTable env) {
+		//Addr
+		CodeGen.OutInstr(new IntVal(CompileArr()));
+		//Size
+		CodeGen.OutInstr(new IntVal(1));
+		
+		return null;
+	}
+
 	@Override
 	public void Compile() {	
 		

@@ -8,7 +8,7 @@ public class StopInstr extends AbstrInstr {
 	private static final long serialVersionUID = 1L;
 
 	public StopInstr() {
-		op = Ops.stpop;
+		SetOp(Ops.stpop);
 	};
 
 	public void Interpret()

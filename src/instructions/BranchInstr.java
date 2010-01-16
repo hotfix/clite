@@ -9,7 +9,7 @@ public class BranchInstr extends AbstrInstr {
 
 	public BranchInstr(int fop) {
 		// System.out.println(fop);
-		op = fop;
+		SetOp(fop);
 	};
 
 	public void Interpret() {
@@ -18,7 +18,7 @@ public class BranchInstr extends AbstrInstr {
 
 		System.out.print(Interpreter.progcnt + " Interpret BranchInstr ");
 		label = ((IntVal) Interpreter.valuestack.pop()).GetI();
-		switch (op) {
+		switch (GetOp()) {
 		case Ops.brtop: {
 			System.out.println("BT " + label);
 			op1 = (IntVal) Interpreter.valuestack.pop();
@@ -48,7 +48,7 @@ public class BranchInstr extends AbstrInstr {
 
 	public void Print() {
 		System.out.print(Interpreter.progcnt + " ");
-		System.out.println("Interpret BranchInstr " + op);
+		System.out.println("Interpret BranchInstr " + GetOp());
 		Interpreter.progcnt++;
 	};
 }
