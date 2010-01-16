@@ -73,8 +73,8 @@ public class BinInstr extends AbstrInstr {
 			op1 = Interpreter.valuestack.pop(); // intinstr
 			i1 = ((IntVal) op1).GetI();
 			i2 = ((IntVal) op2).GetI();
-			System.out.println(i1 + " == " + i2);
-			if (i1 == i2)
+			System.out.println(i2 + " == " + i1);
+			if (i2 == i1)
 				Interpreter.valuestack.push(new IntVal(0));
 			else
 				Interpreter.valuestack.push(new IntVal(1));
@@ -85,8 +85,8 @@ public class BinInstr extends AbstrInstr {
 			op1 = Interpreter.valuestack.pop(); // intinstr
 			i1 = ((IntVal) op1).GetI();
 			i2 = ((IntVal) op2).GetI();
-			System.out.println(i1 + " <> " + i2);
-			if (i1 != i2)
+			System.out.println(i2 + " != " + i1);
+			if (i2 != i1)
 				Interpreter.valuestack.push(new IntVal(0));
 			else
 				Interpreter.valuestack.push(new IntVal(1));
@@ -97,8 +97,8 @@ public class BinInstr extends AbstrInstr {
 			op1 = Interpreter.valuestack.pop(); // intinstr
 			i1 = ((IntVal) op1).GetI();
 			i2 = ((IntVal) op2).GetI();
-			System.out.println(i1 + " < " + i2);
-			if (i1 < i2)
+			System.out.println(i2 + " < " + i1);
+			if (i2 < i1)
 				Interpreter.valuestack.push(new IntVal(0));
 			else
 				Interpreter.valuestack.push(new IntVal(1));
@@ -109,8 +109,8 @@ public class BinInstr extends AbstrInstr {
 			op1 = Interpreter.valuestack.pop(); // intinstr
 			i1 = ((IntVal) op1).GetI();
 			i2 = ((IntVal) op2).GetI();
-			System.out.println(i1 + " <= " + i2);
-			if (i1 <= i2)
+			System.out.println(i2 + " <= " + i1);
+			if (i2 <= i1)
 				Interpreter.valuestack.push(new IntVal(0));
 			else
 				Interpreter.valuestack.push(new IntVal(1));
@@ -121,8 +121,8 @@ public class BinInstr extends AbstrInstr {
 			op1 = Interpreter.valuestack.pop(); // intinstr
 			i1 = ((IntVal) op1).GetI();
 			i2 = ((IntVal) op2).GetI();
-			System.out.println(i1 + " >= " + i2);
-			if (i1 >= i2)
+			System.out.println(i2 + " >= " + i1);
+			if (i2 >= i1)
 				Interpreter.valuestack.push(new IntVal(0));
 			else
 				Interpreter.valuestack.push(new IntVal(1));
@@ -133,8 +133,8 @@ public class BinInstr extends AbstrInstr {
 			op1 = Interpreter.valuestack.pop(); // intinstr
 			i1 = ((IntVal) op1).GetI();
 			i2 = ((IntVal) op2).GetI();
-			System.out.println(i1 + " > " + i2);
-			if (i1 > i2)
+			System.out.println(i2 + " > " + i1);
+			if (i2 > i1)
 				Interpreter.valuestack.push(new IntVal(0));
 			else
 				Interpreter.valuestack.push(new IntVal(1));
