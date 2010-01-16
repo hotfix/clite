@@ -37,9 +37,13 @@ public class ArrayRefNode extends BinNode {
 		if(GetL().op == Ops.arrayref) 
 			addr = ((ArrayRefNode)GetL()).CompileArr();
 		else {
-			VarEntry entry = CodeGen.Search(((IdfNode)GetL()).GetS()).GetE();
-			descr = entry.GetTyp();
-			addr += entry.GetAddr();
+			if(GetL().op == Ops.structref) 
+				System.out.println("Error: Reference at array fields from structs not yet implemented!");
+			else {
+				VarEntry entry = CodeGen.Search(((IdfNode)GetL()).GetS()).GetE();
+				descr = entry.GetTyp();
+				addr += entry.GetAddr();
+			}
 		}		
 			
 		if (descr.GetOp() == Ops.arraytyp) descr = ((ArrayDescr)descr).getType();			

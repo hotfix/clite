@@ -1,5 +1,7 @@
 package abstractTreeNodes;
 
+import symTable.AbstractDescr;
+import symTable.StructDescr;
 import symTable.SymTable;
 
 public class StructDecNode extends AbstractNode {
@@ -28,6 +30,10 @@ public class StructDecNode extends AbstractNode {
 		fieldlist.print(indentation + 2);
 	}
 
+	public String toString() {
+		return "StructDecNode: \n" + fieldlist.toString();
+	}
+	
 	@Override
 	public void Compile() {
 		
@@ -35,11 +41,21 @@ public class StructDecNode extends AbstractNode {
 		fieldlist.Compile(env);
 	}
 
-	public String toString() {
-		return "StructDecNode: \n" + fieldlist.toString();
+//	@Override
+//	public AbstractDescr Compile(SymTable env) {
+//		SymTable struct_env = new SymTable();	
+//		fieldlist.Compile(struct_env);
+//		StructDescr struct_descr = new StructDescr(77, struct_env);
+//		
+//		env.addVariable(name.GetS(), struct_descr);
+//		return struct_descr;
+//	}
+
+	@Override
+	public AbstractDescr getDescriptor(SymTable env) {
+		SymTable struct_env = new SymTable();	
+		fieldlist.Compile(struct_env);
+		return new StructDescr(struct_env.getSize(), struct_env);
 	}
 
-//	public AbstractDescr Compile(StructDescr sd, HashMap<String, AbstractEntry> env) {	
-//		
-//	}
 }

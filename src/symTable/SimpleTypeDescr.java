@@ -28,6 +28,6 @@ public class SimpleTypeDescr extends AbstractDescr {
 	
 	@Override
 	public String toString() {
-		return "SimpleTypeDescr [name=" + name + ", size=" + size + "]";
+		return "SimpleTypeDescr [name=" + name + ", size=" + size + ", const=" + isConst() + "]";
 	}
 }
