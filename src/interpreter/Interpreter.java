@@ -34,8 +34,9 @@ public class Interpreter {
 	FileInputStream in;
 	ObjectInputStream s;
 
-	public Interpreter(String filename) throws IOException, ClassNotFoundException {
-		
+	public Interpreter(String filename) throws IOException,
+			ClassNotFoundException {
+
 		in = new FileInputStream(filename);
 		s = new ObjectInputStream(in);
 
@@ -45,7 +46,9 @@ public class Interpreter {
 
 		storage = new ArrayList<AbstrInstr>();
 		valuestack = new Stack<AbstrInstr>();
-	};
+	}
+
+
 
 	public void Printvalues() {
 		int i;
@@ -58,7 +61,8 @@ public class Interpreter {
 		i = 0;
 		while (i < l.size()) {
 			name = l.get(i);
-			entry = (VarEntry) ((CodeGen.envs.get(CodeGen.level)).getVariable(name));
+			entry = (VarEntry) ((CodeGen.envs.get(CodeGen.level))
+					.getVariable(name));
 			addr = entry.GetAddr();
 			d = entry.GetTyp();
 			if (d.GetOp() == Ops.strop) {
@@ -95,12 +99,10 @@ public class Interpreter {
 		System.out.println("\n*** dump instructions end");
 
 		// Speicher initialisieren;
-		
-		
-		//maxstorage = ((IntVal) (progstg.get(1))).GetI();
-		//SP = maxstorage;
-		
-		
+
+		// maxstorage = ((IntVal) (progstg.get(1))).GetI();
+		// SP = maxstorage;
+
 		SL[0] = 0;
 		SL[1] = 0;
 		SL[2] = 0;
@@ -112,11 +114,10 @@ public class Interpreter {
 		for (i = 0; i < SP; i++) {
 			Interpreter.storage.add(new IntVal(0));
 		}
-		
 
 		// Instruktionen interpretieren
 		i = progstg.size();
-		//progcnt = ((IntVal) progstg.get(0)).GetI();
+		// progcnt = ((IntVal) progstg.get(0)).GetI();
 		progcnt = 0;
 		while (progcnt < i) {
 			progstg.get(progcnt).Interpret();
