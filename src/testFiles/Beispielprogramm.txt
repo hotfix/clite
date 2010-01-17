@@ -1,0 +1,17 @@
+program m;
+
+begin
+	int i,j,k;
+	i = 1; j = 2; k = 3; 
+	if (i < j) {
+		i = j + 1;
+	} else{
+		i = k * j;
+	}
+	while (j < 10){ 
+		j = j + k;
+	}
+    print i;//3
+    print j;//11
+    print k;//3
+end
