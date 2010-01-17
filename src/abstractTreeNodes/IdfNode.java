@@ -29,12 +29,15 @@ public class IdfNode extends AbstractNode {
 
 	@Override
 	public AbstractDescr Compile(SymTable env) {
+
+		int addr = 0;
+		if(CodeGen.envs.get(0) != env) addr = CodeGen.envs.get(0).getSize();
+		
 		//Address
-		CodeGen.OutInstr(new IntVal( env.getVariable(name).GetAddr() ));
+		CodeGen.OutInstr(new IntVal( env.getVariable(name).GetAddr() + addr ));
 		//Size
 		CodeGen.OutInstr(new IntVal( env.getVariable(name).GetTyp().GetSize() ));
-		
-		//???
+
 		return null;
 	}	
 	

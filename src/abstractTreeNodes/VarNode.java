@@ -58,7 +58,8 @@ public class VarNode extends BinNode {
 				((IdfNode)GetL()).GetS(), 
 				descr
 		);
-		((IdfNode)GetL()).Compile(env);
+		if(descr.GetOp() != Ops.structtyp) 
+			((IdfNode)GetL()).Compile(env);
 		//TODO: null ???
 		return null;
 	}
