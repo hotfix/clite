@@ -26,7 +26,7 @@ begin
         int a;    
     }r;
     
-    int a[2];
+    int a[3];
     
     i = 1;
     
