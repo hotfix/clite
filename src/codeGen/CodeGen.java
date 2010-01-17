@@ -55,8 +55,7 @@ public class CodeGen {
 		CodeGen.envs.add(new SymTable());
 		((/* ProgNode */AbstractNode) root).Compile(envs.get(0));
 		FixUp(progst.size());
-		System.out
-				.println("\n== CodeGen code fï¿½r Interpretierer rausschreiben ==");
+		System.out.println("\n== CodeGen code für Interpretierer rausschreiben ==");
 		os.writeObject(progst);
 		os.flush();
 	}

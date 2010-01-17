@@ -100,7 +100,7 @@ public class IfNode extends AbstractNode {
 		l2 = CodeGen.NewLabel();
 		
 		e.Compile(env);
-		CodeGen.OutInstr(new IntVal(l1));// SprungLable, falls die bedinung falsch ist
+		CodeGen.OutInstr(new IntVal(l1));// SprungLabel, falls die bedinung falsch ist
 		
 		//CodeGen.OutInstr(new BranchInstr(Ops.brfop, l1));
 		CodeGen.OutInstr(new BranchInstr(Ops.brfop));

@@ -61,13 +61,11 @@ public class FunctionDecNode extends AbstractNode {
 		System.out.println("FunctionDecNode ");
 		if (formalParams != null){
 			formalParams.Compile();
-			//CodeGen.OutInstr(null);
 		}
 		
 		for (int i = 0; i < statements.size(); i++) {
 			statements.get(i).Compile();
-		}
-		
+		}		
 	}
 
 }
