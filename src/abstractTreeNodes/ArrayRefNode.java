@@ -1,5 +1,6 @@
 package abstractTreeNodes;
 
+import instructions.BinInstr;
 import instructions.IntVal;
 import codeGen.CodeGen;
 import symTable.AbstractDescr;
@@ -30,42 +31,38 @@ public class ArrayRefNode extends BinNode {
 				"\n  " + GetL().toString() +
 				"\n  " + GetR().toString());
 	}	
-	
-	public int CompileArr() {
-	
-		int addr=0;
-		if(GetL().op == Ops.arrayref) 
-			addr = ((ArrayRefNode)GetL()).CompileArr();
-		else {
-			if(GetL().op == Ops.structref) 
-				System.out.println("Error: Reference at array fields from structs not yet implemented!");
-			else {
-				VarEntry entry = CodeGen.Search(((IdfNode)GetL()).GetS()).GetE();
-				descr = entry.GetTyp();
-				addr += entry.GetAddr();
-			}
-		}		
-			
-		if (descr.GetOp() == Ops.arraytyp) descr = ((ArrayDescr)descr).getType();			
-		return addr + ((IntNode)GetR()).getI()*descr.GetSize();		
-	}	
+		
 	
 	@Override
 	public AbstractDescr Compile(SymTable env) {
-		//Addr
-		CodeGen.OutInstr(new IntVal(CompileArr()));
+		
+		ArrayRefNode node = this;
+		int depth = 0;
+		while(node.GetL().op == Ops.arrayref) {
+			node = (ArrayRefNode)node.GetL();
+			depth++;
+		}
+
+		VarEntry entry = env.getVariable( ((IdfNode)node.GetL()).GetS() );
+		CodeGen.OutInstr(new IntVal(entry.GetAddr())); //array base address
+
+		node = this;
+		
+		AbstractDescr descr = entry.GetTyp();
+		for(int i = 0; i <= depth; i++) {
+		
+			node.GetR().Compile(env); //index
+			if(node.GetL().op == Ops.arrayref)
+				node = (ArrayRefNode) node.GetL();
+			descr = ((ArrayDescr)descr).getType();
+			CodeGen.OutInstr(new IntVal(descr.GetSize())); //size of array
+			CodeGen.OutInstr(new BinInstr(Ops.mulop));			
+			CodeGen.OutInstr(new BinInstr(Ops.addop));			
+		}
+		
 		//Size
 		CodeGen.OutInstr(new IntVal(1));
 		
 		return null;
-	}
-
-	@Override
-	public void Compile() {	
-		
-		//Addr
-		CodeGen.OutInstr(new IntVal(CompileArr()));
-		//Size
-		CodeGen.OutInstr(new IntVal(1));		
 	}
 }
