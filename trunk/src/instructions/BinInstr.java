@@ -29,10 +29,10 @@ public class BinInstr extends AbstrInstr {
 		case Ops.subop: {
 			op2 = Interpreter.valuestack.pop();
 			op1 = Interpreter.valuestack.pop();
-			System.out.println(((IntVal) op1).GetI() + " - "
-					+ ((IntVal) op2).GetI());
-			Interpreter.valuestack.push(new IntVal(((IntVal) op1).GetI()
-					- ((IntVal) op2).GetI()));
+			System.out.println(((IntVal) op2).GetI() + " - "
+					+ ((IntVal) op1).GetI());
+			Interpreter.valuestack.push(new IntVal(((IntVal) op2).GetI()
+					- ((IntVal) op1).GetI()));
 			break;
 		}
 		case Ops.mulop: {
@@ -47,10 +47,10 @@ public class BinInstr extends AbstrInstr {
 		case Ops.divop: {
 			op2 = Interpreter.valuestack.pop();
 			op1 = Interpreter.valuestack.pop();
-			System.out.println(((IntVal) op1).GetI() + " / "
-					+ ((IntVal) op2).GetI());
-			Interpreter.valuestack.push(new IntVal(((IntVal) op1).GetI()
-					/ ((IntVal) op2).GetI()));
+			System.out.println(((IntVal) op2).GetI() + " / "
+					+ ((IntVal) op1).GetI());
+			Interpreter.valuestack.push(new IntVal(((IntVal) op2).GetI()
+					/ ((IntVal) op1).GetI()));
 			break;
 		}
 		case Ops.assop: {

@@ -1,6 +1,9 @@
 package abstractTreeNodes;
 
+import instructions.BinInstr;
 import instructions.IntVal;
+import instructions.PopInstr;
+import instructions.UnInstr;
 import codeGen.CodeGen;
 import symTable.AbstractDescr;
 import symTable.AbstractEntry;
@@ -36,13 +39,20 @@ public class StructRefNode extends BinNode {
 	public AbstractDescr Compile(SymTable env) {
 		
 		VarEntry struct  = env.getVariable(((IdfNode)GetL()).GetS());
+		SymTable env2 = ((StructDescr)struct.GetTyp()).getRecenv();
 		int struct_addr = struct.GetAddr();
 		
-		VarEntry structfield = ((StructDescr)struct.GetTyp()).getRecenv().getVariable(((IdfNode)GetR()).GetS());
 		
-		if (structfield.GetTyp().GetOp() == Ops.arraytyp) 
-			System.out.println("StructRefNode::Compile -> Error: Reference at array fields not yet implemented!");
+		if (GetR().op == Ops.arrayref) {
+			CodeGen.OutInstr(new IntVal(struct.GetAddr()));
+			GetR().Compile(env2);	
+			CodeGen.OutInstr(new PopInstr());
+			CodeGen.OutInstr(new BinInstr(Ops.addop));
+			CodeGen.OutInstr(new IntVal(1));
+		}
 		else {
+			
+			VarEntry structfield = env2.getVariable(((IdfNode)GetR()).GetS());			
 			//Addr
 			CodeGen.OutInstr(new IntVal( structfield.GetAddr() +  struct_addr));
 			//Size

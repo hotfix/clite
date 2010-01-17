@@ -242,7 +242,16 @@ public class Parser {
 			IdfNode idf = eval_Variable();
 
 			if ( (nextToken.getTokenType() == MyScanner1.LSBRACE) || (nextToken.getTokenType() == MyScanner1.DOT) ) {
-				result = new ContNode(eval_Selector(idf));
+				
+				AbstractNode select = null;
+				if (nextToken.getTokenType() == MyScanner1.LSBRACE) { 
+					select = new ArrayRefNode();
+				}		
+				if (nextToken.getTokenType() == MyScanner1.DOT) {
+					select = new StructRefNode();					
+				}	
+				eval_Selector(select, idf.GetS());
+				result = new ContNode(select);
 			}
 			else result = new ContNode(idf);
 		}
@@ -263,32 +272,42 @@ public class Parser {
 		skip = true;
 	}
 	
-	private static BinNode eval_Selector(AbstractNode left_node) throws Exception {
-
-		BinNode result = null;
-		AbstractNode rightSide = null;
+	private static void eval_Selector(AbstractNode result, String name) throws Exception {
 		
 		if ( (nextToken.getTokenType() == MyScanner1.LSBRACE) ) {			
 			Insymbol();
-			result = new ArrayRefNode();
-			rightSide = eval_Expression();
+			((BinNode)result).SetR(eval_Expression());
 			if ( (nextToken.getTokenType() != MyScanner1.RSBRACE) ) Error("eval_Selector::RSBRACE expected\n");
+			Insymbol();
+			if ( (nextToken.getTokenType() == MyScanner1.LSBRACE) ) {
+				ArrayRefNode left_side = new ArrayRefNode();
+				((BinNode)result).SetL(left_side);
+				eval_Selector(left_side, name);
+			}
+			else {
+				((BinNode)result).SetL(new IdfNode(name));
+			}
 		}
 		else
 		if ( (nextToken.getTokenType() == MyScanner1.DOT) ) {
+			((StructRefNode)result).SetL(new IdfNode(name));
+			Insymbol();			
+			if ( (nextToken.getTokenType() != MyScanner1.IDENTIFIER) ) Error("eval_Selector::Identifier expected\n");
+			String right_id = nextToken.getLexem();
 			Insymbol();
-			if ( (nextToken.getTokenType() != MyScanner1.IDENTIFIER) ) Error("eval_Selector::Identifier expected\n");			
-			rightSide = new IdfNode(nextToken.getLexem());
-			result = new StructRefNode();	
+			//if ( (nextToken.getTokenType() == MyScanner1.DOT) ) {
+			if ( (nextToken.getTokenType() == MyScanner1.LSBRACE) || (nextToken.getTokenType() == MyScanner1.DOT) ) {
+				
+				AbstractNode right_side = null;
+				if ( (nextToken.getTokenType() == MyScanner1.DOT) ) right_side = new StructRefNode();
+				if ( (nextToken.getTokenType() == MyScanner1.LSBRACE) ) right_side = new ArrayRefNode(); 
+				((BinNode)result).SetR(right_side);
+				eval_Selector(right_side, right_id);
+			}
+			else {
+				((StructRefNode)result).SetR(new IdfNode(right_id));
+			}
 		}
-		else return (BinNode) left_node;
-		
-		Insymbol();
-		result.SetL(left_node);
-		result.SetR(rightSide);
-		
-		result = eval_Selector(result);		
-		return result;
 	}
 
 	private static AbstractNode eval_ActualParameters() throws Exception {
@@ -376,11 +395,14 @@ public class Parser {
 		String var = nextToken.getLexem();
 		AbstractNode left_side = eval_Variable();
 		
-		if ( (nextToken.getTokenType() == MyScanner1.LSBRACE) || 
-			 (nextToken.getTokenType() == MyScanner1.DOT) )
-		{ 
-			left_side = eval_Selector(new IdfNode(var));
-		}	
+		if (nextToken.getTokenType() == MyScanner1.LSBRACE) { 
+			left_side = new ArrayRefNode();
+			eval_Selector(left_side, var);
+		}		
+		if (nextToken.getTokenType() == MyScanner1.DOT) {
+			left_side = new StructRefNode();
+			eval_Selector(left_side, var);
+		}
 		
 		if (nextToken.getTokenType() != MyScanner1.ASSIGNOP) Error("'ASSIGNOP' expected\n");
 		else Insymbol();
