@@ -29,12 +29,8 @@ public class IntNode extends AbstractNode {
 	} 
 	
 	@Override
-	public void Compile() {
-		CodeGen.OutInstr(new IntVal(num));
-	}
-	
-	@Override
 	public AbstractDescr Compile(SymTable env) {
+		System.out.println("IntNode::Compile");
 		CodeGen.OutInstr(new IntVal(num));
 		return null;
 	}

@@ -2,6 +2,9 @@ package abstractTreeNodes;
 
 import java.util.List;
 
+import symTable.AbstractDescr;
+import symTable.SymTable;
+
 public class FunctionDecNode extends AbstractNode {
 	private static final long serialVersionUID = 1L;
 
@@ -57,15 +60,16 @@ public class FunctionDecNode extends AbstractNode {
 		return s;
 	}
 
-	public void Compile() {
-		System.out.println("FunctionDecNode ");
+	public AbstractDescr Compile(SymTable env) {
+		System.out.println("FunctionDecNode::Compile");
 		if (formalParams != null){
-			formalParams.Compile();
+			formalParams.Compile(env);
 		}
 		
 		for (int i = 0; i < statements.size(); i++) {
-			statements.get(i).Compile();
+			statements.get(i).Compile(env);
 		}		
+		return null;
 	}
 
 }

@@ -39,24 +39,13 @@ public class ListNode extends AbstractNode {
 		return s;
 	}
 
-	//TODO:ersetzen
-	@Override
-	public void Compile() {
-
-		System.out.println("ListNode::Compile");
-		for(int i = 0; i < list.size(); i++) {
-			list.get(i).Compile();
-		}
-	}
-
 	@Override
 	public AbstractDescr Compile(SymTable env) {
 		
-		System.out.println("ListNode::Compile2");
+		System.out.println("ListNode::Compile");
 		for(int i = 0; i < list.size(); i++) {
 			list.get(i).Compile(env);
 		}
-		//TODO: null ???
 		return null;
 	}
 	

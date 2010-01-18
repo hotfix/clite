@@ -12,28 +12,8 @@ import java.util.Map;
 import lexyaccgen.EOFException;
 import lexyaccgen.MyScanner1;
 import lexyaccgen.Yytoken;
-import abstractTreeNodes.AbstractNode;
-import abstractTreeNodes.ArrayNode;
-import abstractTreeNodes.ArrayRefNode;
-import abstractTreeNodes.AssNode;
-import abstractTreeNodes.BinNode;
-import abstractTreeNodes.ConstDecNode;
-import abstractTreeNodes.ContNode;
-import abstractTreeNodes.FormalParamsNode;
-import abstractTreeNodes.FunctionCallNode;
-import abstractTreeNodes.FunctionDecNode;
-import abstractTreeNodes.IdfNode;
-import abstractTreeNodes.IfNode;
-import abstractTreeNodes.IntNode;
-import abstractTreeNodes.ListNode;
-import abstractTreeNodes.NegationNode;
-import abstractTreeNodes.Ops;
-import abstractTreeNodes.PrintNode;
-import abstractTreeNodes.ProgNode;
-import abstractTreeNodes.StructDecNode;
-import abstractTreeNodes.StructRefNode;
-import abstractTreeNodes.VarNode;
-import abstractTreeNodes.WhileNode;
+
+import abstractTreeNodes.*;
 import codeGen.CodeGen;
 
 public class Parser {
@@ -50,25 +30,6 @@ public class Parser {
 	static boolean 		end_found	= false;
 	static AbstractNode root;
 
-	/*
-	 * Hilfsroutinen
-	 */
-
-	public static void Compile(String str) {
-		System.out.println(str);
-	}
-
-	public static void OutStr(String str) {
-		System.out.print(str + " ");
-	}
-
-	public static void OutInt(int i) {
-		System.out.print(i + " ");
-	}
-
-	public static void OutOp(String op) {
-		System.out.print(op);
-	}
 
 	private static void Error(String str) throws Exception {
 		throw new Exception("Error at line "+ new Integer(scanner.getLine()).toString() + ": " + str);
@@ -840,14 +801,11 @@ public class Parser {
 					
 					Insymbol();
 					
-					//begin_found = true;
-					//end_found	= true;
-					
 					root = eval_Program();
 					root.print(0);
 					
 					if (scanner.yylex().getTokenType() != MyScanner1.EOF) {
-						//Error("End Of File expected\n");
+						Error("End Of File expected\n");
 					}
 					
 					System.out.println("OK!\n");

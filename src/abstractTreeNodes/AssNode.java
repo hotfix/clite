@@ -1,8 +1,5 @@
 package abstractTreeNodes;
 
-import instructions.BinInstr;
-import instructions.IntVal;
-import codeGen.CodeGen;
 import symTable.AbstractDescr;
 import symTable.SymTable;
 
@@ -45,19 +42,8 @@ public class AssNode extends BinNode {
 		}
 	}
 
-	//TODO:ersetzen
-	@Override
-	public void Compile() {
-		super.Compile();
-	}
-
 	@Override
 	public AbstractDescr Compile(SymTable env) {
 		return super.Compile(env);
-		//GetR().Compile(env);
-		//GetL().Compile(env);
-		//CodeGen.OutInstr(new IntVal(1));
-		//CodeGen.OutInstr(new BinInstr(op));
-		//return null;
 	}
 }

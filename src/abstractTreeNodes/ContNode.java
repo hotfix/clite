@@ -26,15 +26,6 @@ public class ContNode extends AbstractNode {
 		return new String("ContNode" + 
 				"\n  " + child.toString() );				
 	}
-	
-	@Override
-	public void Compile() {
-		System.out.println("ContNode::Compile2");
-		
-		child.Compile();
-		CodeGen.OutInstr(new ContInstr());
-
-	}
 
 	@Override
 	public AbstractDescr Compile(SymTable env) {

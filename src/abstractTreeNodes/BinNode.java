@@ -45,13 +45,6 @@ public class BinNode extends AbstractNode {
 	public AbstractNode GetR() {
 		return r;
 	}
-
-	public void Compile() {
-		System.out.println("BinNode " + op);
-		r.Compile();
-		l.Compile();		
-		CodeGen.OutInstr(new BinInstr(op));
-	}
 	
 	@Override
 	public AbstractDescr Compile(SymTable env) {

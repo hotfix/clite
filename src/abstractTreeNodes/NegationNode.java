@@ -1,29 +1,33 @@
 package abstractTreeNodes;
 
-public class NegationNode extends AbstractNode {
+import symTable.AbstractDescr;
+import symTable.SymTable;
+
+public class NegationNode extends BinNode {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private AbstractNode child;	
-	
 	public NegationNode(AbstractNode child) {
-		this.child = child;
+		
+		SetL(new IntNode("0"));
+		SetR(child);
+		op = Ops.subop;
 	}
 
 	@Override
-	public void Compile() {
-		// TODO Auto-generated method stub
-		super.Compile();
+	public AbstractDescr Compile(SymTable env) {
+		super.Compile(env);
+		return null;
 	}
 	
 	public void print(int indentation) {
 		
 		for(int i = 0; i < indentation; i++) System.out.print(' ');
 		System.out.println("NegationNode");
-		child.print(indentation+2);
+		GetR().print(indentation+2);
 	}
 
 	public String toString() {
-		return new String("NegationNode " + "\n  " + child.toString());
+		return new String("NegationNode " + "\n  " + GetR().toString());
 	}
 }

@@ -2,7 +2,6 @@ package abstractTreeNodes;
 
 import symTable.AbstractDescr;
 import symTable.SymTable;
-import codeGen.CodeGen;
 
 public class VarNode extends BinNode {
 
@@ -36,20 +35,9 @@ public class VarNode extends BinNode {
 				"\n  " + GetR().toString());
 	}
 	
-	//TODO:ersetzen
-	@Override
-	public void Compile() {
-		System.out.println("VarNode::Compile");
-		CodeGen.envs.get(CodeGen.level).addVariable(
-				((IdfNode)GetL()).GetS(), 
-				GetR().Compile(CodeGen.envs.get(CodeGen.level))
-		);
-		((IdfNode)GetL()).Compile();
-	}
-	
 	@Override
 	public AbstractDescr Compile(SymTable env) {
-		System.out.println("VarNode::Compile2");
+		System.out.println("VarNode::Compile");
 		
 		AbstractDescr descr = GetR().getDescriptor(env);
 		if (isconst == true) descr.setConst(true);
@@ -60,7 +48,7 @@ public class VarNode extends BinNode {
 		);
 		if(descr.GetOp() != Ops.structtyp) 
 			((IdfNode)GetL()).Compile(env);
-		//TODO: null ???
+
 		return null;
 	}
 }

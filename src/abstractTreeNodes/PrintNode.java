@@ -25,14 +25,7 @@ public class PrintNode extends AbstractNode {
 	public String toString() {
 		return new String("PrintNode"  + 
 				"\n  " + param.toString());
-	} 
-	
-	@Override
-	public void Compile() {
-		param.Compile();
-		CodeGen.OutInstr(new PrintInstr());
 	}
-
 
 	@Override
 	public AbstractDescr Compile(SymTable env) {

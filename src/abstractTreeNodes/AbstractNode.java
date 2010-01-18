@@ -18,16 +18,12 @@ public class AbstractNode implements Serializable {
 	public int GetOp() {
 		return op;
 	}
-
-	public void Compile() {
-		System.out.println("AbstractCompile");
-	}
 	
 	public AbstractDescr getDescriptor(SymTable env) {
 		return null;
 	}
 	public AbstractDescr Compile(SymTable env) {
-		System.out.println("AbstractCompile2");
+		System.out.println("AbstractCompile");
 		return null;
 	}
 	

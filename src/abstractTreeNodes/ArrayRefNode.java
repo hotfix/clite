@@ -12,8 +12,6 @@ public class ArrayRefNode extends BinNode {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static AbstractDescr descr = null;
-	
 	public ArrayRefNode() {
 		op = Ops.arrayref;
 	}
@@ -30,11 +28,12 @@ public class ArrayRefNode extends BinNode {
 		return new String("ArrayRefNode" + 
 				"\n  " + GetL().toString() +
 				"\n  " + GetR().toString());
-	}	
-		
+	}		
 	
 	@Override
 	public AbstractDescr Compile(SymTable env) {
+		
+		System.out.println("ArrayRefNode::Compile");
 		
 		ArrayRefNode node = this;
 		int depth = 0;

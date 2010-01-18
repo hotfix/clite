@@ -30,6 +30,8 @@ public class IdfNode extends AbstractNode {
 	@Override
 	public AbstractDescr Compile(SymTable env) {
 
+		System.out.println("IdfNode::Compile");
+		
 		int addr = 0;
 		if(CodeGen.envs.get(0) != env) addr = CodeGen.envs.get(0).getSize();
 		

@@ -33,23 +33,6 @@ public class StructDecNode extends AbstractNode {
 	public String toString() {
 		return "StructDecNode: \n" + fieldlist.toString();
 	}
-	
-	@Override
-	public void Compile() {
-		
-		SymTable env = new SymTable();		
-		fieldlist.Compile(env);
-	}
-
-//	@Override
-//	public AbstractDescr Compile(SymTable env) {
-//		SymTable struct_env = new SymTable();	
-//		fieldlist.Compile(struct_env);
-//		StructDescr struct_descr = new StructDescr(77, struct_env);
-//		
-//		env.addVariable(name.GetS(), struct_descr);
-//		return struct_descr;
-//	}
 
 	@Override
 	public AbstractDescr getDescriptor(SymTable env) {
@@ -57,5 +40,4 @@ public class StructDecNode extends AbstractNode {
 		fieldlist.Compile(struct_env);
 		return new StructDescr(struct_env.getSize(), struct_env);
 	}
-
 }
