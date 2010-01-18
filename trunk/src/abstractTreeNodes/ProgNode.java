@@ -5,9 +5,6 @@ import symTable.SymTable;
 
 public class ProgNode extends AbstractNode {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	private String		programName;
@@ -55,16 +52,11 @@ public class ProgNode extends AbstractNode {
 	}
 
 	@Override
-	public void Compile() {
-
-		functions.Compile();		
-		//CodeGen.OutInstr(new IntVal(CodeGen.progst.size()));		
-		statements.Compile();
-	}
-
-	@Override
 	public AbstractDescr Compile(SymTable env) {
-		functions.Compile(env);		
+		
+		System.out.println("ProgNode::Compile");
+		
+		//functions.Compile(env);		
 		//CodeGen.OutInstr(new IntVal(CodeGen.progst.size()));		
 		statements.Compile(env);
 		

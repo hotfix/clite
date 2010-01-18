@@ -3,6 +3,9 @@ package abstractTreeNodes;
 import java.util.Iterator;
 import java.util.Map;
 
+import symTable.AbstractDescr;
+import symTable.SymTable;
+
 public class FormalParamsNode extends AbstractNode {
 
 	private static final long serialVersionUID = 1L;
@@ -41,20 +44,22 @@ public class FormalParamsNode extends AbstractNode {
 		return s;
 	}
 	
-	public void Compile() {
-		Iterator<AbstractNode> it = params.keySet().iterator();
-	
-		System.out.println("FormalParamsNode");
+	public AbstractDescr Compile(SymTable env) {
+		
+		System.out.println("FormalParamsNode::Compile");
+		
+		Iterator<AbstractNode> it = params.keySet().iterator();	
+		
 		while (it.hasNext()) {
 			IdfNode key = (IdfNode) it.next();
 			// Variable
-			key.Compile();
+			key.Compile(env);
 			//CodeGen.OutInstr(new IntVal(-1));
 			// type
-			params.get(key).Compile();
+			params.get(key).Compile(env);
 			//CodeGen.OutInstr(new IntVal(-1));
 		}
-		
+		return null;
 	}
 
 }

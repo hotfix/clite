@@ -7,9 +7,7 @@ public class ConstDecNode extends BinNode {
 
 	private static final long serialVersionUID = 1L;
 
-	public ConstDecNode () {}
-	
-	
+	public ConstDecNode () {}	
 
 	public ConstDecNode(IdfNode left_side, IntNode right_side) {
 		SetL(left_side);
@@ -32,7 +30,7 @@ public class ConstDecNode extends BinNode {
 	
 	@Override
 	public AbstractDescr Compile(SymTable env) {
-		System.out.println("ConstDecNode::Compile2");
+		System.out.println("ConstDecNode::Compile");
 		AbstractDescr descr = GetR().getDescriptor(env);
 		descr.setConst(true);
 		env.addVariable(
@@ -40,7 +38,6 @@ public class ConstDecNode extends BinNode {
 				descr
 		);
 		((IdfNode)GetL()).Compile(env);
-		//TODO: null ???
 		return null;
 	}
 }

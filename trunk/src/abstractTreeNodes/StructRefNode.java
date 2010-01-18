@@ -36,6 +36,8 @@ public class StructRefNode extends BinNode {
 	@Override
 	public AbstractDescr Compile(SymTable env) {
 		
+		System.out.println("StructRefNode::Compile");
+		
 		VarEntry struct  = env.getVariable(((IdfNode)GetL()).GetS());
 		SymTable env2 = ((StructDescr)struct.GetTyp()).getRecenv();
 		int struct_addr = struct.GetAddr();

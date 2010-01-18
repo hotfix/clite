@@ -1,5 +1,8 @@
 package abstractTreeNodes;
 
+import symTable.AbstractDescr;
+import symTable.SymTable;
+
 public class FunctionCallNode extends AbstractNode {
 
 	private static final long serialVersionUID = 1L;
@@ -25,7 +28,8 @@ public class FunctionCallNode extends AbstractNode {
 	}
 	
 	@Override
-	public void Compile() {
-
+	public AbstractDescr Compile(SymTable env) {
+		System.out.println("FunctionCallNode::Compile");
+		return null;
 	}
 }
